@@ -1,0 +1,11 @@
+apiVersion: v2
+name: policy-controller
+description: A Helm chart for Kubernetes
+type: application
+version: 1.0.0
+
+appVersion: 0.7.0
+dependencies:
+  - name: policy-controller
+    version: 0.5.7
+    repository: https://sigstore.github.io/helm-charts

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: node-problem-detector
+description: A Helm chart for Kubernetes
+type: application
+version: 1.0.0
+
+appVersion: 0.8.12
+dependencies:
+  - name: node-problem-detector
+    version: 2.3.4
+    repository: https://charts.deliveryhero.io/

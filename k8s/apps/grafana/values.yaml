@@ -1,0 +1,13 @@
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      external-dns.alpha.kubernetes.io/hostname: grafana.kyle2.net
+    hosts:
+      - grafana.kyle2.net
+    tls:
+      - hosts:
+          - grafana.kyle2.net
+        secretName: grafana-tls

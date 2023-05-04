@@ -1,0 +1,10 @@
+longhorn:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    host: longhorn.kyle2.net
+    tls: true
+    tlsSecret: longhorn-tls
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      external-dns.alpha.kubernetes.io/hostname: longhorn.kyle2.net
