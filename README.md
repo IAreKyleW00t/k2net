@@ -11,6 +11,8 @@ My personal Kubernetes cluster, running on [k3s](https://k3s.io/).
 Everything is deployed through [ArgoCD](https://argoproj.github.io/cd/), including ArgoCD itself. However, we must manually deploy it the first time before it can start to track it's own changes.
 
 ```sh
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
 helm upgrade --install argocd argo/argo-cd \
     --atomic \
     --namespace argocd \
