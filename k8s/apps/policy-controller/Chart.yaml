@@ -1,6 +1,6 @@
 apiVersion: v2
 name: policy-controller
-description: A Helm chart for Kubernetes
+description: Meta-chart for policy-controller
 type: application
 version: 1.0.0
 

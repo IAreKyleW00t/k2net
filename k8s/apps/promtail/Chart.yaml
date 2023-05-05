@@ -1,6 +1,6 @@
 apiVersion: v2
 name: promtail
-description: A Helm chart for Kubernetes
+description: Meta-chart for Promtail
 type: application
 version: 1.0.0
 

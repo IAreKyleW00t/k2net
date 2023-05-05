@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ingress-nginx
-description: A Helm chart for Kubernetes
+description: Meta-chart for ingress-nginx
 type: application
 version: 1.0.0
 

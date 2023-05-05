@@ -1,6 +1,6 @@
 apiVersion: v2
 name: loki
-description: A Helm chart for Kubernetes
+description: Meta-chart for Loki
 type: application
 version: 1.0.0
 
