@@ -44,14 +44,18 @@ done
 Each application is listed in the [`k8s/apps`](k8s/apps/) folder, including "system" apps. Applications are deployed through ArgoCD and will track changes through it once initially configured; changes to the `Application` resource associated with the app in ArgoCD will happen automatically via `git`.
 
 ```sh
+# For standard k8s manifests
 kubectl apply -f k8s/apps/<app_name>/app.yaml
+
+# For Helm charts
+kubectl apply -f k8s/apps/<app_name>/templates/app.yaml
 ```
 
 or deploy them all in one swoop (not recommended):
 
 ```sh
-for dir in k8s/apps/*; do
-    kubectl apply -f "${dir}/app.yaml"
+for app in $(find k8s/apps/ -type f -name "app.yaml"); do
+    kubectl apply -f "$app"
 done
 ```
 
