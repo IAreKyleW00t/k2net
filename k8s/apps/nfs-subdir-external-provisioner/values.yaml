@@ -1,0 +1,6 @@
+nfs-subdir-external-provisioner:
+  nfs:
+    server: 192.168.10.10
+    path: /volume1/k3s
+    mountOptions:
+      - vers=4.1
