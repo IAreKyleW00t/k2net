@@ -1,0 +1,136 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: unifi-data
+  namespace: unifi
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi
+  namespace: unifi
+  labels:
+    app: unifi
+spec:
+  selector:
+    matchLabels:
+      app: unifi
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: unifi
+    spec:
+      containers:
+        - name: unifi
+          image: linuxserver/unifi-controller:latest
+          ports:
+            - containerPort: 3478 # STUN
+              protocol: UDP
+            - containerPort: 8080 # Control
+            - containerPort: 8443 # API
+            - containerPort: 8880 # HTTP
+            - containerPort: 8843 # HTTPS
+            - containerPort: 6789 # Speedtest
+            - containerPort: 10001 # Discovery
+              protocol: UDP
+            - containerPort: 1900 # L2 Discovery
+              protocol: UDP
+          resources:
+            requests:
+              memory: 1024Mi
+              cpu: 1000m
+            limits:
+              memory: 4096Mi
+              cpu: 2000m
+          volumeMounts:
+            - name: data
+              mountPath: /config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: unifi-data
+---
+# If your k8s version < v1.23, you will need to enable the
+# MixedProtocolLBService feature gate to use a single service for
+# UDP and TCP connections, otherwise you need 2 separate services.
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi
+  namespace: unifi
+  annotations:
+    metallb.universe.tf/allow-shared-ip: ingress-nginx
+spec:
+  selector:
+    app: unifi
+  ports:
+    - name: stun
+      port: 3478
+      targetPort: 3478
+      protocol: UDP
+    - name: control
+      port: 8080
+      targetPort: 8080
+    - name: api
+      port: 8443
+      targetPort: 8443
+    - name: http
+      port: 8880
+      targetPort: 8880
+    - name: https
+      port: 8843
+      targetPort: 8843
+    - name: speedtest
+      port: 6789
+      targetPort: 6789
+    - name: discovery
+      port: 10001
+      targetPort: 10001
+      protocol: UDP
+    - name: l2-discovery
+      port: 1900
+      targetPort: 1900
+      protocol: UDP
+  type: LoadBalancer
+  loadBalancerIP: 192.168.10.201
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unifi
+  namespace: unifi
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: unifi.kyle2.net
+    nginx.ingress.kubernetes.io/backend-protocol: https
+
+    # Better WebSockets support
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - unifi.kyle2.net
+      secretName: unifi-tls
+  rules:
+    - host: unifi.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: unifi
+                port:
+                  name: api
