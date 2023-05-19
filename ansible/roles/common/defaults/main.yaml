@@ -1,4 +1,7 @@
 ---
+# Remote syslogs
+rsyslog_server: ""
+
 # System hostname
 hostname: "{{ inventory_hostname }}"
 

@@ -1,0 +1,21 @@
+---
+- name: Remote Syslog
+  block:
+    - name: Remote Syslog | Send logs to remote syslog server
+      ansible.builtin.template:
+        src: rsyslog.conf.j2
+        dest: /etc/rsyslog.d/80-ansible.conf
+        owner: root
+        group: root
+        mode: "0644"
+      register: rsyslog_config
+
+    - name: Remote Syslog | Reload rsyslog service
+      ansible.builtin.systemd:
+        name: rsyslog
+        state: restarted
+      when: rsyslog_config.changed
+  become: yes
+  tags:
+    - rsyslog
+    - common

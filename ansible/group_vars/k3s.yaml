@@ -1,4 +1,7 @@
 ---
+# Handled via k3s
+rsyslog_server: ""
+
 # Disable swap on k3s nodes
 additional_swap:
   - path: /swap.img

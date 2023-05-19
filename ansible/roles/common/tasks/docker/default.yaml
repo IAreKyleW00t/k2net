@@ -1,29 +1,6 @@
 ---
 - name: Docker
   block:
-    - name: Docker | Check if netclient is running on remote host
-      ansible.builtin.systemd:
-        name: netclient
-      when: ansible_distribution == 'Ubuntu' and 'netmaker' not in group_names
-      register: netclient_service
-      changed_when: false
-
-    - name: Docker | Correct legacy iptables for Ubuntu when running netclient
-      community.general.alternatives:
-        name: "{{ app.name }}"
-        path: "{{ app.path }}"
-      when: |
-        ansible_distribution == 'Ubuntu' and
-        'netmaker' not in group_names and
-        netclient_service.status.ActiveState == 'active'
-      loop_control:
-        loop_var: app
-      loop:
-        - name: iptables
-          path: /usr/sbin/iptables-legacy
-        - name: ip6tables
-          path: /usr/sbin/ip6tables-legacy
-
     - name: Docker | Remove legacy docker engine versions
       ansible.builtin.apt:
         name:

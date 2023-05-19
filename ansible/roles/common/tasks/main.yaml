@@ -1,4 +1,10 @@
 ---
+- include_tasks: rsyslog.yaml
+  when: rsyslog_server != ""
+  tags:
+    - common
+    - rsyslog
+
 - import_tasks: hostname.yaml
   tags:
     - common
