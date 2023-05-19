@@ -1,0 +1,17 @@
+---
+- name: Shutdown
+  block:
+    - name: Shutdown | Drain k3s node
+      ansible.builtin.command: |
+        kubectl drain {{ hostname | quote }} \
+          --delete-emptydir-data \
+          --ignore-daemonsets
+      delegate_to: localhost
+
+    - name: Shutdown | Run k3s-killall.sh
+      ansible.builtin.command: k3s-killall.sh
+  notify:
+    - Start k3s
+  tags:
+    - k3s
+    - Shutdown

@@ -1,0 +1,11 @@
+---
+- name: System Packages
+  block:
+    - name: System Packages | Install additional packages
+      ansible.builtin.yum:
+        name: "{{ additional_packages }}"
+        state: latest
+  become: yes
+  tags:
+    - packages
+    - common

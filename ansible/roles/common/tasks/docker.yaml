@@ -1,0 +1,21 @@
+---
+- include_tasks: "{{ item }}"
+  with_first_found:
+    - "docker/{{ ansible_distribution | lower }}.yaml"
+    - docker/default.yaml
+  tags:
+    - docker
+    - common
+
+- name: Docker | Prune old docker containers, images, networks, volumes, and caches
+  community.docker.docker_prune:
+    containers: yes
+    images: yes
+    networks: yes
+    volumes: yes
+    builder_cache: yes
+  become: yes
+  tags:
+    - docker
+    - cleanup
+    - common

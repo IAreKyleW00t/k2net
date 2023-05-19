@@ -1,0 +1,6 @@
+---
+- hosts: k3s
+  serial: 1 # 1 node at a time
+  roles:
+    - k3s
+    - common

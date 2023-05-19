@@ -1,0 +1,15 @@
+---
+- name: System Updates
+  block:
+    - name: System Updates | Update all packages
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+
+    - name: System Updates | Remove obsolete packages that are no longer required
+      ansible.builtin.yum:
+        autoremove: yes
+  become: yes
+  tags:
+    - updates
+    - common

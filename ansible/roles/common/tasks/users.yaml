@@ -1,0 +1,58 @@
+---
+- name: System Users
+  block:
+    - name: System Users | Ensure user '{{ user.name }}' exists
+      ansible.builtin.user:
+        name: "{{ user.name }}"
+        comment: "{{ user.comment }}"
+        groups: "{{ user.groups }}"
+
+    - name: System Users | Add '{{ user.name }}' to sudoers file
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/80-{{ user.name }}"
+        content: "{{ user.name }} {{ user.content | default('ALL=(ALL) NOPASSWD: ALL') }}"
+        mode: 0440
+      when: user.sudo.enabled | bool
+
+    - name: System Users | Create SSH folder for user '{{ user.name }}'
+      ansible.builtin.file:
+        path: "/home/{{ user.name }}/.ssh"
+        state: directory
+        owner: "{{ user.name }}"
+        group: "{{ user.name }}"
+        mode: "0700"
+      when: user.ssh.enabled | bool
+
+    - name: System Users | Set SSH private key for user '{{ user.name }}'
+      ansible.builtin.copy:
+        dest: "/home/{{ user.name }}/.ssh/{{ user.ssh.name }}"
+        src: "{{ user.ssh.local_key_path }}"
+        owner: "{{ user.name }}"
+        group: "{{ user.name }}"
+        mode: "0600"
+      when: user.ssh.enabled | bool
+
+    - name: System Users | Set SSH public key for user '{{ user.name }}'
+      ansible.builtin.copy:
+        dest: "/home/{{ user.name }}/.ssh/{{ user.ssh.name }}.pub"
+        src: "{{ user.ssh.local_key_path }}.pub"
+        owner: "{{ user.name }}"
+        group: "{{ user.name }}"
+        mode: "0644"
+      when: user.ssh.enabled | bool
+
+    - name: System Users | Add SSH public to authorized_keys for '{{ user.name }}'
+      ansible.builtin.lineinfile:
+        path: /home/{{ user.name }}/.ssh/authorized_keys
+        line: "{{ item }}"
+        owner: "{{ user.name }}"
+        group: "{{ user.name }}"
+        mode: "0644"
+        create: yes
+      with_file:
+        - "{{ user.ssh.local_key_path }}.pub"
+      when: user.ssh.enabled | bool
+  become: yes
+  tags:
+    - users
+    - common

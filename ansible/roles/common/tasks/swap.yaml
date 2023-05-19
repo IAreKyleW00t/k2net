@@ -1,0 +1,21 @@
+---
+- include_tasks: swap/enabled.yaml
+  loop: "{{ enabled_swap }}"
+  when: enabled_swap | length > 0
+  tags:
+    - swap
+    - common
+
+- include_tasks: swap/disabled.yaml
+  loop: "{{ disabled_swap }}"
+  when: disabled_swap | length > 0
+  tags:
+    - swap
+    - common
+
+- name: Swap | Activate all enabled swap partitions
+  ansible.builtin.command: swapon -a
+  become: yes
+  tags:
+    - swap
+    - common

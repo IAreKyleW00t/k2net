@@ -1,0 +1,5 @@
+---
+- hosts: pihole
+  roles:
+    - common
+    - pihole

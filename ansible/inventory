@@ -1,0 +1,25 @@
+[all]
+netmaker-1      ansible_host=3.135.131.84
+
+pihole-1        ansible_host=192.168.10.16
+pihole-2        ansible_host=100.100.100.1
+
+wyse-1          ansible_host=192.168.10.142
+wyse-2          ansible_host=192.168.10.136
+wyse-3          ansible_host=192.168.10.34
+wyse-4          ansible_host=192.168.10.97
+wyse-5          ansible_host=192.168.10.59
+
+[k3s]
+wyse-1
+wyse-2
+wyse-3
+wyse-4
+wyse-5
+
+[netmaker]
+netmaker-1
+
+[pihole]
+pihole-1
+pihole-2

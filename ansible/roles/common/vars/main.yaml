@@ -1,0 +1,6 @@
+---
+enabled_swap: "{{ additional_swap | selectattr('size', '>', 0)}}"
+disabled_swap: "{{ additional_swap | selectattr('size', '==', 0)}}"
+
+enabled_sysctl: "{{ sysctl | dict2items | selectattr('value', '!=', None) }}"
+disabled_sysctl: "{{ sysctl | dict2items | selectattr('value', '==', None) }}"

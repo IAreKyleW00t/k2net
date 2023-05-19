@@ -1,0 +1,4 @@
+---
+# General k3s settings
+k3s_node_type: server # or agent
+k3s_readiness_timeout: 600s

@@ -1,10 +1,29 @@
 # K2NET
 
-My personal Kubernetes cluster, running on [k3s](https://k3s.io/).
+My homelab, setup with [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/), and running [k3s](https://k3s.io/) for all my app workloads.
 
 🚧 Still under construction! 🚧
 
 ## Preparation
+
+### Ansible
+
+Ansible is used to configure the underlying systems to be ready for use in the k3s cluster, or for some other dedicated use. All roles and playbooks for this are in the [ansible](ansible/) folder
+and can be applied using:
+
+```sh
+ansible-playbook --vault-password-file ansible_vault.key -i inventory all.yaml
+```
+
+or, configure a specific role and/or host:
+
+```sh
+ansible-playbook --vault-password-file ansible_vault.key -i inventory <role>.yaml --limit <hostname>
+```
+
+#### k3s nodes
+
+Due to how k3s needs initially configured (with HA), and to better handle upgrades, the "install" of k3s is **not** included with Ansible and should be setup _before_ running the standard playbook on it.
 
 ### ArgoCD
 

@@ -1,0 +1,36 @@
+---
+- name: System Updates
+  block:
+    - name: System Updates | Update Apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: System Updates | Update all packages
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+    - name: System Updates | Perform dist-upgrade
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: System Updates | Enable unattended-upgrades
+      ansible.builtin.apt:
+        name: unattended-upgrades
+        state: latest
+
+    - name: System Updates | Remove obsolete packages from the cache
+      ansible.builtin.apt:
+        autoclean: yes
+
+    - name: System Updates | Remove orphaned packages that are no longer required
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: System Updates | Clean old packages and install scripts
+      ansible.builtin.apt:
+        clean: yes
+  become: yes
+  tags:
+    - updates
+    - common

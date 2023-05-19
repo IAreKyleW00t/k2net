@@ -1,0 +1,15 @@
+---
+additional_swap:
+  - path: /var/ansible_swap
+    size: 1
+
+additional_hosts:
+  192.168.10.16: pihole-1
+  fde7:76ae:f7c1:10:8059:fa88:88d7:5e2f: pihole-1
+
+# Only IPv4 in cloud right now
+pihole_dns:
+  - 9.9.9.9
+  - 149.112.112.112
+
+pihole_gravitysync_remote_host: 192.168.10.16

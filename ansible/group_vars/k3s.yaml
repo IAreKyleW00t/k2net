@@ -1,0 +1,17 @@
+---
+# Disable swap on k3s nodes
+additional_swap:
+  - path: /swap.img
+    size: 0
+sysctl:
+  vm.swappiness: 0
+
+# Packages needed for k3s
+additional_packages:
+  - nfs-common
+
+additional_mounts:
+  - path: /mnt/emmc
+    src: /dev/mmcblk0
+    fstype: ext4
+    opts: defaults,noatime,nofail

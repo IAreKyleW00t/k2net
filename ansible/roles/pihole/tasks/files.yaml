@@ -1,0 +1,17 @@
+---
+- name: Files
+  block:
+    - name: Files | Ensure pihole and dnsmasq config directories exists
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - /etc/pihole
+        - /etc/dnsmasq.d
+  become: yes
+  tags:
+    - files
+    - pihole

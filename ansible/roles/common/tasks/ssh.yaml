@@ -1,0 +1,29 @@
+---
+- name: SSH
+  block:
+    - name: SSH | Enable SSH Protocol 2
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: ^Protocol .+$
+        line: Protocol 2
+      register: sshd_proto_config
+
+    - name: SSH | Disable password-based authentication methods
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^{{ item }} .+$"
+        line: "{{ item }} no"
+      loop:
+        - PasswordAuthentication
+        - PermitEmptyPasswords
+      register: sshd_auth_config
+
+    - name: SSH | Reload sshd service
+      ansible.builtin.systemd:
+        name: sshd
+        state: reloaded
+      when: sshd_proto_config.changed or sshd_auth_config.changed
+  become: yes
+  tags:
+    - ssh
+    - common

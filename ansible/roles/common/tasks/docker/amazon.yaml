@@ -1,0 +1,35 @@
+---
+- name: Docker
+  block:
+    - name: Docker | Enable Amazon Linux Docker repo
+      command: amazon-linux-extras enable docker
+
+    - name: Docker | Install docker engine
+      ansible.builtin.yum:
+        name:
+          - docker
+        state: latest
+
+    - name: Docker | Get system architecture
+      ansible.builtin.command: uname -m
+      changed_when: false
+      register: uname
+
+    - name: Docker | Download and install latest docker-compose
+      ansible.builtin.get_url:
+        url: "https://github.com/docker/compose/releases/latest/download/docker-compose-{{ ansible_system }}-{{ uname.stdout }}"
+        dest: /usr/local/bin/docker-compose
+        mode: "0755"
+        owner: "root"
+        group: "root"
+
+    - name: Docker | Enable and start the docker service
+      ansible.builtin.systemd:
+        name: docker
+        enabled: yes
+        state: started
+  become: yes
+  tags:
+    - docker
+    - install
+    - common

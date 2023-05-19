@@ -1,0 +1,86 @@
+---
+- name: Docker
+  block:
+    - name: Docker | Check if netclient is running on remote host
+      ansible.builtin.systemd:
+        name: netclient
+      when: ansible_distribution == 'Ubuntu' and 'netmaker' not in group_names
+      register: netclient_service
+      changed_when: false
+
+    - name: Docker | Correct legacy iptables for Ubuntu when running netclient
+      community.general.alternatives:
+        name: "{{ app.name }}"
+        path: "{{ app.path }}"
+      when: |
+        ansible_distribution == 'Ubuntu' and
+        'netmaker' not in group_names and
+        netclient_service.status.ActiveState == 'active'
+      loop_control:
+        loop_var: app
+      loop:
+        - name: iptables
+          path: /usr/sbin/iptables-legacy
+        - name: ip6tables
+          path: /usr/sbin/ip6tables-legacy
+
+    - name: Docker | Remove legacy docker engine versions
+      ansible.builtin.apt:
+        name:
+          - docker
+          - docker-engine
+          - docker.io
+          - containerd
+          - runc
+        state: absent
+
+    - name: Docker | Install docker dependencies
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: latest
+
+    - name: Docker | Get system architecture
+      ansible.builtin.command: dpkg --print-architecture
+      changed_when: false
+      register: dpkg
+
+    - name: Docker | Add docker GPG signing key
+      ansible.builtin.apt_key:
+        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+        keyring: /etc/apt/trusted.gpg.d/docker.gpg
+        state: present
+
+    - name: Docker | Add docker Apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ dpkg.stdout }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        filename: docker
+        state: present
+      register: docker_repo
+
+    - name: Docker | Update Apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+      when: docker_repo.changed
+
+    - name: Docker | Install docker engine
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: latest
+
+    - name: Docker | Enable and start the docker service
+      ansible.builtin.systemd:
+        name: docker
+        enabled: yes
+        state: started
+  become: yes
+  tags:
+    - docker
+    - common

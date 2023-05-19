@@ -1,0 +1,15 @@
+---
+- name: System Packages
+  block:
+    - name: System Packages | Update Apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: System Packages | Install additional packages
+      ansible.builtin.apt:
+        name: "{{ additional_packages }}"
+        state: latest
+  become: yes
+  tags:
+    - updates
+    - common

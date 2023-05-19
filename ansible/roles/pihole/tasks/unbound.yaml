@@ -1,0 +1,56 @@
+---
+- name: Unbound
+  block:
+    - name: Unbound | Ensure unbound config directory exists
+      ansible.builtin.file:
+        path: /etc/unbound/unbound.conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Unbound | Ensure unbound anchor directories exists
+      ansible.builtin.file:
+        path: /var/lib/unbound
+        state: directory
+        owner: unbound
+        group: unbound
+        mode: "0755"
+
+    - name: Unbound | Download latest root hints
+      ansible.builtin.get_url:
+        url: https://www.internic.net/domain/named.root
+        dest: /var/lib/unbound/root.hints
+        owner: unbound
+        group: unbound
+        mode: "0644"
+
+    - name: Unbound | Template out Pi-Hole configuration for unbound
+      ansible.builtin.template:
+        src: unbound.conf.j2
+        dest: /etc/unbound/unbound.conf.d/pi-hole.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Unbound | Install/Update unbound
+      ansible.builtin.apt:
+        name: unbound
+        state: latest
+
+    - name: Unbound | Enable and start the unbound service
+      ansible.builtin.systemd:
+        name: unbound
+        enabled: yes
+        state: started
+
+    - name: Unbound | Disable and stop the unbound-resolvconf service
+      ansible.builtin.systemd:
+        name: unbound-resolvconf
+        enabled: no
+        state: stopped
+  when: ansible_distribution in ['Debian', 'Ubuntu']
+  become: yes
+  tags:
+    - unbound
+    - pihole

@@ -1,0 +1,22 @@
+---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.yaml"
+    - default.yaml
+  tags:
+    - netmaker
+
+- import_tasks: shutdown.yaml
+  tags:
+    - netmaker
+    - shutdown
+
+- import_tasks: files.yaml
+  tags:
+    - netmaker
+    - files
+
+- import_tasks: setup.yaml
+  tags:
+    - netmaker
+    - setup
