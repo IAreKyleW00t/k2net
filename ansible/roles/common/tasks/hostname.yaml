@@ -11,6 +11,8 @@
         dest: /etc/hosts
         regexp: "^127\\.0\\.1\\.1.+"
         line: "127.0.1.1\t{{ hostname }}"
+        insertbefore: "^##+"
+        firstmatch: yes
 
     - name: Hostname | Reboot system to fully set hostname
       ansible.builtin.reboot:
