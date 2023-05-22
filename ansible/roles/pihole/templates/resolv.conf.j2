@@ -4,6 +4,7 @@ options timeout:{{ pihole_resolvconf_timeout }} attempts:{{ pihole_resolvconf_at
 # Attempt to use Pi-Hole for local DNS first, but fallback
 # to using the same upstream DNS if Pi-Hole is down.
 nameserver 127.0.0.1
+nameserver ::1
 {% for ns in pihole_dns %}
 nameserver {{ ns }}
 {% endfor %}
