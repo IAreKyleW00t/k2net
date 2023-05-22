@@ -1,4 +1,5 @@
 ---
+caddy_container_image: ghcr.io/iarekylew00t/caddy-cloudflare
 caddy_acme_email: admin@kyle.systems
 caddy_cloudflare_api_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
@@ -10,7 +11,7 @@ caddy_cloudflare_api_token: !vault |
   3438323432396433336534316465653163373563316636303363
 
 caddy_additional_hosts:
-  192.168.10.201: k3s-ingress
+  k3s-ingress: 192.168.10.201
 
 # Public hosts
 caddy_hosts:
@@ -18,6 +19,9 @@ caddy_hosts:
     encode zstd gzip
     reverse_proxy * https://k3s-ingress {
       header_up X-Real-IP {remote_host}
+      transport http {
+        tls_insecure_skip_verify
+      }
     }
   unifi.kyle.systems: |
     encode zstd gzip
@@ -27,8 +31,6 @@ caddy_hosts:
         tls_insecure_skip_verify
       }
     }
-  codecs.kyle.systems: |
-    redir https://www.codecguide.com/media_foundation_codecs.htm permanent
 
   kyle.colanton.io: |
     redir https://k.yle.sh permanent
@@ -41,7 +43,7 @@ caddy_hosts:
   kronos.csuoh.io: |
     redir https://csuohio.kronos.net/wfc/applications/wtk/html/ess/logon.jsp permanent
 
-caddy_dyndns_enabled: yes
+caddy_dyndns_enabled: no
 caddy_dyndns_domains:
   kyle.systems: vault unifi codecs
   colanton.io: kyle

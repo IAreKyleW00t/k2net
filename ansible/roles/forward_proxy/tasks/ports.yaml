@@ -39,4 +39,4 @@
   become: yes
   tags:
     - ports
-    - forward-proxy
+    - forward_proxy

@@ -25,4 +25,4 @@
   become: yes
   tags:
     - setup
-    - forward-proxy
+    - forward_proxy
