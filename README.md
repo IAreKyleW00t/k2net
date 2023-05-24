@@ -32,8 +32,10 @@ Everything is deployed through [ArgoCD](https://argoproj.github.io/cd/), includi
 ```sh
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
+ARGO_VERSION=$(cat k8s/apps/argocd/Chart.yaml | yq -r '.dependencies[0].version')
 helm upgrade --install argocd argo/argo-cd \
     --atomic \
+    --version "$ARGO_VERSION" \
     --namespace argocd \
     --create-namespace
 ```
