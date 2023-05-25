@@ -7,3 +7,7 @@ ingress-nginx:
         # Allow other services to share this IP, useful when you want
         # to access ports other than 80,443 through the same "ingress"
         metallb.universe.tf/allow-shared-ip: ingress-nginx
+    admissionWebhooks:
+      patch:
+        podAnnotations:
+          linkerd.io/inject: disabled
