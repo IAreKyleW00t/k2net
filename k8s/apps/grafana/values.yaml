@@ -1,4 +1,7 @@
 grafana:
+  admin:
+    existingSecret: grafana-password
+
   ingress:
     enabled: true
     ingressClassName: nginx
@@ -11,6 +14,7 @@ grafana:
       - hosts:
           - grafana.kyle2.net
         secretName: grafana-tls
+
   datasources:
     datasources.yaml:
       apiVersion: 1
