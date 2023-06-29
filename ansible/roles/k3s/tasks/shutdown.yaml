@@ -12,6 +12,8 @@
       ansible.builtin.command: k3s-killall.sh
   notify:
     - Start k3s
+    - Uncordon k3s node
+    - Wait for k3s node
   tags:
     - k3s
     - Shutdown
