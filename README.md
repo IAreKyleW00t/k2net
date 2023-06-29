@@ -56,6 +56,7 @@ or do it all in one swoop:
 
 ```sh
 for dir in k8s/prep/*; do
+    kubectl create ns "$(basename $dir)"
     kubectl apply -f "$dir"
 done
 ```
