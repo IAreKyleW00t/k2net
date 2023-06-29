@@ -12,6 +12,8 @@ sysctl:
 # Packages needed for k3s
 additional_packages:
   - nfs-common
+  - wireguard
+  - wireguard-tools
 
 additional_mounts:
   - path: /mnt/emmc

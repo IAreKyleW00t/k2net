@@ -1,6 +1,6 @@
 ---
 additional_swap:
-  - path: /var/ansible_swap
+  - path: /var/swap
     size: 1
 
 additional_hosts:
