@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-dns
+  annotations:
+    linkerd.io/inject: enabled
 # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/pihole.md
 ---
 apiVersion: v1
