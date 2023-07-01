@@ -2,10 +2,10 @@ apiVersion: v2
 name: longhorn
 description: Meta-chart for Longhorn
 type: application
-version: 1.0.0
+version: 1.0.1
 
-appVersion: 1.4.1
+appVersion: 1.4.2
 dependencies:
   - name: longhorn
-    version: 1.4.1
+    version: 1.4.2
     repository: https://charts.longhorn.io
