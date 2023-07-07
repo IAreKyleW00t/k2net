@@ -6,9 +6,9 @@ resolvconf_nameservers:
   # - "2620:fe::fe"
   # - "2620:fe::9"
 
-netmaker_version: v0.20.2
-netmaker_server_image_tag: v0.20.2
-netmaker_ui_image_tag: v0.20.2
+netmaker_version: v0.20.3
+netmaker_server_image_tag: v0.20.3
+netmaker_ui_image_tag: v0.20.3
 netmaker_email: admin@kyle.systems
 netmaker_domain: net.kyle.systems
 netmaker_master_key: !vault |
