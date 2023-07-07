@@ -1,0 +1,116 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: home-assistant
+  annotations:
+    linkerd.io/inject: enabled
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: home-assistant-data
+  namespace: home-assistant
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+  labels:
+    app: home-assistant
+spec:
+  selector:
+    matchLabels:
+      app: home-assistant
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+    spec:
+      containers:
+        - name: home-assistant
+          image: homeassistant/home-assistant:latest
+          ports:
+            - containerPort: 8123 # HTTP
+          resources:
+            requests:
+              memory: 1024Mi
+              cpu: 1000m
+            limits:
+              memory: 4096Mi
+              cpu: 2000m
+          volumeMounts:
+            - name: data
+              mountPath: /config
+
+        - name: mqtt
+          image: eclipse-mosquitto:latest
+          ports:
+            - containerPort: 1883 # MQTT
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 10m
+            limits:
+              memory: 32Mi
+              cpu: 100m
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: home-assistant-data
+---
+# If your k8s version < v1.23, you will need to enable the
+# MixedProtocolLBService feature gate to use a single service for
+# UDP and TCP connections, otherwise you need 2 separate services.
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+  annotations:
+    metallb.universe.tf/allow-shared-ip: ingress-nginx
+spec:
+  selector:
+    app: home-assistant
+  ports:
+    - name: http
+      port: 8123
+      targetPort: 8123
+  type: LoadBalancer
+  loadBalancerIP: 192.168.10.201
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: homeassistant.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - homeassistant.kyle2.net
+      secretName: home-assistant-tls
+  rules:
+    - host: homeassistant.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: home-assistant
+                port:
+                  name: http
