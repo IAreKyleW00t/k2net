@@ -1,0 +1,64 @@
+---
+# Remote syslogs
+rsyslog_server: ""
+
+# System hostname
+hostname: "{{ inventory_hostname }}"
+
+# Reboot timeout (in seconds)
+reboot_timeout: 3600
+
+# System DNS settings
+dnsmasq_servers: []
+# - 127.0.0.1
+
+# sysctl settings
+sysctl:
+  vm.swappiness: 10 # default for Ubuntu is 60
+
+# Additional /etc/hosts entries
+additional_hosts: {}
+#  192.168.1.1: example
+
+# Additional volume mounts
+# Filesystem will automatically be created if needed
+additional_mounts: []
+#  - path: /mnt/example-data
+#    src: /dev/sdf
+#    fstype: xfs
+#    opts: defaults,nofail
+
+# Additional groups
+additional_groups: []
+# - example
+
+# Additional users
+additional_users: []
+# - name: test
+#   comment: Example user
+#   groups: docker,users
+#   sudo:
+#     enable: yes
+#     content: "ALL=(ALL) NOPASSWD: ALL"
+#   ssh:
+#     enabled: yes
+#     name: id_rsa
+#     local_key_path: ssh/mykey/id_rsa
+
+# Swap settings
+additional_swap: []
+# - path: /var/ansible_swap
+#   size: 4096
+#   size_unit: M
+# - path: /var/ansible_swap
+#   size: 2 # GB by default
+# - path: /swap.img
+#   size: 0 # Remove
+
+# Additional system packages
+additional_packages: []
+# - nfs-common
+
+# IPs to allow SSH through firewall (IPv4 or IPv6)
+ssh_allowed_ips: []
+# - 1.2.3.4

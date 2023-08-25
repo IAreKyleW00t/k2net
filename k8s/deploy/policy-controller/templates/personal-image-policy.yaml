@@ -1,0 +1,15 @@
+---
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: personal-image-policy
+  namespace: {{ .Release.Namespace }}
+spec:
+  images:
+    - glob: index.docker.io/iarekylew00t/**
+    - glob: ghcr.io/iarekylew00t/**
+  authorities:
+    - keyless:
+        identities:
+          - issuer: https://token.actions.githubusercontent.com
+            subjectRegExp: ^https://github.com/IAreKyleW00t/.+/.github/workflows/.+@.+$

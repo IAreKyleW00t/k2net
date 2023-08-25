@@ -1,0 +1,144 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mqtt
+  annotations:
+    linkerd.io/inject: enabled
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mqtt-data
+  namespace: mqtt
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt-config
+  namespace: mqtt
+data:
+  mosquitto.conf: |
+    listener 1883
+    allow_anonymous false
+    password_file /mosquitto/credentials/pwfile
+    persistence true
+    persistence_location /mosquitto/data/
+    log_dest stdout
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt
+  namespace: mqtt
+  annotations:
+    operator.1password.io/item-path: vaults/Homelab/items/mqtt-credentials
+    operator.1password.io/item-name: mqtt-credentials
+  labels:
+    app: mqtt
+spec:
+  selector:
+    matchLabels:
+      app: mqtt
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: mqtt
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1883 # mosquitto
+        runAsGroup: 1883 # mosquitto
+        fsGroup: 1883 # mosquitto
+        fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: pwfile-gen
+          image: eclipse-mosquitto:2.0.17
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - mosquitto_passwd -c -b /mosquitto/credentials/pwfile $MQTT_USERNAME $MQTT_PASSWORD
+          env:
+            - name: MQTT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-credentials
+                  key: username
+            - name: MQTT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-credentials
+                  key: credential
+          volumeMounts:
+            - name: credentials
+              mountPath: /mosquitto/credentials
+      containers:
+        - name: mqtt
+          image: eclipse-mosquitto:2.0.17
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          ports:
+            - containerPort: 1883 # MQTT
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 10m
+            limits:
+              memory: 32Mi
+              cpu: 100m
+          livenessProbe:
+            tcpSocket:
+              port: 1883
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 1883
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /mosquitto/data
+            - name: config
+              mountPath: /mosquitto/config
+            - name: credentials
+              mountPath: /mosquitto/credentials
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mqtt-data
+        - name: config
+          configMap:
+            name: mqtt-config
+        - name: credentials
+          emptyDir:
+            medium: Memory
+            sizeLimit: 4Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt
+  namespace: mqtt
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: mqtt.kyle2.net
+spec:
+  selector:
+    app: mqtt
+  ports:
+    - name: mqtt
+      port: 1883
+      targetPort: 1883
+  type: LoadBalancer

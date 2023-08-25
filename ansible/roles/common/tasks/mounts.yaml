@@ -1,0 +1,21 @@
+# Called from mail.yaml, using include_tasks to create a looping block
+---
+- name: Mounts
+  block:
+    - name: "Mounts | Ensure '{{ item.fstype }}' filesystem exists on device '{{ item.src }}'"
+      community.general.filesystem:
+        dev: "{{ item.src }}"
+        fstype: "{{ item.fstype }}"
+        force: no
+
+    - name: "Mounts | Mount device to '{{ item.path }}' and ensure it persistents across reboots"
+      ansible.posix.mount:
+        path: "{{ item.path }}"
+        src: "{{ item.src }}"
+        fstype: "{{ item.fstype }}"
+        opts: "{{ item.opts }}"
+        state: mounted
+  become: yes
+  tags:
+    - mounts
+    - common

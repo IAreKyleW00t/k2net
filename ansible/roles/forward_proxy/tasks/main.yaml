@@ -1,0 +1,16 @@
+---
+- import_tasks: files.yaml
+  tags:
+    - forward_proxy
+    - files
+
+- import_tasks: setup.yaml
+  tags:
+    - forward_proxy
+    - setup
+
+- include_tasks: ports.yaml
+  when: socat_ports | length > 0
+  tags:
+    - forward_proxy
+    - ports

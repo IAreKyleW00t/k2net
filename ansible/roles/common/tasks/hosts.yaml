@@ -1,0 +1,15 @@
+---
+- name: Static Hosts
+  block:
+    - name: Static Hosts | Updating additional hosts in /etc/hosts
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: "^{{ item.key }}"
+        line: "{{ item.key }}\t{{ item.value }}"
+        insertbefore: "^##+"
+        firstmatch: yes
+      loop: "{{ additional_hosts | dict2items }}"
+  become: yes
+  tags:
+    - hosts
+    - common

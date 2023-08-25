@@ -1,0 +1,35 @@
+---
+- name: Swap | Enabled
+  block:
+    - name: Swap | Enabled | Check if swap files exists
+      ansible.builtin.stat:
+        path: "{{ item.path }}"
+      register: swapfile
+
+    - name: Swap | Enabled | Create swap files
+      ansible.builtin.command: |
+        fallocate -l "{{ item.size }}{{ item.size_unit | default("G") }}" {{ item.path | quote }}
+      when: not swapfile.stat.exists
+
+    - name: Swap | Enabled | Update swap file permissions
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        owner: "root"
+        group: "root"
+        mode: "0600"
+
+    - name: Swap | Enabled | Format swap files
+      ansible.builtin.command: |
+        mkswap {{ item.path | quote }}
+      when: not swapfile.stat.exists
+
+    - name: Swap | Enabled | Mount swap files and ensure it persistents across reboots
+      ansible.builtin.lineinfile:
+        dest: /etc/fstab
+        regexp: "{{ item.path }}.+"
+        line: "{{ item.path }}\tswap\tswap\tdefaults\t0\t0"
+        state: present
+  become: yes
+  tags:
+    - swap
+    - common

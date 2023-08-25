@@ -1,0 +1,23 @@
+linkerd-control-plane:
+  podAnnotations:
+    operator.1password.io/item-path: vaults/Homelab/items/linkerd-trust-anchor
+    operator.1password.io/item-name: linkerd-trust-anchor
+  identity:
+    issuer:
+      scheme: kubernetes.io/tls
+  identityTrustAnchorsPEM: |
+    -----BEGIN CERTIFICATE-----
+    MIIBjjCCATSgAwIBAgIRAMiThnAXesqwZDCTBENRM8swCgYIKoZIzj0EAwIwJTEj
+    MCEGA1UEAxMacm9vdC5saW5rZXJkLmNsdXN0ZXIubG9jYWwwHhcNMjMwNTIzMjEy
+    NDU5WhcNMzMwNTIwMjEyNDU5WjAlMSMwIQYDVQQDExpyb290LmxpbmtlcmQuY2x1
+    c3Rlci5sb2NhbDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPAr4YmhZz9Ni3ba
+    DyluwxEsoRBvQpQvnP1eTYM1VTh46PomB5SM8HDaQbQxCUFiqRV1ch1tAQ2UB8Xk
+    IvwgR+mjRTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0G
+    A1UdDgQWBBQeSeZazbZDwpe6ne8pnMEm7sdThDAKBggqhkjOPQQDAgNIADBFAiBK
+    ggfosdsJElLAI2xmyYqH7v0hdN+J9ADvYMxNrADJ/gIhAJaqEk061+snbOOI1qdq
+    h9m6wbveRG327IGMqLRNiFKZ
+    -----END CERTIFICATE-----
+
+linkerd-viz:
+  dashboard:
+    enforcedHostRegexp: ^(linkerd\.kyle2\.net|localhost|127\.0\.0\.1|web\.linkerd\.svc\.cluster\.local|web\.linkerd\.svc|\[::1\])(:\d+)?$

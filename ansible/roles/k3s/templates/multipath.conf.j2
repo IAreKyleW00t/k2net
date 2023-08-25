@@ -1,0 +1,8 @@
+# {{ ansible_managed }} - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+defaults {
+    user_friendly_names yes
+}
+
+blacklist {
+    devnode "^sd[a-z0-9]+"
+}

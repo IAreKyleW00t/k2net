@@ -1,0 +1,4 @@
+---
+additional_swap:
+  - path: /var/swap
+    size: 1

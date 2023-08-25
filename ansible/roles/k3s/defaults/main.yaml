@@ -1,0 +1,17 @@
+---
+# General k3s settings
+k3s_node_type: server # or agent
+k3s_readiness_timeout: 600s
+k3s_version: v1.27.4+k3s1
+k3s_url: ""
+k3s_token: SECRET
+k3s_server_args: ""
+k3s_agent_args: ""
+k3s_leader: false
+
+# DNS settings
+k3s_resolvconf_timeout: 1
+k3s_resolvconf_attempts: 2
+k3s_resolvconf_rotate: false # round-robin between nameservers
+k3s_nameservers: []
+# - 9.9.9.9

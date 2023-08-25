@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Id": "PolicyForCloudFrontPrivateContent",
+  "Statement": [
+    {
+      "Sid": "AllowCloudFrontServicePrincipal",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "${s3_bucket}/*",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceArn": "${cloudfront_distribution_arn}"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+connect:
+  connect:
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        external-dns.alpha.kubernetes.io/hostname: connect.kyle2.net
+      hosts:
+        - host: connect.kyle2.net
+          paths: []
+      tls:
+        - hosts:
+            - connect.kyle2.net
+          secretName: op-connect-tls
+  operator:
+    create: true

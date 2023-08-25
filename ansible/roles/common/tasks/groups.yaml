@@ -1,0 +1,10 @@
+---
+- name: System Groups
+  block:
+    - name: System Groups | Ensure group '{{ group }}' exists
+      ansible.builtin.group:
+        name: "{{ group }}"
+  become: yes
+  tags:
+    - groups
+    - common

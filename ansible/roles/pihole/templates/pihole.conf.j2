@@ -1,0 +1,25 @@
+# {{ ansible_managed }} - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+PIHOLE_INTERFACE={{ pihole_interface }}
+QUERY_LOGGING={{ pihole_query_logging | lower }}
+INSTALL_WEB_SERVER={{ pihole_install_web_server | lower }}
+INSTALL_WEB_INTERFACE={{ pihole_install_web_interface | lower }}
+LIGHTTPD_ENABLED={{ pihole_lighttpd_enabled | lower }}
+CACHE_SIZE={{ pihole_cache_size }}
+DNS_FQDN_REQUIRED={{ pihole_dns_fqdn_required | lower }}
+DNS_BOGUS_PRIV={{ pihole_dns_bogus_priv | lower }}
+DNSMASQ_LISTENING={{ pihole_dnsmasq_listening }}
+WEBPASSWORD={{ pihole_webpassword }}
+BLOCKING_ENABLED={{ pihole_blocking_enabled | lower }}
+DNSSEC={{ pihole_dnssec | lower }}
+REV_SERVER={{ pihole_rev_server | lower }}
+REV_SERVER_CIDR={{ pihole_rev_server_cidr }}
+REV_SERVER_TARGET={{ pihole_rev_server_target }}
+REV_SERVER_DOMAIN={{ pihole_rev_server_domain }}
+WEBUIBOXEDLAYOUT={{ pihole_webuiboxedlayout }}
+WEBTHEME={{ pihole_webtheme }}
+API_EXCLUDE_DOMAINS={{ pihole_api_exclude_domains | join(',') }}
+API_EXCLUDE_CLIENTS={{ pihole_api_exclude_clients | join(',') }}
+API_QUERY_LOG_SHOW={{ pihole_api_query_log_show }}
+{% for dns in pihole_dns %}
+PIHOLE_DNS_{{ loop.index }}={{ dns }}
+{% endfor %}

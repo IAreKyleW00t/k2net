@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nfs-subdir-external-provisioner
+  namespace: argocd
+spec:
+  destination:
+    namespace: nfs-subdir-external-provisioner
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/IAreKyleW00t/k2net
+    targetRevision: main
+    path: k8s/deploy/nfs-subdir-external-provisioner
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

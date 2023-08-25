@@ -1,0 +1,9 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Release.Name }}-trust-anchor
+  namespace: {{ .Release.Namespace }}
+spec:
+  ca:
+    secretName: linkerd-trust-anchor

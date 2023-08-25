@@ -1,0 +1,20 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: home
+  namespace: {{ .Release.Namespace }}
+spec:
+  avoidBuggyIPs: true
+  addresses:
+    # Reserved for MetalLB
+    - 192.168.10.201-192.168.10.254
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: home
+  namespace: {{ .Release.Namespace }}
+spec:
+  ipAddressPools:
+    - home

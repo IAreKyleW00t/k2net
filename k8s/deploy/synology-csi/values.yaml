@@ -1,0 +1,32 @@
+synology-csi:
+  clientInfoSecret:
+    create: false
+    name: dsm-client-info-secret
+  storageClasses:
+    delete:
+      reclaimPolicy: Delete
+      volumeBindingMode: WaitForFirstConsumer
+      parameters:
+        protocol: iscsi
+        fsType: btrfs
+        dsm: "192.168.10.10"
+        location: /volume1
+        formatOptions: --nodiscard
+    retain:
+      reclaimPolicy: Retain
+      volumeBindingMode: WaitForFirstConsumer
+      parameters:
+        protocol: iscsi
+        fsType: btrfs
+        dsm: "192.168.10.10"
+        location: /volume1
+        formatOptions: --nodiscard
+  volumeSnapshotClasses:
+    delete:
+      deletionPolicy: Delete
+      parameters:
+        description: Synology CSI
+    retain:
+      deletionPolicy: Retain
+      parameters:
+        description: Synology CSI

@@ -1,0 +1,24 @@
+---
+- name: System sysctl
+  block:
+    - name: System sysctl | Setting sysctl values
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+        sysctl_set: yes
+        reload: yes
+      loop: "{{ enabled_sysctl }}"
+
+    - name: System sysctl | Unsetting sysctl values if null
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: absent
+        sysctl_set: yes
+        reload: yes
+      loop: "{{ disabled_sysctl }}"
+  become: yes
+  tags:
+    - sysctl
+    - common

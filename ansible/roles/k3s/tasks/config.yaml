@@ -1,0 +1,16 @@
+---
+- name: Config
+  block:
+    - name: Config | Fetch latest KubeConfig
+      ansible.builtin.fetch:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: ~/.kube/config
+        flat: yes
+      become: yes
+
+    - name: Config | Update config server address
+      ansible.builtin.command: yq -i e '.clusters[0].cluster.server = "{{ k3s_url }}"' ~/.kube/config
+      delegate_to: localhost
+  tags:
+    - k3s
+    - config

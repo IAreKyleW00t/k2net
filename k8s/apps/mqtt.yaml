@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mqtt
+  namespace: argocd
+spec:
+  destination:
+    namespace: mqtt
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/IAreKyleW00t/k2net
+    targetRevision: main
+    path: k8s/deploy/mqtt
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

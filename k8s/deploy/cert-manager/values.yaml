@@ -1,0 +1,5 @@
+cert-manager:
+  installCRDs: true
+  deploymentAnnotations:
+    operator.1password.io/item-path: vaults/Homelab/items/cloudflare-api-token
+    operator.1password.io/item-name: cloudflare-api-token

@@ -1,0 +1,39 @@
+---
+# Docker container image tag and data directory
+caddy_container_image: caddy:latest
+caddy_data_directory: /srv/docker/caddy
+
+socat_container_image: alpine/socat:latest
+
+# Addtional /etc/hosts mappings to include in container
+caddy_additional_hosts: {}
+#  backend: 192.168.1.42
+
+# ACME email settings
+caddy_acme_email: ""
+
+# Cloudflare settings
+caddy_cloudflare_api_token: ""
+
+# Dynamic DNS settings
+caddy_dyndns_enabled: false
+caddy_dyndns_domains: {}
+#  example.com: @ www
+#  example.net: subdomain
+
+# Caddy port settings
+caddy_http_port: 80
+caddy_https_port: 443
+
+# Virtual servers/hosts
+caddy_hosts: {}
+#  example.com: |
+#    gzip zstd gzip
+#    file_server
+#    reverse_proxy localhost:9005
+
+# Port forwarding
+socat_ports: []
+#  - port: 6667
+#    proto: tcp
+#    dest: 192.168.10.10

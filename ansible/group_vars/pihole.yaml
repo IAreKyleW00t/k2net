@@ -1,0 +1,43 @@
+---
+dnsmasq_servers: [] # managed by Pi-Hole
+pihole_dns:
+  - 9.9.9.9
+  - 149.112.112.112
+
+additional_groups:
+  - pihole
+
+additional_users:
+  - name: gravitysync
+    comment: Gravity Sync user
+    groups: docker,pihole
+    sudo:
+      enabled: yes
+    ssh:
+      enabled: yes
+      name: id_rsa
+      local_key_path: ssh/gravitysync_rsa
+
+# renovate: datasource=github-releases depName=pi-hole/pi-hole
+pihole_version: 5.17.1
+pihole_dnssec: false # https://support.quad9.net/hc/en-us/articles/4409274993677-DNS-Forwarders-Best-Practices
+pihole_dnsmasq_listening: all # to support Netmaker
+pihole_webpassword: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  39646163396263306635326661623666333735623137353761343237623637393266613436333639
+  3432323866386330376239306332383562616337356535330a653136386364363165313961346561
+  61353661626263636632623263373165303233376563303831626337366333636362666131386563
+  3162626261346431620a383432623062353435353064333266356362316434636230633937373130
+  39313839323964336332396535613237613566356537343937383364366136356437333463626535
+  66653535353235306134376565643330663564363939373838363035656633646464353132313466
+  32333262336438393939396463346563613233656134356630613561363539373863626236663231
+  61646538323133383038
+
+pihole_static_records:
+  k3s.kyle2.net:
+    - 192.168.10.142
+    - 192.168.10.34
+    - 192.168.10.60
+
+pihole_gravitysync_enabled: yes
+pihole_gravitysync_local_ssh_key_path: ssh/gravitysync_rsa

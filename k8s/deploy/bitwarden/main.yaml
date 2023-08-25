@@ -1,0 +1,150 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bitwarden
+  annotations:
+    linkerd.io/inject: enabled
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bitwarden-data
+  namespace: bitwarden
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitwarden
+  namespace: bitwarden
+  annotations:
+    operator.1password.io/item-path: vaults/Homelab/items/bitwarden-tokens
+    operator.1password.io/item-name: bitwarden-tokens
+    operator.1password.io/auto-restart: "true"
+  labels:
+    app: bitwarden
+spec:
+  selector:
+    matchLabels:
+      app: bitwarden
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: bitwarden
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: bitwarden
+          image: vaultwarden/server:1.29.1-alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          ports:
+            - containerPort: 80 # HTTP
+            - containerPort: 3012 # WebSockets
+          env:
+            - name: WEBSOCKET_ENABLED
+              value: "true"
+            - name: WEBSOCKET_PORT
+              value: "3012"
+            - name: DOMAIN
+              value: https://vault.kyle2.net/
+          envFrom:
+            - secretRef:
+                name: bitwarden-tokens
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 1000m
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 1
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: bitwarden-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bitwarden
+  namespace: bitwarden
+spec:
+  selector:
+    app: bitwarden
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: ws
+      port: 3012
+      targetPort: 3012
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bitwarden
+  namespace: bitwarden
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: vault.kyle2.net
+
+    # Better WebSockets support
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - vault.kyle2.net
+      secretName: bitwarden-tls
+  rules:
+    - host: vault.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bitwarden
+                port:
+                  name: http
+          - path: /notifications/hub
+            pathType: Exact
+            backend:
+              service:
+                name: bitwarden
+                port:
+                  name: ws

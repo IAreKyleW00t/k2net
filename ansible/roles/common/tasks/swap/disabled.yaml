@@ -1,0 +1,28 @@
+---
+- name: Swap | Disabled
+  block:
+    - name: Swap | Disabled | Check if stale swap files exists
+      ansible.builtin.stat:
+        path: "{{ item.path }}"
+      register: swapfile
+
+    # swap file may not be fully active, which is fine
+    - name: Swap | Disabled | Disable swap
+      ansible.builtin.shell: swapoff {{ item.path | quote }} || true
+      when: swapfile.stat.exists
+
+    - name: Swap | Disabled | Delete swap file
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      when: swapfile.stat.exists
+
+    - name: Swap | Disabled | Remove swap files from fstab
+      ansible.builtin.lineinfile:
+        dest: /etc/fstab
+        regexp: "{{ item.path }}.+"
+        state: absent
+  become: yes
+  tags:
+    - swap
+    - common

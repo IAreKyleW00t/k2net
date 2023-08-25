@@ -1,0 +1,5 @@
+---
+- import_playbook: gateway.yaml
+- import_playbook: pihole.yaml
+- import_playbook: k3s.yaml
+- import_playbook: forward_proxy.yaml

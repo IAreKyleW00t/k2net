@@ -1,0 +1,30 @@
+---
+- name: Setup | Server
+  block:
+    - name: Setup | Server | Download {{ k3s_version }} k3s install script
+      ansible.builtin.get_url:
+        url: https://get.k3s.io
+        dest: /tmp/k3s-install.sh
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Setup | Server | Run k3s install script
+      ansible.builtin.shell: |
+        INSTALL_K3S_VERSION={{ k3s_version }} K3S_TOKEN={{ k3s_token }} sh /tmp/k3s-install.sh {{ k3s_node_type }} --server {{ k3s_url }} {{ k3s_server_args | join(' ') }}
+      when: not k3s_leader
+
+    - name: Setup | Server | Run k3s install script (leader)
+      ansible.builtin.shell: |
+        INSTALL_K3S_VERSION={{ k3s_version }} K3S_TOKEN={{ k3s_token }} sh /tmp/k3s-install.sh {{ k3s_node_type }} --cluster-init {{ k3s_server_args | join(' ') }}
+      when: k3s_leader
+
+    - name: Setup | Server | Delete old k3s install script
+      ansible.builtin.file:
+        path: /tmp/k3s-install.sh
+        state: absent
+  become: yes
+  tags:
+    - server
+    - setup
+    - k3s

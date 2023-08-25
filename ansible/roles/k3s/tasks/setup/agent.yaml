@@ -1,0 +1,24 @@
+---
+- name: Setup | Agent
+  block:
+    - name: Setup | Agent | Download {{ k3s_version }} k3s install script
+      ansible.builtin.get_url:
+        url: https://get.k3s.io
+        dest: /tmp/k3s-install.sh
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Setup | Agent | Run k3s install script
+      ansible.builtin.shell: |
+        INSTALL_K3S_VERSION={{ k3s_version }} K3S_URL={{ k3s_url }} K3S_TOKEN={{ k3s_token }} sh /tmp/k3s-install.sh {{ k3s_node_type }} {{ k3s_agent_args | join(' ') }}
+
+    - name: Setup | Agent | Delete old k3s intsall script
+      ansible.builtin.file:
+        path: /tmp/k3s-install.sh
+        state: absent
+  become: yes
+  tags:
+    - agent
+    - setup
+    - k3s

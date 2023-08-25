@@ -1,0 +1,7 @@
+---
+ansible_user: ubuntu
+
+# rsyslog_server: 192.168.10.10:514
+dnsmasq_servers:
+  - 192.168.10.16
+  - 100.100.100.1

@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bitwarden
+  namespace: argocd
+spec:
+  destination:
+    namespace: bitwarden
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/IAreKyleW00t/k2net
+    targetRevision: main
+    path: k8s/deploy/bitwarden
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

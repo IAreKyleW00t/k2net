@@ -1,0 +1,12 @@
+loki:
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    storage:
+      type: filesystem
+  singleBinary:
+    replicas: 1
+    persistence:
+      size: 100Gi
+      storageClass: longhorn

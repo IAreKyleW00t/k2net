@@ -1,0 +1,37 @@
+---
+- name: Netclient
+  block:
+    - name: Netclient | Install Netclient dependencies
+      ansible.builtin.apt:
+        name:
+          - wireguard
+          - wireguard-tools
+        state: latest
+
+    - name: Netclient | Add Netclient GPG signing key
+      ansible.builtin.apt_key:
+        url: "https://apt.netmaker.org/gpg.key"
+        keyring: /etc/apt/trusted.gpg.d/netclient.gpg
+        state: present
+
+    - name: Netclient | Add Netclient Apt repository
+      ansible.builtin.apt_repository:
+        repo: deb https:apt.netmaker.org stable main
+        filename: netclient
+        state: present
+      register: netclient_repo
+
+    - name: Netclient | Update Apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+      when: netclient_repo.changed
+
+    - name: Netclient | Install Netclient
+      ansible.builtin.apt:
+        name:
+          - netclient
+        state: latest
+  become: yes
+  tags:
+    - netclient
+    - common

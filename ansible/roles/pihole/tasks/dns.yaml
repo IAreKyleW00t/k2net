@@ -1,0 +1,32 @@
+---
+- name: DNS
+  block:
+    - name: DNS | Check if /etc/resolv.conf is symlink
+      ansible.builtin.stat:
+        path: /etc/resolv.conf
+      register: resolv_conf
+
+    - name: DNS | Remove symlink for /etc/resolv.conf
+      ansible.builtin.file:
+        path: /etc/resolv.conf
+        state: absent
+      when: resolv_conf.stat.islnk is defined and resolv_conf.stat.islnk
+
+    - name: DNS | Remove idempotence flag from /etc/resolv.conf
+      ansible.builtin.command: chattr -i /etc/resolv.conf
+      when: resolv_conf.stat.islnk is defined and not resolv_conf.stat.islnk
+
+    - name: DNS | Template out /etc/resolv.conf
+      ansible.builtin.template:
+        src: resolv.conf.j2
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: DNS | Add idempotence flag from /etc/resolv.conf
+      ansible.builtin.command: chattr +i /etc/resolv.conf
+  become: yes
+  tags:
+    - dns
+    - pihole

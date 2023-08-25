@@ -1,0 +1,48 @@
+---
+- include_vars: "{{ k3s_node_type | lower }}.yaml"
+  tags:
+    - k3s
+
+- name: Check if k3s is installed
+  ansible.builtin.command: which kubectl
+  register: k3s_install
+  changed_when: false
+  failed_when: false # error = not found
+  tags:
+    - k3s
+
+- include_tasks: dns.yaml
+  tags:
+    - k3s
+    - dns
+
+- include_tasks: shutdown.yaml
+  when: k3s_install.rc == 0
+  tags:
+    - k3s
+    - shutdown
+
+- include_tasks: "{{ item }}"
+  with_first_found:
+    - "setup/{{ k3s_node_type | lower }}.yaml"
+  tags:
+    - k3s
+    - setup
+
+# Make sure k3s is stopped after installation, except the first time
+- include_tasks: shutdown.yaml
+  when: k3s_install.rc == 0
+  tags:
+    - k3s
+    - shutdown
+
+- include_tasks: config.yaml
+  when: k3s_leader
+  tags:
+    - k3s
+    - config
+
+- include_tasks: multipath.yaml
+  tags:
+    - k3s
+    - multipath

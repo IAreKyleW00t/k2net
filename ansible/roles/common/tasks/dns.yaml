@@ -1,0 +1,66 @@
+---
+- name: DNS
+  block:
+    - name: DNS | Install DNSmasq
+      ansible.builtin.apt:
+        update_cache: yes
+        name:
+          - dnsmasq
+        state: latest
+
+    - name: DNS | Configure DNSmasq to ignore resolvconf output
+      ansible.builtin.lineinfile:
+        dest: /etc/default/dnsmasq
+        regexp: ^#?IGNORE_RESOLVCONF=.+$
+        line: IGNORE_RESOLVCONF=yes
+
+    - name: DNS | Template out /etc/dnsmasq.conf
+      ansible.builtin.template:
+        src: dnsmasq.conf.j2
+        dest: /etc/dnsmasq.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: DNS | Stop and disable systemd-resolved service
+      ansible.builtin.systemd:
+        name: systemd-resolved
+        state: stopped
+        enabled: no
+
+    - name: DNS | Reload and enable DNSmasq service
+      ansible.builtin.systemd:
+        name: dnsmasq
+        state: restarted
+        enabled: yes
+
+    - name: DNS | Check if /etc/resolv.conf is symlink
+      ansible.builtin.stat:
+        path: /etc/resolv.conf
+      register: resolv_conf
+
+    - name: DNS | Remove symlink for /etc/resolv.conf
+      ansible.builtin.file:
+        path: /etc/resolv.conf
+        state: absent
+      when: resolv_conf.stat.islnk is defined and resolv_conf.stat.islnk
+
+    - name: DNS | Remove idempotence flag from /etc/resolv.conf
+      ansible.builtin.command: chattr -i /etc/resolv.conf
+      when: resolv_conf.stat.islnk is defined and not resolv_conf.stat.islnk
+
+    - name: DNS | Template out /etc/resolv.conf
+      ansible.builtin.template:
+        src: resolv.conf.j2
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: DNS | Add idempotence flag from /etc/resolv.conf
+      ansible.builtin.command: chattr +i /etc/resolv.conf
+
+  become: yes
+  tags:
+    - dns
+    - common

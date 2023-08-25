@@ -1,0 +1,18 @@
+longhorn:
+  defaultSettings:
+    defaultDataLocality: best-effort
+    backupTarget: s3://k2net-longhorn-backup@us-east-2/backup
+    backupTargetCredentialSecret: aws-credentials
+
+  persistence:
+    defaultDataLocality: best-effort
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    host: longhorn.kyle2.net
+    tls: true
+    tlsSecret: longhorn-tls
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      external-dns.alpha.kubernetes.io/hostname: longhorn.kyle2.net

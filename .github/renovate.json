@@ -1,0 +1,169 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "docker:enableMajor",
+    ":semanticCommits",
+    ":disableRateLimiting"
+  ],
+  "platform": "github",
+  "onboarding": false,
+  "requireConfig": "required",
+  "dependencyDashboardTitle": "Renovate Dashboard 🛡️",
+  "timezone": "America/New_York",
+  "schedule": ["at any time"],
+  "automerge": false,
+  "automergeSchedule": [],
+  "rebaseWhen": "conflicted",
+  "kubernetes": {
+    "fileMatch": ["k8s/deploy/.+/main\\.ya?ml$"]
+  },
+  "helm-values": {
+    "fileMatch": ["k8s/deploy/.+/Chart\\.ya?ml$"]
+  },
+  "argocd": {
+    "fileMatch": ["k8s/apps/.+\\.ya?ml$"]
+  },
+  "terraform": {
+    "fileMatch": ["terraform/.+\\.tf$"]
+  },
+  "ansible": {
+    "fileMatch": ["ansible/roles/.+/tasks/.+\\.ya?ml$"]
+  },
+  "ansible-galaxy": {
+    "fileMatch": ["ansible/requirements\\.ya?ml$", "ansible/galaxy\\.ya?ml$"]
+  },
+  "regexManagers": [
+    {
+      "fileMatch": [
+        ".github/.+/.+\\.ya?ml$",
+        "ansible/group_vars/.+\\.ya?ml$",
+        "ansible/host_vars/.+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "#\\s?renovate: datasource=(?<datasource>.*?)\\s?.+[_-]container[_-]image: (?<depName>.+):(?<currentValue>[\\w+\\.\\-]*)",
+        "#\\s?renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s?.+[_-]version: (?<currentValue>[\\w+\\.\\-]*)"
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["linuxserver/heimdall"],
+      "allowedVersions": "!/^2021.+/"
+    },
+    {
+      "matchPackagePatterns": ["^linkerd-"],
+      "groupName": "linkerd"
+    },
+    {
+      "matchPackageNames": ["hashicorp/terraform"],
+      "groupName": "terraform"
+    },
+    {
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "groupName": "terraform"
+    },
+    {
+      "matchDatasources": ["kubernetes-api"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(k8s)!: "
+    },
+    {
+      "matchDatasources": ["kubernetes-api"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "k8s"
+    },
+    {
+      "matchDatasources": ["kubernetes-api"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "k8s"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(container)!: "
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "container"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "container"
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(helm)!: "
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "helm"
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "helm"
+    },
+    {
+      "matchPackageNames": "hashicorp/terraform",
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(terraform)!: "
+    },
+    {
+      "matchPackageNames": "hashicorp/terraform",
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "terraform"
+    },
+    {
+      "matchPackageNames": "hashicorp/terraform",
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "terraform"
+    },
+    {
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(terraform)!: "
+    },
+    {
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "terraform"
+    },
+    {
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "terraform"
+    },
+    {
+      "matchDatasources": ["galaxy", "galaxy-collection"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(ansible)!: "
+    },
+    {
+      "matchDatasources": ["galaxy", "galaxy-collection"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "ansible"
+    },
+    {
+      "matchDatasources": ["galaxy", "galaxy-collection"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "ansible"
+    }
+  ]
+}

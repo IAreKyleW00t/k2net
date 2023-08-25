@@ -1,0 +1,14 @@
+---
+- name: DNS
+  block:
+    - name: DNS | Template out /etc/k3s-resolv.conf
+      ansible.builtin.template:
+        src: resolv.conf.j2
+        dest: /etc/k3s-resolv.conf
+        owner: root
+        group: root
+        mode: "0644"
+  become: yes
+  tags:
+    - dns
+    - k3s

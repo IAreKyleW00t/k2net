@@ -1,0 +1,70 @@
+---
+# renovate: datasource=docker
+caddy_container_image: ghcr.io/iarekylew00t/caddy-cloudflare:2.7.4
+caddy_acme_email: admin@kyle2.net
+caddy_cloudflare_api_token: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  37363637373631633333386464666363326630373734326239373363313566656338326439636239
+  3266656139613361613433656334366665393165643164310a616336396362333136373539333061
+  31646437613236326139306566353933383434363666373831613963643431343938366133383036
+  3964343835653939330a633537653430623063343530393738623939386533323961333362653638
+  31666137636538356237383631393131343032386431316331343032643363343666373333313238
+  3438323432396433336534316465653163373563316636303363
+
+caddy_additional_hosts:
+  k3s-ingress: 192.168.10.201
+
+# Public hosts
+caddy_hosts:
+  vault.kyle2.net: |
+    encode zstd gzip
+    reverse_proxy * https://k3s-ingress {
+      header_up X-Real-IP {remote_host}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  unifi.kyle2.net: |
+    encode zstd gzip
+    reverse_proxy * https://k3s-ingress {
+      header_up X-Real-IP {remote_host}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
+  kyle.colanton.io: |
+    redir https://k.yle.sh permanent
+  csuoh.io: |
+    redir https://www.csuohio.edu{uri}
+  kronos.csuoh.io: |
+    redir https://csuohio.kronos.net/wfc/applications/wtk/html/ess/logon.jsp permanent
+
+# Port forwarding
+# renovate: datasource=docker
+socat_container_image: alpine/socat:1.7.4.4
+socat_ports:
+  # Unifi
+  - port: 3478 # STUN
+    proto: udp
+    dest: 192.168.10.201
+  - port: 8080 # Control
+    proto: tcp
+    dest: 192.168.10.201
+  - port: 8443 # API
+    proto: tcp
+    dest: 192.168.10.201
+  - port: 8880 # HTTP
+    proto: tcp
+    dest: 192.168.10.201
+  - port: 8843 # HTTPS
+    proto: tcp
+    dest: 192.168.10.201
+  - port: 6789 # Speedtest
+    proto: tcp
+    dest: 192.168.10.201
+  - port: 10001 # Discovery
+    proto: udp
+    dest: 192.168.10.201
+  - port: 1900 # L2 Discovery
+    proto: udp
+    dest: 192.168.10.201

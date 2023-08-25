@@ -1,0 +1,34 @@
+grafana:
+  admin:
+    existingSecret: grafana-credentials
+    userKey: username
+    passwordKey: password
+
+  annotations:
+    operator.1password.io/item-path: vaults/Homelab/items/Grafana
+    operator.1password.io/item-name: grafana-credentials
+    operator.1password.io/auto-restart: "true"
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      external-dns.alpha.kubernetes.io/hostname: grafana.kyle2.net
+    hosts:
+      - grafana.kyle2.net
+    tls:
+      - hosts:
+          - grafana.kyle2.net
+        secretName: grafana-tls
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          url: http://loki:3100
+          jsonData:
+            maxLines: 1000

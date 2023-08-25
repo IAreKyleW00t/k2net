@@ -1,0 +1,28 @@
+---
+- name: Start k3s service
+  ansible.builtin.systemd:
+    name: "{{ k3s_service_name }}"
+    state: started
+  become: yes
+
+- name: Uncordon k3s node
+  ansible.builtin.command: "kubectl uncordon {{ hostname | quote }}"
+  delegate_to: localhost
+
+- name: Wait for k3s node
+  ansible.builtin.command: |
+    kubectl wait \
+      --for=condition=Ready \
+      --timeout={{ k3s_readiness_timeout | quote }} \
+      node {{ hostname | quote }}
+  delegate_to: localhost
+
+- name: Wait for cluster to normalize
+  ansible.builtin.command: |
+    kubectl wait \
+      --selector='!job-name' \
+      --all-namespaces \
+      --for=condition=Ready \
+      --timeout={{ k3s_readiness_timeout | quote }} \
+      pods --all
+  delegate_to: localhost

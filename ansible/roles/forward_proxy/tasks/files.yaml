@@ -1,0 +1,26 @@
+# Called from mail.yaml, using include_tasks
+---
+- name: Files
+  block:
+    - name: Files | Ensure Caddy data directory exists
+      ansible.builtin.file:
+        path: "{{ caddy_data_directory }}/{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - data
+        - config
+
+    - name: Files | Template out Caddyfile
+      ansible.builtin.template:
+        src: Caddyfile.j2
+        dest: "{{ caddy_data_directory }}/Caddyfile"
+        owner: root
+        group: root
+        mode: "0644"
+  become: yes
+  tags:
+    - files
+    - forward_proxy

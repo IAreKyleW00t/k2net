@@ -1,0 +1,87 @@
+---
+- include_tasks: rsyslog.yaml
+  when: rsyslog_server != ""
+  tags:
+    - common
+    - rsyslog
+
+- import_tasks: hostname.yaml
+  tags:
+    - common
+    - hostname
+
+- include_tasks: dns.yaml
+  when: |
+    dnsmasq_servers | length > 0 and
+    'pihole' not in group_names
+  tags:
+    - common
+    - dns
+
+- include_tasks: hosts.yaml
+  when: additional_hosts | length > 0
+  tags:
+    - common
+    - hosts
+
+- include_tasks: mounts.yaml
+  loop: "{{ additional_mounts }}"
+  tags:
+    - common
+    - mounts
+
+- import_tasks: ssh.yaml
+  tags:
+    - common
+    - ssh
+
+- import_tasks: swap.yaml
+  tags:
+    - common
+    - swap
+
+- import_tasks: sysctl.yaml
+  tags:
+    - common
+    - sysctl
+
+- import_tasks: updates.yaml
+  tags:
+    - common
+    - updates
+
+- import_tasks: packages.yaml
+  tags:
+    - common
+    - packages
+
+- import_tasks: netclient.yaml
+  tags:
+    - common
+    - netclient
+
+- import_tasks: docker.yaml
+  tags:
+    - common
+    - docker
+
+- include_tasks: groups.yaml
+  loop: "{{ additional_groups }}"
+  loop_control:
+    loop_var: group
+  tags:
+    - common
+    - groups
+
+- include_tasks: users.yaml
+  loop: "{{ additional_users }}"
+  loop_control:
+    loop_var: user
+  tags:
+    - common
+    - users
+
+- import_tasks: restart.yaml
+  tags:
+    - common
+    - restart

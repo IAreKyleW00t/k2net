@@ -1,0 +1,45 @@
+---
+- name: Setup
+  block:
+    - name: Setup | Template out edns unbound config for dnsmasq
+      ansible.builtin.template:
+        src: edns.conf.j2
+        dest: /etc/dnsmasq.d/99-edns.conf
+        owner: root
+        group: root
+        mode: "0644"
+      when: pihole_unbound_enabled
+
+    - name: Setup | Remove edns unbound config if unbound is disabled
+      ansible.builtin.file:
+        path: /etc/dnsmasq.d/99-edns.conf
+        state: absent
+      when: not pihole_unbound_enabled
+
+    - name: Setup | Template out Pi-Hole configuration
+      ansible.builtin.template:
+        src: pihole.conf.j2
+        dest: /etc/pihole/setupVars.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Setup | Download latest Pi-Hole install script
+      ansible.builtin.get_url:
+        url: https://install.pi-hole.net
+        dest: /tmp/pihole-install.sh
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Setup | Run Pi-Hole install script
+      ansible.builtin.command: /tmp/pihole-install.sh --unattended
+
+    - name: Setup | Delete old Pi-Hole intsall script
+      ansible.builtin.file:
+        path: /tmp/pihole-install.sh
+        state: absent
+  become: yes
+  tags:
+    - setup
+    - pihole

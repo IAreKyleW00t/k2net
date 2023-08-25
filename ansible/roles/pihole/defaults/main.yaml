@@ -1,0 +1,56 @@
+---
+# Primary Pi-Hole settings
+pihole_interface: eth0
+pihole_query_logging: true
+pihole_install_web_server: true
+pihole_install_web_interface: true
+pihole_lighttpd_enabled: true
+pihole_cache_size: 10000
+pihole_dns_fqdn_required: true
+pihole_dns_bogus_priv: true
+pihole_dnsmasq_listening: eth0
+pihole_webpassword: 998ed4d621742d0c2d85ed84173db569afa194d4597686cae947324aa58ab4bb # admin
+pihole_blocking_enabled: true
+pihole_dnssec: true
+pihole_rev_server: false
+pihole_rev_server_cidr: 192.168.0.0/16
+pihole_rev_server_target: 192.168.1.1
+pihole_rev_server_domain: ""
+pihole_webuiboxedlayout: boxed
+pihole_webtheme: default-dark
+pihole_api_exclude_domains: []
+pihole_api_exclude_clients: []
+pihole_api_query_log_show: all
+
+# Upstream DNS, default Quad9
+pihole_dns:
+  - 9.9.9.9
+  - 149.112.112.112
+  # - 127.0.0.1#5353 # Unbound
+
+# Records defined in DNSMasq directly.
+# Useful if you need multiple IPs to point to a single domain.
+pihole_static_records: {}
+#  k3s.example.com:
+#    - 192.168.1.10
+#    - 192.168.1.11
+#    - 192.168.1.12
+
+# Unbound settings
+pihole_unbound_enabled: false
+pihole_unbound_port: 5353
+pihole_unbound_do_ip4: "yes"
+pihole_unbound_do_ip6: "no"
+pihole_unbound_prefer_ip6: "no"
+pihole_unbound_do_udp: "yes"
+pihole_unbound_do_tcp: "yes"
+pihole_unbound_dnssec: "yes"
+pihole_unbound_edns_buffer_size: 1232
+
+# Gravity sync settings
+pihole_gravitysync_enabled: false
+pihole_gravitysync_leader: false # push
+pihole_gravitysync_auto: true # Enable syncing service
+pihole_gravitysync_user: gravitysync
+pihole_gravitysync_remote_host: ""
+pihole_gravitysync_local_ssh_key_path: ""

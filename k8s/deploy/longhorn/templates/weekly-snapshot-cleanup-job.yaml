@@ -1,0 +1,14 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: weekly-snapshot-cleanup
+  namespace: {{ .Release.Namespace }}
+spec:
+  name: weekly-snapshot-cleanup
+  task: snapshot-cleanup
+  cron: 0 1 * * 5
+  concurrency: 2
+  retain: 0
+  groups:
+  - default

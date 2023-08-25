@@ -1,0 +1,102 @@
+---
+name: Terraform
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Perform apply after successful plan
+        type: boolean
+        default: false
+        required: false
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/terraform.yaml
+      - terraform/
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/terraform.yaml
+      - terraform/
+
+defaults:
+  run:
+    working-directory: terraform/
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  TF_VAR_netmaker_access_key: ${{ secrets.NETMAKER_ACCESS_KEY }}
+
+# Only run 1 Terraform plan/apply at a time
+concurrency: ${{ github.workflow }}
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3.6.0
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          # renovate: datasource=github-releases depName=hashicorp/terraform
+          terraform_version: v1.5.6
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        continue-on-error: true
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -out=tf.plan
+        continue-on-error: true
+      
+      - name: Record Terraform summary
+        id: summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          #### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️ \`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
+
+          <details><summary>Validation Output</summary>
+
+          \`\`\`
+          ${{ steps.validate.outputs.stdout }}
+          \`\`\`
+
+          </details>
+
+          #### Terraform Plan 📖 \`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`
+          ${{ steps.plan.outputs.stdout }}
+          \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`terraform/\`, Workflow: \`${{ github.workflow }}\`*
+          EOF
+
+      - name: Terraform Apply
+        if: |
+          steps.plan.outcome == 'success' &&
+          ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event.inputs.apply)
+        id: apply
+        run: terraform apply -input=false tf.plan

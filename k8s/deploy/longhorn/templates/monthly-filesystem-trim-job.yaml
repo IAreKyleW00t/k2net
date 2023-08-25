@@ -1,0 +1,14 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: monthly-filesystem-trim
+  namespace: {{ .Release.Namespace }}
+spec:
+  name: monthly-filesystem-trim
+  task: filesystem-trim
+  cron: 0 2 1 * *
+  concurrency: 2
+  retain: 0
+  groups:
+  - default

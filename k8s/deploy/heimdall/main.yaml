@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: heimdall
+  annotations:
+    linkerd.io/inject: enabled
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: heimdall-config
+  namespace: heimdall
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heimdall
+  namespace: heimdall
+  labels:
+    app: heimdall
+spec:
+  selector:
+    matchLabels:
+      app: heimdall
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: heimdall
+    spec:
+      containers:
+        - name: heimdall
+          image: linuxserver/heimdall:2.5.6
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            # Linuxserver.io images require root, but drop down to user-level
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 1000m
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: heimdall-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heimdall
+  namespace: heimdall
+spec:
+  selector:
+    app: heimdall
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: heimdall
+  namespace: heimdall
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: dash.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - dash.kyle2.net
+      secretName: heimdall-tls
+  rules:
+    - host: dash.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: heimdall
+                port:
+                  name: http

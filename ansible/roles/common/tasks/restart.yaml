@@ -1,0 +1,16 @@
+---
+- name: Restart
+  block:
+    - name: Restart | Check if reboot is required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: check_reboot
+
+    - name: Restart | Reboot system to apply pending updates
+      ansible.builtin.reboot:
+        reboot_timeout: "{{ reboot_timeout }}"
+      when: check_reboot.stat.exists
+  become: yes
+  tags:
+    - restart
+    - common

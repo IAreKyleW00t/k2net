@@ -1,0 +1,36 @@
+---
+# Netmaker uses docker-compose with several containers
+- name: Setup
+  block:
+    - name: Setup | Allow FORWARD traffic
+      ansible.builtin.iptables:
+        chain: FORWARD
+        policy: ACCEPT
+
+    - name: Setup | Set UDP Receive Buffer Size to 2500000
+      ansible.posix.sysctl:
+        name: net.core.rmem_max
+        value: "2500000"
+        sysctl_set: yes
+        state: present
+        reload: yes
+
+    - name: Setup | Pull latest netmaker docker images
+      ansible.builtin.shell: |
+        set -a
+        source netmaker.env
+        {{ docker_compose_bin }} pull
+      args:
+        chdir: "{{ netmaker_root_directory }}"
+
+    - name: Setup | Start netmaker via docker-compose with new containers
+      ansible.builtin.shell: |
+        set -a
+        source netmaker.env
+        {{ docker_compose_bin }} up -d --force-recreate
+      args:
+        chdir: "{{ netmaker_root_directory }}"
+  become: yes
+  tags:
+    - setup
+    - netmaker

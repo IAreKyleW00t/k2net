@@ -1,0 +1,24 @@
+---
+- name: Hostname
+  block:
+    - name: Hostname | Set system hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
+      register: hostname_check
+
+    - name: Hostname | Set local hostname in /etc/hosts
+      ansible.builtin.lineinfile:
+        dest: /etc/hosts
+        regexp: "^127\\.0\\.1\\.1.+"
+        line: "127.0.1.1\t{{ hostname }}"
+        insertbefore: "^##+"
+        firstmatch: yes
+
+    - name: Hostname | Reboot system to fully set hostname
+      ansible.builtin.reboot:
+        reboot_timeout: "{{ reboot_timeout }}"
+      when: hostname_check.changed
+  become: yes
+  tags:
+    - hostname
+    - common

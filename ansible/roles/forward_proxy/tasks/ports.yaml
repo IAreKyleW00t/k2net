@@ -1,0 +1,42 @@
+# Called from mail.yaml, using include_tasks
+---
+- name: Port Forwarding
+  block:
+    - name: Port Forwarding | Enable IPv4 and IPv6 Forwarding
+      ansible.posix.sysctl:
+        name: "{{ item }}"
+        value: 1
+        state: present
+        sysctl_set: yes
+        reload: yes
+      loop:
+        - net.ipv4.ip_forward
+        - net.ipv6.conf.all.forwarding
+
+    - name: Port Forwarding | Pull '{{ socat_container_image }}' docker container
+      community.docker.docker_image:
+        name: "{{ socat_container_image }}"
+        source: pull
+
+    - name: "Port Forwarding | Start socat containers"
+      community.docker.docker_container:
+        name: "socat-{{ item.proto }}-{{ item.port }}"
+        image: "{{ socat_container_image }}"
+        restart_policy: unless-stopped
+        restart: yes
+        command: "{{ item.proto }}-listen:{{ item.port }},fork,reuseaddr tcp-connect:{{ item.dest }}:{{ item.port }}"
+        ports:
+          - "{{ item.port }}:{{ item.port }}/{{ item.proto }}"
+        comparisons:
+          "*": strict # recreate container on _any_ change
+      loop: "{{ enabled_ports }}"
+
+    - name: "Port Forwarding | Remove unused socat containers"
+      community.docker.docker_container:
+        name: "socat-{{ item.proto }}-{{ item.port }}"
+        state: absent
+      loop: "{{ disabled_ports }}"
+  become: yes
+  tags:
+    - ports
+    - forward_proxy
