@@ -1,0 +1,14 @@
+---
+area/github:
+  - ".github/**/*"
+  - .gitignore
+area/ansible:
+  - "ansible/**/*"
+area/kubernetes:
+  - "kubernetes/**/*"
+area/terraform:
+  - "terraform/**/*"
+  - .terraformignore
+documentation:
+  - README.md
+  - LICENSE

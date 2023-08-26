@@ -1,0 +1,40 @@
+---
+# Area
+- name: area/github
+  color: "010409"
+- name: area/ansible
+  color: "e00"
+- name: area/kubernetes
+  color: "3371e3"
+- name: area/terraform
+  color: "7b42bc"
+# Type
+- name: type/digest
+  color: "006b75"
+- name: type/patch
+  color: "0e8a16"
+- name: type/minor
+  color: "fbca04"
+- name: type/major
+  color: "d93f0b"
+- name: type/break
+  color: "b60205"
+# Uncategorized
+- name: bug
+  color: "d73a4a"
+- name: do-not-merge
+  color: "ee0701"
+- name: documentation
+  color: "0075ca"
+- name: duplicate
+  color: "cfd3d7"
+- name: enhancement
+  color: "a2eeef"
+- name: help wanted
+  color: "008672"
+- name: invalid
+  color: "e4e669"
+- name: question
+  color: "d876e3"
+- name: wontfix
+  color: "ffffff"

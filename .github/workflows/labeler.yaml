@@ -1,0 +1,16 @@
+---
+name: Labeler
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Labeler
+        uses: actions/labeler@v4.3.0
+        with:
+          configuration-path: .github/labeler.yaml
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
