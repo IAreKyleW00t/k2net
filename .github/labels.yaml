@@ -20,6 +20,8 @@
 - name: type/break
   color: "b60205"
 # Uncategorized
+- name: renovate
+  color: "009485"
 - name: bug
   color: "d73a4a"
 - name: do-not-merge
