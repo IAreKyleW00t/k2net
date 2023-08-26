@@ -5,7 +5,7 @@ area/github:
 area/ansible:
   - "ansible/**/*"
 area/kubernetes:
-  - "kubernetes/**/*"
+  - "k8s/**/*"
 area/terraform:
   - "terraform/**/*"
   - .terraformignore
