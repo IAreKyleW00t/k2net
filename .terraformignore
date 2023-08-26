@@ -1,2 +1,4 @@
-ansible/
-k8s/
+# ignore everything by default
+*
+# explicitly include terraform directory
+!terraform/
