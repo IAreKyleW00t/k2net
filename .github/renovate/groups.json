@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^linkerd-"],
+      "groupName": "linkerd"
+    },
+    {
+      "matchPackageNames": ["hashicorp/terraform"],
+      "groupName": "terraform"
+    },
+    {
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "groupName": "terraform"
+    }
+  ]
+}
