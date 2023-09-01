@@ -64,6 +64,13 @@ jobs:
         id: plan
         run: terraform plan -no-color -out=tf.plan
         continue-on-error: true
+
+      - name: Terraform Apply
+        if: |
+          steps.plan.outcome == 'success' &&
+          ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event.inputs.apply)
+        id: apply
+        run: terraform apply -input=false tf.plan
       
       - name: Record Terraform summary
         id: summary
@@ -91,12 +98,15 @@ jobs:
 
           </details>
 
+          #### Terraform Apply ⚡ \`${{ steps.apply.outcome }}\`
+
+          <details><summary>Show Apply</summary>
+
+          \`\`\`
+          ${{ steps.apply.outputs.stdout }}
+          \`\`\`
+
+          </details>
+
           *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`terraform/\`, Workflow: \`${{ github.workflow }}\`*
           EOF
-
-      - name: Terraform Apply
-        if: |
-          steps.plan.outcome == 'success' &&
-          ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event.inputs.apply)
-        id: apply
-        run: terraform apply -input=false tf.plan
