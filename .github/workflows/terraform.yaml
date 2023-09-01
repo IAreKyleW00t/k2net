@@ -49,7 +49,6 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        continue-on-error: true
 
       - name: Terraform Init
         id: init
@@ -58,22 +57,21 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        continue-on-error: true
 
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color -out=tf.plan
-        continue-on-error: true
 
       - name: Terraform Apply
+        id: apply
         if: |
           steps.plan.outcome == 'success' &&
           ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event.inputs.apply)
-        id: apply
         run: terraform apply -input=false tf.plan
       
       - name: Record Terraform summary
         id: summary
+        if: always()
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<EOF
           #### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
