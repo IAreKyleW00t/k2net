@@ -48,11 +48,11 @@ jobs:
 
       - name: Terraform fmt
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt -no-color -check
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -no-color
 
       - name: Terraform Validate
         id: validate
@@ -67,7 +67,7 @@ jobs:
         if: |
           steps.plan.outcome == 'success' &&
           ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event.inputs.apply)
-        run: terraform apply -input=false tf.plan
+        run: terraform apply -no-color -input=false tf.plan
       
       - name: Record Terraform summary
         id: summary
