@@ -5,6 +5,7 @@
     "docker:enableMajor",
     ":semanticCommits",
     ":disableRateLimiting",
+    "helpers:pinGitHubActionDigests",
     "github>IAreKyleW00t/k2net//.github/renovate/groups.json",
     "github>IAreKyleW00t/k2net//.github/renovate/labels.json",
     "github>IAreKyleW00t/k2net//.github/renovate/semanticCommits.json",
