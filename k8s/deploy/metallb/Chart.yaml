@@ -6,5 +6,5 @@ version: 1.0.1
 
 dependencies:
   - name: metallb
-    version: 0.13.10
+    version: 0.13.11
     repository: https://metallb.github.io/metallb
