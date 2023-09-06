@@ -6,5 +6,5 @@ version: 1.0.1
 
 dependencies:
   - name: node-problem-detector
-    version: 2.3.7
+    version: 2.3.8
     repository: https://charts.deliveryhero.io/
