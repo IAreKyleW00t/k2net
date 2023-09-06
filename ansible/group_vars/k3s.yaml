@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=github-releases depName=k3s-io/k3s
-k3s_version: v1.27.4+k3s1
+k3s_version: v1.27.5+k3s1
 k3s_url: https://k3s.kyle2.net:6443
 k3s_server_args:
   - --disable=traefik,local-storage,metrics-server,servicelb
