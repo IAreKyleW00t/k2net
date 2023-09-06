@@ -19,6 +19,23 @@
       "semanticCommitScope": "k8s"
     },
     {
+      "matchDepNames": ["k3s-io/k3s"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "feat(k8s)!: "
+    },
+    {
+      "matchDepNames": ["k3s-io/k3s"],
+      "matchUpdateTypes": ["minor"],
+      "semanticCommitType": "feat",
+      "semanticCommitScope": "k8s"
+    },
+    {
+      "matchDepNames": ["k3s-io/k3s"],
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "k8s"
+    },
+    {
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major"],
       "commitMessagePrefix": "feat(container)!: "
