@@ -1,0 +1,4 @@
+---
+ansible_user: kyle
+ansible_python_interpreter: /opt/bin/python3
+ansible_ssh_transfer_method: scp

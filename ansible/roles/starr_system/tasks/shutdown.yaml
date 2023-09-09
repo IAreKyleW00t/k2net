@@ -1,0 +1,11 @@
+---
+- name: Shutdown
+  block:
+    - name: Shutdown | Stop starr-system
+      ansible.builtin.shell: "{{ docker_compose_bin }} down --remove-orphans"
+      args:
+        chdir: "{{ starr_root_directory }}"
+  become: yes
+  tags:
+    - shutdown
+    - starr

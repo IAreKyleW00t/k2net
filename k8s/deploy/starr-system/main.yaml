@@ -1,0 +1,146 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: starr-system
+  annotations:
+    linkerd.io/inject: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: euclase
+  namespace: starr-system
+spec:
+  type: ExternalName
+  externalName: euclase.kyle2.net
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prowlarr
+  namespace: starr-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: prowlarr.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - prowlarr.kyle2.net
+      secretName: prowlarr-tls
+  rules:
+    - host: prowlarr.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: euclase
+                port:
+                  number: 9696
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: radarr
+  namespace: starr-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: radarr.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - radarr.kyle2.net
+      secretName: radarr-tls
+  rules:
+    - host: radarr.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: euclase
+                port:
+                  number: 7878
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr
+  namespace: starr-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: sonarr.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - sonarr.kyle2.net
+      secretName: sonarr-tls
+  rules:
+    - host: sonarr.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: euclase
+                port:
+                  number: 8989
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sabnzbd
+  namespace: starr-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: sabnzbd.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - sabnzbd.kyle2.net
+      secretName: sabnzbd-tls
+  rules:
+    - host: sabnzbd.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: euclase
+                port:
+                  number: 8888
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bittorrent
+  namespace: starr-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    external-dns.alpha.kubernetes.io/hostname: bittorrent.kyle2.net
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - bittorrent.kyle2.net
+      secretName: bittorrent-tls
+  rules:
+    - host: bittorrent.kyle2.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: euclase
+                port:
+                  number: 8787

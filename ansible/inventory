@@ -13,6 +13,8 @@ wyse-3          ansible_host=192.168.10.34
 wyse-4          ansible_host=192.168.10.97
 wyse-5          ansible_host=192.168.10.60
 
+euclase         ansible_host=192.168.10.10
+
 [k3s]
 wyse-1
 wyse-3
@@ -32,3 +34,6 @@ forward-proxy
 [pihole]
 pihole-1
 pihole-2
+
+[nas]
+euclase

@@ -1,0 +1,22 @@
+---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.yaml"
+    - default.yaml
+  tags:
+    - starr
+
+- import_tasks: shutdown.yaml
+  tags:
+    - starr
+    - shutdown
+
+- import_tasks: files.yaml
+  tags:
+    - starr
+    - files
+
+- import_tasks: setup.yaml
+  tags:
+    - starr
+    - setup

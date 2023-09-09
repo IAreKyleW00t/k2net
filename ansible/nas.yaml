@@ -1,0 +1,4 @@
+---
+- hosts: nas
+  roles:
+    - starr_system

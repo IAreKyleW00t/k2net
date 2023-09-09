@@ -1,0 +1,16 @@
+---
+- name: Setup
+  block:
+    - name: Setup | Pull latest docker images
+      ansible.builtin.shell: "{{ docker_compose_bin }} pull"
+      args:
+        chdir: "{{ starr_root_directory }}"
+
+    - name: Setup | Start starr-system via docker-compose with new containers
+      ansible.builtin.shell: "{{ docker_compose_bin }} up -d --force-recreate"
+      args:
+        chdir: "{{ starr_root_directory }}"
+  become: yes
+  tags:
+    - setup
+    - starr

@@ -1,0 +1,83 @@
+# {{ ansible_managed }} - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+version: "3.2"
+services:
+  prowlarr:
+    container_name: prowlarr
+    image: {{ prowlarr_container_image }}
+    restart: unless-stopped
+    ports:
+      - {{ prowlarr_port }}:9696
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${DOCKER_CONFIG_DIR}/prowlarr:/config
+  radarr:
+    container_name: radarr
+    image: {{ radarr_container_image }}
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+      - sabnzbd
+      - qbittorrent
+    ports:
+      - {{ sonarr_port }}:7878
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${DOCKER_CONFIG_DIR}/radarr:/config
+      - ${DOCKER_STORAGE_DIR}:/data
+  sonarr:
+    container_name: sonarr
+    image: {{ sonarr_container_image }}
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+      - sabnzbd
+      - qbittorrent
+    ports:
+      - {{ radarr_port }}:8989
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${DOCKER_CONFIG_DIR}/sonarr:/config
+      - ${DOCKER_STORAGE_DIR}:/data
+  sabnzbd:
+    container_name: sabnzbd
+    image: {{ sabnzbd_container_image }}
+    restart: unless-stopped
+    ports:
+      - {{ sabnzbd_port }}:8080
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+    volumes:
+      - ${DOCKER_CONFIG_DIR}/sabnzbd:/config
+      - ${DOCKER_STORAGE_DIR}/usenet:/data/usenet
+  qbittorrent:
+    container_name: qbittorrent
+    image: {{ qbittorrent_container_image }}
+    restart: unless-stopped
+    ports:
+      - {{ qbittorrent_port }}:8787
+      - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port }}
+      - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port }}/udp
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
+      - WEBUI_PORT=8787
+    volumes:
+      - ${DOCKER_CONFIG_DIR}/qbittorrent:/config
+      - ${DOCKER_STORAGE_DIR}/torrents:/data/torrents

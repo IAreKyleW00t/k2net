@@ -1,0 +1,23 @@
+# Docker images
+prowlarr_container_image: linuxserver/prowlarr:latest
+sonarr_container_image: linuxserver/sonarr:latest
+radarr_container_image: linuxserver/radarr:latest
+sabnzbd_container_image: linuxserver/sabnzbd:latest
+qbittorrent_container_image: linuxserver/qbittorrent:latest
+
+# Location for all docker data
+starr_root_directory: /srv/docker/starr-system
+starr_storage_directory: /media
+
+# Settings
+starr_puid: 1000
+starr_guid: 1000
+starr_umask: "002"
+starr_timezone: America/New_York
+
+prowlarr_port: 9696
+sonarr_port: 8989
+radarr_port: 7878
+sabnzbd_port: 8888
+qbittorrent_port: 8787
+qbittorrent_torrent_port: 50000
