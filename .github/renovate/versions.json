@@ -3,7 +3,11 @@
   "packageRules": [
     {
       "matchPackageNames": ["linuxserver/heimdall"],
-      "allowedVersions": "!/^2021.+/"
+      "allowedVersions": "!/^2021\\..+/"
+    },
+    {
+      "matchPackageNames": ["linuxserver/qbittorrent"],
+      "allowedVersions": "!/^20\\..+/"
     }
   ]
 }
