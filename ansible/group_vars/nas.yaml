@@ -1,8 +1,13 @@
 ---
+# renovate: datasource=docker
 prowlarr_container_image: linuxserver/prowlarr:version-1.7.4.3769
+# renovate: datasource=docker
 sonarr_container_image: linuxserver/sonarr:version-3.0.10.1567
+# renovate: datasource=docker
 radarr_container_image: linuxserver/radarr:version-4.7.5.7809
+# renovate: datasource=docker
 sabnzbd_container_image: linuxserver/sabnzbd:4.0.3
+# renovate: datasource=docker
 qbittorrent_container_image: linuxserver/qbittorrent:4.5.5
 
 # Location for all docker data
