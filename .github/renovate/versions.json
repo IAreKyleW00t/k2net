@@ -7,7 +7,7 @@
     },
     {
       "matchPackageNames": ["linuxserver/qbittorrent"],
-      "allowedVersions": "!/^20\\..+/"
+      "allowedVersions": "!/^(20|14)\\..+/"
     }
   ]
 }
