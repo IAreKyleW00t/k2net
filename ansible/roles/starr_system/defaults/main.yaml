@@ -16,8 +16,8 @@ starr_umask: "002"
 starr_timezone: America/New_York
 
 prowlarr_port: 9696
-sonarr_port: 8989
-radarr_port: 7878
+sonarr_port: 7878
+radarr_port: 8989
 sabnzbd_port: 8888
 qbittorrent_port: 8787
 qbittorrent_torrent_port: 50000
