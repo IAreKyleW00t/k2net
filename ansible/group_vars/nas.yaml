@@ -8,7 +8,7 @@ radarr_container_image: linuxserver/radarr:version-4.7.5.7809
 # renovate: datasource=docker
 sabnzbd_container_image: linuxserver/sabnzbd:4.0.3
 # renovate: datasource=docker
-qbittorrent_container_image: linuxserver/qbittorrent:4.5.5
+qbittorrent_container_image: linuxserver/qbittorrent:14.3.9
 
 # Location for all docker data
 starr_root_directory: /volume1/docker/starr-system
