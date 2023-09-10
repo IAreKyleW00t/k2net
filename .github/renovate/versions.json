@@ -8,6 +8,10 @@
     {
       "matchPackageNames": ["linuxserver/qbittorrent"],
       "allowedVersions": "!/^(20|14)\\..+/"
+    },
+    {
+      "matchPackageNames": ["linuxserver/prowlarr"],
+      "allowedVersions": "!/^1\\.8\\.1259/"
     }
   ]
 }
