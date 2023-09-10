@@ -11,7 +11,7 @@
     },
     {
       "matchPackageNames": ["linuxserver/prowlarr"],
-      "allowedVersions": "!/^1\\.8\\.1259/"
+      "allowedVersions": "!/^1\\.8\\.125(9|3)/"
     }
   ]
 }
