@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=docker
-prowlarr_container_image: linuxserver/prowlarr:1.7.4
+prowlarr_container_image: linuxserver/prowlarr:1.8.6
 # renovate: datasource=docker
 sonarr_container_image: linuxserver/sonarr:3.0.10
 # renovate: datasource=docker
