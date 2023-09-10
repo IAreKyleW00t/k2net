@@ -123,7 +123,7 @@ kubectl apply -f k8s/apps/bitwarden.yaml
 kubectl apply -f k8s/apps/heimdall.yaml
 kubectl apply -f k8s/apps/home-assistant.yaml
 kubectl apply -f k8s/apps/mqtt.yaml
-kubectl apply -f k8s/apps/rtorrent.yaml
+kubectl apply -f k8s/apps/starr-system.yaml
 kubectl apply -f k8s/apps/thelounge.yaml
 kubectl apply -f k8s/apps/unifi.yaml
 kubectl apply -f k8s/apps/uptime-kuma.yaml
