@@ -7,13 +7,505 @@ metadata:
     linkerd.io/inject: enabled
 ---
 apiVersion: v1
-kind: Service
+kind: PersistentVolume
 metadata:
-  name: euclase
+  name: media-storage-pv
   namespace: starr-system
 spec:
-  type: ExternalName
-  externalName: euclase.kyle2.net
+  storageClassName: nfs-client
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 10Mi # ignored
+  nfs:
+    server: 192.168.10.10
+    path: /volume1/media
+  mountOptions:
+    - vers=4.1
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-storage
+  namespace: starr-system
+spec:
+  storageClassName: nfs-client
+  volumeName: media-storage-pv
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Mi # ignored
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prowlarr-data
+  namespace: starr-system
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: radarr-data
+  namespace: starr-system
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-data
+  namespace: starr-system
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sabnzbd-data
+  namespace: starr-system
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qbittorrent-data
+  namespace: starr-system
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: starr-config
+  namespace: starr-system
+data:
+  PUID: "1040"
+  PGID: "65542"
+  UMASK: "002"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  namespace: starr-system
+  labels:
+    app: prowlarr
+spec:
+  selector:
+    matchLabels:
+      app: prowlarr
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      containers:
+        - name: prowlarr
+          image: linuxserver/prowlarr:1.8.6
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9696
+          envFrom:
+            - configMapRef:
+                name: starr-config
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 1000m
+            limits:
+              memory: 1024Mi
+          volumeMounts:
+            - name: data
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9696
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9696
+            initialDelaySeconds: 3
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: prowlarr-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: starr-system
+  labels:
+    app: radarr
+spec:
+  selector:
+    matchLabels:
+      app: radarr
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - name: radarr
+          image: linuxserver/radarr:4.7.5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7878
+          envFrom:
+            - configMapRef:
+                name: starr-config
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 500m
+            limits:
+              memory: 1024Mi
+          volumeMounts:
+            - name: media
+              mountPath: /data
+            - name: data
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 7878
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 7878
+            initialDelaySeconds: 3
+            periodSeconds: 10
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-storage
+        - name: data
+          persistentVolumeClaim:
+            claimName: radarr-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: starr-system
+  labels:
+    app: sonarr
+spec:
+  selector:
+    matchLabels:
+      app: sonarr
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - name: sonarr
+          image: linuxserver/sonarr:3.0.10
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8989
+          envFrom:
+            - configMapRef:
+                name: starr-config
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 500m
+            limits:
+              memory: 1024Mi
+          volumeMounts:
+            - name: media
+              mountPath: /data
+            - name: data
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8989
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8989
+            initialDelaySeconds: 3
+            periodSeconds: 10
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-storage
+        - name: data
+          persistentVolumeClaim:
+            claimName: sonarr-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+  namespace: starr-system
+  labels:
+    app: sabnzbd
+spec:
+  selector:
+    matchLabels:
+      app: sabnzbd
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: sabnzbd
+      annotations:
+        # Overhead from Linkerd is detrimental to app performance
+        linkerd.io/inject: disabled
+    spec:
+      containers:
+        - name: sabnzbd
+          image: linuxserver/sabnzbd:4.0.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: starr-config
+          resources:
+            requests:
+              memory: 2048Mi
+              cpu: 2000m
+            limits:
+              memory: 4096Mi
+          volumeMounts:
+            - name: media
+              mountPath: /data/usenet
+              subPath: usenet
+            - name: data
+              mountPath: /config
+            - name: incomplete-downloads
+              mountPath: /incomplete-downloads
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-storage
+        - name: data
+          persistentVolumeClaim:
+            claimName: sabnzbd-data
+        - name: incomplete-downloads
+          emptyDir: {} # just be smart about things
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+  namespace: starr-system
+  labels:
+    app: qbittorrent
+spec:
+  selector:
+    matchLabels:
+      app: qbittorrent
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+      annotations:
+        # Overhead from Linkerd is detrimental to app performance
+        linkerd.io/inject: disabled
+    spec:
+      containers:
+        - name: qbittorrent
+          image: linuxserver/qbittorrent:4.5.5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+            - containerPort: 50000
+            - containerPort: 50000
+              protocol: UDP
+          envFrom:
+            - configMapRef:
+                name: starr-config
+          resources:
+            requests:
+              memory: 1024Mi
+              cpu: 2000m
+            limits:
+              memory: 2048Mi
+          volumeMounts:
+            - name: media
+              mountPath: /data/torrents
+              subPath: torrents
+            - name: data
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-storage
+        - name: data
+          persistentVolumeClaim:
+            claimName: qbittorrent-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  namespace: starr-system
+spec:
+  selector:
+    app: prowlarr
+  ports:
+    - name: http
+      port: 9696
+      targetPort: 9696
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  namespace: starr-system
+spec:
+  selector:
+    app: radarr
+  ports:
+    - name: http
+      port: 7878
+      targetPort: 7878
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  namespace: starr-system
+spec:
+  selector:
+    app: sonarr
+  ports:
+    - name: http
+      port: 8989
+      targetPort: 8989
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sabnzbd
+  namespace: starr-system
+spec:
+  selector:
+    app: sabnzbd
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent
+  namespace: starr-system
+spec:
+  selector:
+    app: qbittorrent
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-p2p
+  namespace: starr-system
+spec:
+  selector:
+    app: qbittorrent
+  ports:
+    - name: p2p
+      port: 50000
+      targetPort: 50000
+      protocol: TCP
+    - name: p2p-udp
+      port: 50000
+      targetPort: 50000
+      protocol: UDP
+  type: LoadBalancer
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -21,7 +513,7 @@ metadata:
   name: prowlarr
   namespace: starr-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     external-dns.alpha.kubernetes.io/hostname: prowlarr.kyle2.net
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -39,7 +531,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: euclase
+                name: prowlarr
                 port:
                   number: 9696
 ---
@@ -49,7 +541,7 @@ metadata:
   name: radarr
   namespace: starr-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     external-dns.alpha.kubernetes.io/hostname: radarr.kyle2.net
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -67,7 +559,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: euclase
+                name: radarr
                 port:
                   number: 7878
 ---
@@ -77,7 +569,7 @@ metadata:
   name: sonarr
   namespace: starr-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     external-dns.alpha.kubernetes.io/hostname: sonarr.kyle2.net
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
@@ -95,7 +587,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: euclase
+                name: sonarr
                 port:
                   number: 8989
 ---
@@ -105,7 +597,7 @@ metadata:
   name: sabnzbd
   namespace: starr-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     external-dns.alpha.kubernetes.io/hostname: sabnzbd.kyle2.net
 spec:
   ingressClassName: nginx
@@ -121,9 +613,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: euclase
+                name: sabnzbd
                 port:
-                  number: 8888
+                  number: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -131,7 +623,7 @@ metadata:
   name: bittorrent
   namespace: starr-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     external-dns.alpha.kubernetes.io/hostname: bittorrent.kyle2.net
     nginx.ingress.kubernetes.io/proxy-body-size: "16M"
 spec:
@@ -148,6 +640,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: euclase
+                name: qbittorrent
                 port:
-                  number: 8787
+                  number: 8080
