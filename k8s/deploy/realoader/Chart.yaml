@@ -1,0 +1,10 @@
+apiVersion: v2
+name: reloader
+description: Meta-chart for reloader
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: reloader
+    version: 1.0.40
+    repository: https://stakater.github.io/stakater-charts
