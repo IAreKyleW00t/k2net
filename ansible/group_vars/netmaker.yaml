@@ -1,8 +1,8 @@
 ---
 # Quad9 as default public DNS
 dnsmasq_servers:
-  - 9.9.9.9
-  - 149.112.112.112
+  - 1.1.1.1
+  - 1.0.0.1
 
 # renovate: datasource=github-releases depName=gravitl/netmaker
 netmaker_version: v0.21.0

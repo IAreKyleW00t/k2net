@@ -1,8 +1,8 @@
 ---
 dnsmasq_servers: [] # managed by Pi-Hole
 pihole_dns:
-  - 9.9.9.9
-  - 149.112.112.112
+  - 1.1.1.1
+  - 1.0.0.1
 
 additional_groups:
   - pihole
