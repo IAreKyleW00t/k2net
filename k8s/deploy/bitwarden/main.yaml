@@ -70,11 +70,10 @@ spec:
                 name: bitwarden-tokens
           resources:
             requests:
-              memory: 256Mi
+              memory: 128Mi
               cpu: 100m
             limits:
-              memory: 512Mi
-              cpu: 1000m
+              memory: 256Mi
           volumeMounts:
             - name: data
               mountPath: /data
@@ -82,13 +81,13 @@ spec:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 1
+            initialDelaySeconds: 2
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 1
+            initialDelaySeconds: 2
             periodSeconds: 10
       volumes:
         - name: data

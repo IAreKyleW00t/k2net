@@ -97,7 +97,6 @@ spec:
               cpu: 10m
             limits:
               memory: 32Mi
-              cpu: 100m
           livenessProbe:
             tcpSocket:
               port: 1883

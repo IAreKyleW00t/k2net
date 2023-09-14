@@ -53,11 +53,10 @@ spec:
               value: "1000"
           resources:
             requests:
-              memory: 1024Mi
+              memory: 512Mi
               cpu: 1000m
             limits:
-              memory: 4096Mi
-              cpu: 2000m
+              memory: 1024Mi
           livenessProbe:
             httpGet:
               path: /auth/providers
