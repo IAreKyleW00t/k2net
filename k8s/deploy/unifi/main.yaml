@@ -99,7 +99,7 @@ metadata:
   labels:
     app: unifi
   annotations:
-    reloader.stakater.com/auto: "true"
+    reloader.stakater.com/reload: "site-configs"
 spec:
   selector:
     matchLabels:
