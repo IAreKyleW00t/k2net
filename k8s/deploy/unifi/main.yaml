@@ -27,6 +27,9 @@ metadata:
 data:
   default-config.gateway.json: |
     {
+      "system": {
+        "name-server": ["192.168.10.16", "100.100.100.1"]
+      },
       "service": {
         "nat": {
           "rule": {
@@ -95,6 +98,8 @@ metadata:
   namespace: unifi
   labels:
     app: unifi
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   selector:
     matchLabels:
