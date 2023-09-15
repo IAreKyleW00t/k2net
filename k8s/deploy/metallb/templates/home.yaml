@@ -8,13 +8,33 @@ spec:
   avoidBuggyIPs: true
   addresses:
     # Reserved for MetalLB
-    - 192.168.10.201-192.168.10.254
+    - 192.168.42.0/24
 ---
 apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
+kind: BFDProfile
+metadata:
+  name: home
+  namespace: {{ .Release.Namespace }}
+spec:
+  receiveInterval: 380
+  transmitInterval: 270
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: home
+  namespace: {{ .Release.Namespace }}
+spec:
+  myASN: 64512
+  peerASN: 64512
+  peerAddress: 192.168.1.1
+  bfdProfile: home
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
 metadata:
   name: home
   namespace: {{ .Release.Namespace }}
 spec:
   ipAddressPools:
-    - home
+  - home

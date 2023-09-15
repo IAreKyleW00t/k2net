@@ -2,7 +2,7 @@ ingress-nginx:
   controller:
     kind: DaemonSet
     service:
-      loadBalancerIP: 192.168.10.201
+      loadBalancerIP: 192.168.42.1
       annotations:
         # Allow other services to share this IP, useful when you want
         # to access ports other than 80,443 through the same "ingress"

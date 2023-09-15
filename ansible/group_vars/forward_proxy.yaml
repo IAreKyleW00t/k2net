@@ -12,7 +12,7 @@ caddy_cloudflare_api_token: !vault |
   3438323432396433336534316465653163373563316636303363
 
 caddy_additional_hosts:
-  k3s-ingress: 192.168.10.201
+  k3s-ingress: 192.168.42.1
 
 # Public hosts
 caddy_hosts:
@@ -46,25 +46,25 @@ socat_ports:
   # Unifi
   - port: 3478 # STUN
     proto: udp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 8080 # Control
     proto: tcp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 8443 # API
     proto: tcp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 8880 # HTTP
     proto: tcp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 8843 # HTTPS
     proto: tcp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 6789 # Speedtest
     proto: tcp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 10001 # Discovery
     proto: udp
-    dest: 192.168.10.201
+    dest: 192.168.42.1
   - port: 1900 # L2 Discovery
     proto: udp
-    dest: 192.168.10.201
+    dest: 192.168.42.1

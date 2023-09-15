@@ -59,6 +59,32 @@ data:
             }
           }
         }
+      },
+      "protocols": {
+        "bgp": {
+          "64512": {
+            "neighbor": {
+              "192.168.10.142": {
+                "remote-as": "64512"
+              },
+              "192.168.10.136": {
+                "remote-as": "64512"
+              },
+              "192.168.10.34": {
+                "remote-as": "64512"
+              },
+              "192.168.10.97": {
+                "remote-as": "64512"
+              },
+              "192.168.10.60": {
+                "remote-as": "64512"
+              }
+            },
+            "parameters": {
+              "router-id": "192.168.1.1"
+            }
+          }
+        }
       }
     }
 ---
@@ -192,7 +218,7 @@ spec:
       targetPort: 1900
       protocol: UDP
   type: LoadBalancer
-  loadBalancerIP: 192.168.10.201
+  loadBalancerIP: 192.168.42.1
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
