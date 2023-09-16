@@ -1,11 +1,18 @@
 longhorn:
   defaultSettings:
+    defaultReplicaCount: 3
     defaultDataLocality: best-effort
+    replicaAutoBalance: best-effort
     backupTarget: s3://k2net-longhorn-backup@us-east-2/backup
     backupTargetCredentialSecret: aws-credentials
+    backupstorePollInterval: 0 # only needed if using DR volumes
+    backupConcurrentLimit: 2
+    backupConcurrentLimit: 2
 
   persistence:
+    defaultClassReplicaCount: 3
     defaultDataLocality: best-effort
+    reclaimPolicy: Delete
 
   ingress:
     enabled: true
