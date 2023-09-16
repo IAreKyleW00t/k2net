@@ -9,7 +9,7 @@ metadata:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: media-storage-pv
+  name: starr-system-media-storage-nfs
   namespace: starr-system
 spec:
   storageClassName: nfs-client
@@ -31,7 +31,7 @@ metadata:
   namespace: starr-system
 spec:
   storageClassName: nfs-client
-  volumeName: media-storage-pv
+  volumeName: starr-system-media-storage-nfs
   accessModes:
     - ReadWriteMany
   resources:
@@ -144,7 +144,7 @@ spec:
           resources:
             requests:
               memory: 512Mi
-              cpu: 1000m
+              cpu: 500m
             limits:
               memory: 1024Mi
           volumeMounts:
@@ -197,10 +197,10 @@ spec:
                 name: starr-config
           resources:
             requests:
-              memory: 512Mi
-              cpu: 500m
-            limits:
               memory: 1024Mi
+              cpu: 1000m
+            limits:
+              memory: 2048Mi
           volumeMounts:
             - name: media
               mountPath: /data
@@ -256,10 +256,10 @@ spec:
                 name: starr-config
           resources:
             requests:
-              memory: 512Mi
-              cpu: 500m
-            limits:
               memory: 1024Mi
+              cpu: 1000m
+            limits:
+              memory: 2048Mi
           volumeMounts:
             - name: media
               mountPath: /data
