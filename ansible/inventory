@@ -12,6 +12,9 @@ wyse-2          ansible_host=192.168.10.136
 wyse-3          ansible_host=192.168.10.34
 wyse-4          ansible_host=192.168.10.97
 wyse-5          ansible_host=192.168.10.60
+wyse-6          ansible_host=192.168.10.138
+wyse-7          ansible_host=192.168.10.26
+wyse-8          ansible_host=192.168.10.130
 
 euclase         ansible_host=192.168.10.10
 
@@ -21,6 +24,9 @@ wyse-3
 wyse-5
 wyse-2
 wyse-4
+wyse-6
+wyse-7
+wyse-8
 
 [netmaker]
 netmaker-1
