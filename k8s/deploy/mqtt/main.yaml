@@ -63,7 +63,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: pwfile-gen
-          image: eclipse-mosquitto:2.0.17
+          image: eclipse-mosquitto:2.0.18
           imagePullPolicy: IfNotPresent
           command:
             - sh
@@ -85,7 +85,7 @@ spec:
               mountPath: /mosquitto/credentials
       containers:
         - name: mqtt
-          image: eclipse-mosquitto:2.0.17
+          image: eclipse-mosquitto:2.0.18
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
