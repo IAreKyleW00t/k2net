@@ -11,7 +11,9 @@
 
     - name: Setup | Agent | Run k3s install script
       ansible.builtin.shell: |
-        INSTALL_K3S_VERSION={{ k3s_version }} K3S_URL={{ k3s_url }} K3S_TOKEN={{ k3s_token }} sh /tmp/k3s-install.sh {{ k3s_node_type }} {{ k3s_agent_args | join(' ') }}
+        INSTALL_K3S_SKIP_START=true INSTALL_K3S_VERSION={{ k3s_version }} K3S_URL={{ k3s_url }} K3S_TOKEN={{ k3s_token }} sh /tmp/k3s-install.sh {{ k3s_node_type }} {{ k3s_agent_args | join(' ') }}
+      notify:
+        - Start k3s service
 
     - name: Setup | Agent | Delete old k3s intsall script
       ansible.builtin.file:
