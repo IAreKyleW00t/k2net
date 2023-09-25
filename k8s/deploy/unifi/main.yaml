@@ -242,7 +242,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     external-dns.alpha.kubernetes.io/hostname: unifi.kyle2.net
-    nginx.ingress.kubernetes.io/backend-protocol: https
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-body-size: "16M"
 
     # Better WebSockets support

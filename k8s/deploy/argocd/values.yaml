@@ -9,7 +9,7 @@ argo-cd:
 
         # Required for ArgoCD
         nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-        nginx.ingress.kubernetes.io/backend-protocol: https
+        nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       hosts:
         - argocd.kyle2.net
       tls:
