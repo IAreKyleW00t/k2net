@@ -6,7 +6,7 @@ sonarr_container_image: linuxserver/sonarr:3.0.10
 # renovate: datasource=docker
 radarr_container_image: linuxserver/radarr:4.7.5
 # renovate: datasource=docker
-sabnzbd_container_image: linuxserver/sabnzbd:4.0.3
+sabnzbd_container_image: linuxserver/sabnzbd:4.1.0
 # renovate: datasource=docker
 qbittorrent_container_image: linuxserver/qbittorrent:4.5.5
 
