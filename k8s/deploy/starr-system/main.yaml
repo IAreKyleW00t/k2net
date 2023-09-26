@@ -309,7 +309,7 @@ spec:
     spec:
       containers:
         - name: sabnzbd
-          image: linuxserver/sabnzbd:4.0.3
+          image: linuxserver/sabnzbd:4.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
