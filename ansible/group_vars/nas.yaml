@@ -4,7 +4,7 @@ prowlarr_container_image: linuxserver/prowlarr:1.8.6
 # renovate: datasource=docker
 sonarr_container_image: linuxserver/sonarr:3.0.10
 # renovate: datasource=docker
-radarr_container_image: linuxserver/radarr:4.7.5
+radarr_container_image: linuxserver/radarr:5.0.3
 # renovate: datasource=docker
 sabnzbd_container_image: linuxserver/sabnzbd:4.1.0
 # renovate: datasource=docker
