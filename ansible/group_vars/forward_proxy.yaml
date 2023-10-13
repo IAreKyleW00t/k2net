@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=docker
-caddy_container_image: ghcr.io/iarekylew00t/caddy-cloudflare:2.7.4
+caddy_container_image: ghcr.io/iarekylew00t/caddy-cloudflare:2.7.5
 caddy_acme_email: admin@kyle2.net
 caddy_cloudflare_api_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
