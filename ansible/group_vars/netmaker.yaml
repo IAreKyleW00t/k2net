@@ -5,7 +5,7 @@ dnsmasq_servers:
   - 1.0.0.1
 
 # renovate: datasource=github-releases depName=gravitl/netmaker
-netmaker_version: v0.21.0
+netmaker_version: v0.21.1
 netmaker_email: admin@kyle2.net
 netmaker_domain: net.kyle2.net
 netmaker_master_key: !vault |
