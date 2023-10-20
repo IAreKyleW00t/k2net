@@ -37,6 +37,15 @@ resource "aws_security_group" "ingress_ports" {
   })
 }
 
+resource "aws_security_group" "dns" {
+  name        = "dns"
+  description = "Allows DNS traffic within VPC"
+  vpc_id      = module.vpc.vpc_id
+  tags = merge(local.tags, {
+    Name = "dns"
+  })
+}
+
 ##
 # Rules
 ##
@@ -94,4 +103,14 @@ resource "aws_security_group_rule" "ingress_ports" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.ingress_ports.id
   description       = each.value.name
+}
+
+resource "aws_security_group_rule" "dns" {
+  type              = "ingress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  cidr_blocks       = [module.vpc.vpc_cidr_block]
+  security_group_id = aws_security_group.dns.id
+  description       = "DNS"
 }
