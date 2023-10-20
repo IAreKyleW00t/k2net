@@ -49,7 +49,8 @@ resource "aws_instance" "pihole" {
 
   vpc_security_group_ids = [
     data.aws_security_group.default.id,
-    aws_security_group.ssh.id
+    aws_security_group.ssh.id,
+    aws_security_group.dns.id
   ]
 
   root_block_device {
