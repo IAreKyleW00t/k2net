@@ -9,8 +9,8 @@ dependencies:
     version: 1.8.0
     repository: https://helm.linkerd.io/stable
   - name: linkerd-control-plane
-    version: 1.16.2
+    version: 1.16.3
     repository: https://helm.linkerd.io/stable
   - name: linkerd-viz
-    version: 30.12.2
+    version: 30.12.3
     repository: https://helm.linkerd.io/stable
