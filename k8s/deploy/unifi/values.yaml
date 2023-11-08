@@ -3,6 +3,7 @@ mongodb:
     operator.1password.io/item-path: vaults/Homelab/items/unifi-database-credentials
     operator.1password.io/item-name: unifi-database-credentials
   image:
+    repository: docker.io/mongo
     tag: "4.4.15" # latest "supported" version by UniFi
     resources:
       limits:
@@ -10,14 +11,19 @@ mongodb:
       requests:
         cpu: 100m
         memory: 128Mi
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
   persistence:
     storageClass: longhorn-backup
     size: 10Gi
+    mountPath: /data/db
   extraEnvVarsSecret: unifi-database-credentials
   initdbScripts:
     unifi-init.sh: |
       #!/bin/bash
-      mongosh -u "${MONGODB_ROOT_USER}" -p "${MONGODB_ROOT_PASSWORD}" <<EOF
+      mongo <<EOF
       db.getSiblingDB("${MONGO_DBNAME}").createUser({
           user: "${MONGO_USER}",
           pwd: "${MONGO_PASS}",
