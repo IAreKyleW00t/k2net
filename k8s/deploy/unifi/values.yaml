@@ -1,0 +1,39 @@
+mongodb:
+  annotations:
+    operator.1password.io/item-path: vaults/Homelab/items/unifi-database-credentials
+    operator.1password.io/item-name: unifi-database-credentials
+  image:
+    repository: mongo
+    tag: "4.4.15" # latest "supported" version by UniFi
+    resources:
+      limits:
+        memory: 1024Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  persistence:
+    storageClass: longhorn-backup
+    size: 10Gi
+  extraEnvVarsSecret: unifi-database-credentials
+  initdbScripts:
+    unifi-init.sh: |
+      #!/bin/bash
+      mongosh <<EOF
+      db.getSiblingDB("${MONGO_DBNAME}").createUser({
+          user: "${MONGO_USER}",
+          pwd: "${MONGO_PASS}",
+          roles: [{
+              role: "dbOwner",
+              db: "${MONGO_DBNAME}"
+          }]
+      });
+
+      db.getSiblingDB("${MONGO_DBNAME}_stat").createUser({
+          user: "${MONGO_USER}",
+          pwd: "${MONGO_PASS}",
+          roles: [{
+              role: "dbOwner",
+              db: "${MONGO_DBNAME}_stat"
+          }]
+      });
+      EOF

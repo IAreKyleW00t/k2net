@@ -1,0 +1,44 @@
+---
+# If your k8s version < v1.23, you will need to enable the
+# MixedProtocolLBService feature gate to use a single service for
+# UDP and TCP connections, otherwise you need 2 separate services.
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi
+  name: {{ .Release.Namespace }}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: ingress-nginx
+spec:
+  selector:
+    app: unifi
+  ports:
+    - name: stun
+      port: 3478
+      targetPort: 3478
+      protocol: UDP
+    - name: control
+      port: 8080
+      targetPort: 8080
+    - name: api
+      port: 8443
+      targetPort: 8443
+    - name: http
+      port: 8880
+      targetPort: 8880
+    - name: https
+      port: 8843
+      targetPort: 8843
+    - name: speedtest
+      port: 6789
+      targetPort: 6789
+    - name: discovery
+      port: 10001
+      targetPort: 10001
+      protocol: UDP
+    - name: l2-discovery
+      port: 1900
+      targetPort: 1900
+      protocol: UDP
+  type: LoadBalancer
+  loadBalancerIP: 192.168.42.1
