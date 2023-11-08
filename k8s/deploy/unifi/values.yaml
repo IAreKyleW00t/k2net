@@ -17,7 +17,7 @@ mongodb:
   initdbScripts:
     unifi-init.sh: |
       #!/bin/bash
-      mongosh <<EOF
+      mongosh -u "${MONGODB_ROOT_USER}" -p "${MONGODB_ROOT_PASSWORD}" <<EOF
       db.getSiblingDB("${MONGO_DBNAME}").createUser({
           user: "${MONGO_USER}",
           pwd: "${MONGO_PASS}",
