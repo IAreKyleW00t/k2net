@@ -20,6 +20,7 @@ mongodb:
   persistence:
     storageClass: longhorn-backup
     size: 10Gi
+    mountPath: /data/db
   extraEnvVarsSecret: unifi-database-credentials
   initdbScripts:
     unifi-init.sh: |
