@@ -11,8 +11,12 @@ mongodb:
       requests:
         cpu: 100m
         memory: 128Mi
-  containerSecurityContext:
-    runAsGroup: 1001
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
+  extraVolumes:
+    - name: tmp
+      emptyDir: {}
   persistence:
     storageClass: longhorn-backup
     size: 10Gi
