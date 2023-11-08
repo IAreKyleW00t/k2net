@@ -398,6 +398,8 @@ spec:
               subPath: torrents
             - name: data
               mountPath: /config
+            - name: incomplete-downloads
+              mountPath: /incomplete-downloads
           livenessProbe:
             httpGet:
               path: /
@@ -417,6 +419,8 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: qbittorrent-data
+        - name: incomplete-downloads
+          emptyDir: {} # just be smart about things
 ---
 apiVersion: v1
 kind: Service
