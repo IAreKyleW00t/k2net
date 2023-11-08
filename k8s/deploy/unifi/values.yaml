@@ -11,6 +11,8 @@ mongodb:
       requests:
         cpu: 100m
         memory: 128Mi
+  containerSecurityContext:
+    runAsGroup: 1001
   persistence:
     storageClass: longhorn-backup
     size: 10Gi
