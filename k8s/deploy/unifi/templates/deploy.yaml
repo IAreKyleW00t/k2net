@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi
+  name: {{ .Release.Namespace }}
+  labels:
+    app: unifi
+  annotations:
+    reloader.stakater.com/reload: "site-configs"
+spec:
+  selector:
+    matchLabels:
+      app: unifi
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: unifi
+    spec:
+      initContainers:
+        - name: site-configs
+          image: busybox:1.36.1
+          command:
+            - sh
+            - -c
+            - for i in /configs/*; do mkdir -p /unifi/data/sites/$(basename $i | cut -d '-' -f 1) && cp -v $i /unifi/data/sites/$(basename $i | cut -d '-' -f 1)/$(basename $i | cut -d '-' -f 2); done
+          volumeMounts:
+            - name: data
+              mountPath: /unifi
+            - name: site-configs
+              mountPath: /configs
+      containers:
+        - name: unifi
+          image: linuxserver/unifi-network-application:7.5.187
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3478 # STUN
+              protocol: UDP
+            - containerPort: 8080 # Control
+            - containerPort: 8443 # API
+            - containerPort: 8880 # HTTP
+            - containerPort: 8843 # HTTPS
+            - containerPort: 6789 # Speedtest
+            - containerPort: 10001 # Discovery
+              protocol: UDP
+            - containerPort: 1900 # L2 Discovery
+              protocol: UDP
+          envFrom:
+            - secretRef:
+                name: unifi-database-credentials
+          env:
+            # Linuxserver.io images require root, but drop down to user-level
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: MEM_STARTUP
+              value: "2048"
+            - name: MEM_LIMIT
+              value: "4096"
+            - name: MONGO_HOST
+              value: {{ .Release.Name }}-mongodb
+            - name: MONGO_PORT
+              value: "{{ .Values.mongodb.service.ports.mongodb }}"
+          resources:
+            requests:
+              memory: 2048Mi
+              cpu: 1000m
+            limits:
+              memory: 4096Mi
+          volumeMounts:
+            - name: data
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /manage/account/login
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /manage/account/login
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: unifi-data
+        - name: site-configs
+          configMap:
+            name: site-configs

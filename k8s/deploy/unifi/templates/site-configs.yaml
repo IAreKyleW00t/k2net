@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: site-configs
+  namespace: {{ .Release.Namespace }}
+data:
+  default-config.gateway.json: |
+    {
+      "system": {
+        "name-server": ["192.168.10.16", "100.100.100.1"]
+      },
+      "service": {
+        "nat": {
+          "rule": {
+            "30": {
+              "description": "Force DNS to Pi-Hole (IOT)",
+              "destination": {
+                "port": "53",
+                "group": {
+                  "address-group": "!637160214cedfd00eada7b9b"
+                }
+              },
+              "inbound-interface": "eth1.30",
+              "inside-address": {
+                "address": "192.168.10.16"
+              },
+              "log": "enable",
+              "protocol": "tcp_udp",
+              "type": "destination"
+            },
+            "5030": {
+              "description": "Masquerade for Pi-Hole DNS (IOT)",
+              "destination": {
+                "address": "192.168.10.16",
+                "port": "53"
+              },
+              "log": "disable",
+              "outbound-interface": "eth1.30",
+              "protocol": "tcp_udp",
+              "type": "masquerade"
+            }
+          }
+        }
+      },
+      "protocols": {
+        "bgp": {
+          "64512": {
+            "neighbor": {
+              "192.168.10.142": {
+                "remote-as": "64512"
+              },
+              "192.168.10.136": {
+                "remote-as": "64512"
+              },
+              "192.168.10.34": {
+                "remote-as": "64512"
+              },
+              "192.168.10.97": {
+                "remote-as": "64512"
+              },
+              "192.168.10.60": {
+                "remote-as": "64512"
+              },
+              "192.168.10.138": {
+                "remote-as": "64512"
+              },
+              "192.168.10.26": {
+                "remote-as": "64512"
+              },
+              "192.168.10.130": {
+                "remote-as": "64512"
+              }
+            },
+            "parameters": {
+              "router-id": "192.168.1.1"
+            }
+          }
+        }
+      }
+    }
