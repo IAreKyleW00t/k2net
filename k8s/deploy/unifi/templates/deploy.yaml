@@ -64,19 +64,19 @@ spec:
             - name: PGID
               value: "1000"
             - name: MEM_STARTUP
-              value: "2048"
+              value: "1024"
             - name: MEM_LIMIT
-              value: "4096"
+              value: "2048"
             - name: MONGO_HOST
               value: {{ .Release.Name }}-mongodb
             - name: MONGO_PORT
               value: "{{ .Values.mongodb.service.ports.mongodb }}"
           resources:
             requests:
-              memory: 2048Mi
-              cpu: 1000m
+              memory: 1024Mi
+              cpu: 200m
             limits:
-              memory: 4096Mi
+              memory: 2048Mi
           volumeMounts:
             - name: data
               mountPath: /config
