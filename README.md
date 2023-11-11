@@ -6,6 +6,17 @@ Dependency updates are handled via [Renovate](https://github.com/renovatebot/ren
 
 ## Preparation
 
+### Local tools
+
+The following tools are required to be installed locally for all sections to function properly.
+
+- `kubectl`
+- `helm`
+- `ansible`
+- `terraform` (Optional)
+- `jq`
+- `yq`
+
 ### Terraform
 
 All **cloud** resources are configured via [Terraform](https://www.terraform.io/) with their respective states stored in [Terraform Cloud](https://app.terraform.io/session). Changes to the [`terraform/`](terraform/) directory will be detected and deployed automatically via the [Terraform workflow](.github/workflows/terraform.yaml).
