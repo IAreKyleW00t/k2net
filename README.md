@@ -1,4 +1,4 @@
-# K2NET [![status](https://img.shields.io/badge/Status-5cdd8b)](https://status.kyle2.net/)
+# K2NET [![status](https://img.shields.io/badge/Status-2ea043)](https://status.kyle2.net/)
 
 My GitOps managed homelab, setup with [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/), and running all my workloads via [ArgoCD](https://argoproj.github.io/cd/) on my [k3s](https://k3s.io/) cluster.
 
