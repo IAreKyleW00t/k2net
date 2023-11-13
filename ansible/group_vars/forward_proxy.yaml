@@ -32,6 +32,14 @@ caddy_hosts:
         tls_insecure_skip_verify
       }
     }
+  status.kyle2.net: |
+    encode zstd gzip
+    reverse_proxy * https://k3s-ingress {
+      header_up X-Real-IP {remote_host}
+      transport http {
+        tls_insecure_skip_verify
+      }
+    }
   kyle.colanton.io: |
     redir https://k.yle.sh permanent
   csuoh.io: |
