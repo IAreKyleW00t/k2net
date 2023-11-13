@@ -9,7 +9,8 @@ budget_amount = 20
 cloudflare_zone = "kyle2.net"
 additional_domains = [
   { name = "unifi", proxied = false },
-  { name = "vault", proxied = true }
+  { name = "vault", proxied = true },
+  { name = "status", proxied = true }
 ]
 
 # VPC
