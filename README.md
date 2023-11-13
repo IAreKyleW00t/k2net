@@ -1,6 +1,6 @@
-# K2NET
+# K2NET [![status](https://img.shields.io/badge/Status-5cdd8b)](https://status.kyle2.net/)
 
-My homelab, setup with [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/), and running all my workloads via [ArgoCD](https://argoproj.github.io/cd/) on my [k3s](https://k3s.io/) cluster.
+My GitOps managed homelab, setup with [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/), and running all my workloads via [ArgoCD](https://argoproj.github.io/cd/) on my [k3s](https://k3s.io/) cluster.
 
 Dependency updates are handled via [Renovate](https://github.com/renovatebot/renovate) with it's respective [configuration](.github/renovate.json).
 
