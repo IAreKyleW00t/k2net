@@ -4,7 +4,7 @@ My homelab, managed with GitOps using [Terraform](https://www.terraform.io/), [A
 
 Dependency updates are handled via [Renovate](https://github.com/renovatebot/renovate) with it's respective [configuration](.github/renovate.json).
 
-[![Repobeats](https://repobeats.axiom.co/api/embed/7c6b1531114f03fd7eeb3b3a7d089e9ea7e9949d.svg)](#)
+<picture><image alt="Repobeats graph" src="https://repobeats.axiom.co/api/embed/7c6b1531114f03fd7eeb3b3a7d089e9ea7e9949d.svg"></picture>
 
 ## Preparation
 
