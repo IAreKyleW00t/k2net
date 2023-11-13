@@ -18,7 +18,8 @@ caddy_additional_hosts:
 caddy_hosts:
   vault.kyle2.net: |
     encode zstd gzip
-    reverse_proxy * https://k3s-ingress {
+    @noAdmin not path /admin /admin/*
+    reverse_proxy @noAdmin https://k3s-ingress {
       header_up X-Real-IP {remote_host}
       transport http {
         tls_insecure_skip_verify
@@ -34,7 +35,8 @@ caddy_hosts:
     }
   status.kyle2.net: |
     encode zstd gzip
-    reverse_proxy * https://k3s-ingress {
+    @noDashboard not path /dashboard /settings/*
+    reverse_proxy @noDashboard https://k3s-ingress {
       header_up X-Real-IP {remote_host}
       transport http {
         tls_insecure_skip_verify
