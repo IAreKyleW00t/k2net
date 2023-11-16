@@ -70,7 +70,7 @@ jobs:
         run: terraform apply -no-color -input=false tf.plan
 
       - name: Find existing PR comment
-        uses: peter-evans/find-comment@v2.4.0
+        uses: peter-evans/find-comment@a54c31d7fa095754bfef525c0c8e5e5674c4b4b1 # v2.4.0
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -79,7 +79,7 @@ jobs:
         if: github.event_name == 'pull_request'
 
       - name: Create or update PR comment
-        uses: peter-evans/create-or-update-comment@v3.1.0
+        uses: peter-evans/create-or-update-comment@23ff15729ef2fc348714a3bb66d2f655ca9066f2 # v3.1.0
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
