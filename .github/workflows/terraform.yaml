@@ -68,43 +68,44 @@ jobs:
           steps.plan.outcome == 'success' &&
           ((github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event.inputs.apply)
         run: terraform apply -no-color -input=false tf.plan
-      
-      - name: Record Terraform summary
-        id: summary
-        if: always()
-        run: |
-          cat >> $GITHUB_STEP_SUMMARY <<EOF
-          #### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
-          #### Terraform Initialization ⚙️ \`${{ steps.init.outcome }}\`
-          #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
 
-          <details><summary>Validation Output</summary>
+      - name: Find existing PR comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: Terraform Summary
+        if: github.event_name == 'pull_request'
 
-          \`\`\`
-          ${{ steps.validate.outputs.stdout }}
-          \`\`\`
+      - name: Create or update PR comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## Terraform Summary
 
-          </details>
+            #### Terraform Format and Style 🖌 `${{ steps.fmt.outcome }}`
+            #### Terraform Initialization ⚙️ `${{ steps.init.outcome }}`
+            #### Terraform Validation 🤖 `${{ steps.validate.outcome }}`
 
-          #### Terraform Plan 📖 \`${{ steps.plan.outcome }}\`
+            <details><summary>Validation output</summary>
 
-          <details><summary>Show Plan</summary>
+            ```
+            ${{ steps.validate.outputs.stdout }}
+            ```
 
-          \`\`\`
-          ${{ steps.plan.outputs.stdout }}
-          \`\`\`
+            </details>
 
-          </details>
+            #### Terraform Plan 📖 `${{ steps.plan.outcome }}`
 
-          #### Terraform Apply ⚡ \`${{ steps.apply.outcome }}\`
+            <details><summary>Plan output</summary>
 
-          <details><summary>Show Apply</summary>
+            ```
+            ${{ steps.plan.outputs.stdout }}
+            ```
 
-          \`\`\`
-          ${{ steps.apply.outputs.stdout }}
-          \`\`\`
-
-          </details>
-
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`terraform/\`, Workflow: \`${{ github.workflow }}\`*
-          EOF
+            </details>
+        if: github.event_name == 'pull_request'
