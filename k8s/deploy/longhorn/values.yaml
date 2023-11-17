@@ -8,6 +8,7 @@ longhorn:
     backupstorePollInterval: 0 # only needed if using DR volumes
     backupConcurrentLimit: 2
     backupConcurrentLimit: 2
+    concurrentAutomaticEngineUpgradePerNodeLimit: 2
 
   persistence:
     defaultClassReplicaCount: 3
