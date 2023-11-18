@@ -1,4 +1,4 @@
 ---
 - hosts: nas
   roles:
-    - starr_system
+    - minio

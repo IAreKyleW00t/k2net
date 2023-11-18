@@ -1,0 +1,19 @@
+# {{ ansible_managed }} - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+version: "3.2"
+services:
+  minio:
+    container_name: minio
+    image: {{ minio_container_image }}
+    restart: unless-stopped
+    command: server /data --console-address ":{{ minio_console_port }}"
+    ports:
+      - {{ minio_web_port }}:{{ minio_web_port }}
+      - {{ minio_console_port }}:{{ minio_console_port }}
+    environment:
+      - TZ={{ minio_timezone }}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_BROWSER_REDIRECT_URL=${MINIO_BROWSER_REDIRECT_URL}
+      - MINIO_SERVER_URL=${MINIO_SERVER_URL}
+    volumes:
+      - {{ minio_root_directory }}/data:/data

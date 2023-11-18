@@ -1,0 +1,16 @@
+# Docker images
+minio_container_image: minio/minio:latest
+
+# Location for all docker data
+minio_root_directory: /srv/docker/minio
+
+# Settings
+minio_timezone: America/New_York
+minio_browser_redirect_url: http://127.0.0.1:9001
+minio_server_url: http://127.0.0.1:9000
+
+minio_root_user: minioadmin
+minio_root_password: minioadmin
+
+minio_web_port: 9000
+minio_console_port: 9001
