@@ -12,6 +12,10 @@
     {
       "matchPackageNames": ["linuxserver/prowlarr"],
       "allowedVersions": "!/^1\\.8\\.12\\d+/"
+    },
+    {
+      "matchPackageNames": ["minio/minio"],
+      "versioning": "/^RELEASE\\.(?<major>\\d{4})-(?<minor>\\d{2})-(?<patch>\\d{2})/"
     }
   ]
 }
