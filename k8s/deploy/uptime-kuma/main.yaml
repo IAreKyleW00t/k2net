@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
         - name: uptime-kuma
-          image: louislam/uptime-kuma:1.23.5
+          image: louislam/uptime-kuma:1.23.6
           imagePullPolicy: IfNotPresent
           securityContext:
             readOnlyRootFilesystem: true
