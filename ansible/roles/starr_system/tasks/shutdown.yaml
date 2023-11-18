@@ -1,10 +1,16 @@
 ---
 - name: Shutdown
   block:
+    - name: Shutdown | Check if docker-compose.yaml exists
+      ansible.builtin.stat:
+        path: "{{ starr_root_directory }}/docker-compose.yaml"
+      register: docker_compose_stat
+
     - name: Shutdown | Stop starr-system
       ansible.builtin.shell: "{{ docker_compose_bin }} down --remove-orphans"
       args:
         chdir: "{{ starr_root_directory }}"
+      when: docker_compose_stat.stat.exists
   become: yes
   tags:
     - shutdown
