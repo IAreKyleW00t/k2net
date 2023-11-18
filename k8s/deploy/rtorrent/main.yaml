@@ -9,7 +9,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtorrent
+  name: euclase
   namespace: rtorrent
 spec:
   type: ExternalName
@@ -38,6 +38,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: rtorrent
+                name: euclase
                 port:
                   number: 52370
