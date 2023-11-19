@@ -2,10 +2,11 @@
 # Cloudflare rules
 ##
 resource "cloudflare_ruleset" "b2_request_url_rewrites" {
-  zone_id = data.cloudflare_zone.dns.id
-  name    = "Backblaze B2 URL Rewrite"
-  kind    = "zone"
-  phase   = "http_request_transform"
+  zone_id     = data.cloudflare_zone.dns.id
+  name        = "Backblaze B2 URL Rewrite"
+  description = "Backblaze B2 URL Rewrite"
+  kind        = "zone"
+  phase       = "http_request_transform"
 
   rules {
     action = "rewrite"
@@ -16,16 +17,18 @@ resource "cloudflare_ruleset" "b2_request_url_rewrites" {
         }
       }
     }
-    expression = "(http.host eq \"${local.b2_domain}\" and not starts_with(http.request.uri.path, \"/file/${local.b2_public_bucket}\"))"
-    enabled    = true
+    description = "Add /file/${local.b2_public_bucket} to URL"
+    expression  = "(http.host eq \"${local.b2_domain}\" and not starts_with(http.request.uri.path, \"/file/${local.b2_public_bucket}\"))"
+    enabled     = true
   }
 }
 
 resource "cloudflare_ruleset" "b2_response_header_rewrites" {
-  zone_id = data.cloudflare_zone.dns.id
-  name    = "Backblaze HTTP Response Headers"
-  kind    = "zone"
-  phase   = "http_response_headers_transform"
+  zone_id     = data.cloudflare_zone.dns.id
+  name        = "Backblaze HTTP Response Headers"
+  description = "Backblaze HTTP Response Headers"
+  kind        = "zone"
+  phase       = "http_response_headers_transform"
 
   rules {
     action = "rewrite"
@@ -61,7 +64,8 @@ resource "cloudflare_ruleset" "b2_response_header_rewrites" {
         value     = "*"
       }
     }
-    expression = "(http.host eq \"${local.b2_domain}\")"
-    enabled    = true
+    description = "Remove x-bz-*, add ETag, and set CORS"
+    expression  = "(http.host eq \"${local.b2_domain}\")"
+    enabled     = true
   }
 }
