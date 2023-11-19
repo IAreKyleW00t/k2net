@@ -19,6 +19,11 @@ terraform {
       version = "4.19.0"
     }
 
+    b2 = {
+      source = "Backblaze/b2"
+      version = "0.8.4"
+    }
+
     http = {
       source  = "hashicorp/http"
       version = "3.4.0"
