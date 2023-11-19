@@ -17,7 +17,7 @@ resource "cloudflare_zone_settings_override" "main" {
     }
     min_tls_version          = "1.2"
     opportunistic_encryption = "on"
-    tls_1_3                  = "on"
+    tls_1_3                  = "zrt" # 0-RTT
     automatic_https_rewrites = "on"
 
     # Security > Settings
