@@ -40,7 +40,7 @@ resource "cloudflare_zone_settings_override" "main" {
 
     # Caching > Configuration
     cache_level       = "aggressive" # Standard
-    browser_cache_ttl = 0            # Respect existing Headers
+    browser_cache_ttl = 14400        # 4hrs
 
     # Network
     websockets          = "on"
