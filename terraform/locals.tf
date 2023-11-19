@@ -9,6 +9,8 @@ locals {
   })
 
   # CDN
-  cdn_domain   = "s3.${var.cloudflare_zone}"
-  s3_origin_id = "s3-${aws_s3_bucket.cdn.id}"
+  cdn_domain       = "s3.${var.cloudflare_zone}"
+  s3_origin_id     = "s3-${aws_s3_bucket.cdn.id}"
+  b2_domain        = "b2.${var.cloudflare_zone}"
+  b2_public_bucket = "${var.vpc_name}-public"
 }
