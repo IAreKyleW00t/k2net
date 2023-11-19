@@ -49,3 +49,12 @@ resource "cloudflare_record" "cdn_validation" {
   proxied         = false # not supported
   allow_overwrite = true
 }
+
+resource "cloudflare_record" "b2" {
+  zone_id         = data.cloudflare_zone.dns.id
+  name            = "b2"
+  value           = trimprefix(data.b2_account_info.current.download_url, "https://")
+  type            = "CNAME"
+  proxied         = true
+  allow_overwrite = true
+}

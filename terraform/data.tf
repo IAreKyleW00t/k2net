@@ -38,3 +38,8 @@ data "aws_security_group" "default" {
   vpc_id     = module.vpc.vpc_id
   depends_on = [module.vpc]
 }
+
+##
+# Backblaze Account
+##
+data "b2_account_info" "current" {}
