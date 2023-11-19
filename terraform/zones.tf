@@ -35,7 +35,6 @@ resource "cloudflare_zone_settings_override" "main" {
     }
 
     # Speed > Optimization > Protocol Optimization
-    http2    = "on"
     http3    = "on"
     zero_rtt = "on"
 
@@ -44,7 +43,6 @@ resource "cloudflare_zone_settings_override" "main" {
     browser_cache_ttl = 0            # Respect existing Headers
 
     # Network
-    ipv6                = "on"
     websockets          = "on"
     ip_geolocation      = "on"
     opportunistic_onion = "on"
