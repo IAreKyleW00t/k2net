@@ -9,4 +9,11 @@ resource "b2_bucket" "backups" {
     mode      = "SSE-B2"
     algorithm = "AES256"
   }
+
+
+  lifecycle_rules {
+    file_name_prefix              = ""
+    days_from_hiding_to_deleting  = null
+    days_from_uploading_to_hiding = null
+  }
 }
