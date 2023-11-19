@@ -10,10 +10,9 @@ resource "b2_bucket" "backups" {
     algorithm = "AES256"
   }
 
-
   lifecycle_rules {
     file_name_prefix              = ""
-    days_from_hiding_to_deleting  = null
+    days_from_hiding_to_deleting  = 1
     days_from_uploading_to_hiding = null
   }
 }
