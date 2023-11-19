@@ -3,8 +3,8 @@ longhorn:
     defaultReplicaCount: 3
     defaultDataLocality: best-effort
     replicaAutoBalance: best-effort
-    backupTarget: s3://k2net-longhorn-backup@us-east-2/backup
-    backupTargetCredentialSecret: aws-credentials
+    backupTarget: s3://k2net-backups@us-west-004/longhorn
+    backupTargetCredentialSecret: backblaze-credentials
     backupstorePollInterval: 0 # only needed if using DR volumes
     backupConcurrentLimit: 2
     backupConcurrentLimit: 2
