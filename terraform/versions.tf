@@ -20,7 +20,7 @@ terraform {
     }
 
     b2 = {
-      source = "Backblaze/b2"
+      source  = "backblaze/b2"
       version = "0.8.4"
     }
 
