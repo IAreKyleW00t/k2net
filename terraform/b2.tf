@@ -12,9 +12,8 @@ resource "b2_bucket" "backups" {
 
 
   lifecycle_rules {
-    file_name_prefix              = null
+    file_name_prefix              = ""
     days_from_hiding_to_deleting  = null
     days_from_uploading_to_hiding = null
   }
 }
-  
