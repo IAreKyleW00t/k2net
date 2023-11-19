@@ -27,6 +27,8 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
+  B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
   TF_VAR_netmaker_access_key: ${{ secrets.NETMAKER_ACCESS_KEY }}
 
 # Only run 1 Terraform plan/apply at a time
@@ -108,4 +110,4 @@ jobs:
             ```
 
             </details>
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
