@@ -56,9 +56,9 @@ resource "cloudflare_ruleset" "b2_response_header_rewrites" {
         expression = "concat(http.response.headers[\"x-bz-content-sha1\"][0],http.response.headers[\"x-bz-upload-timestamp\"][0],http.response.headers[\"x-bz-file-id\"][0])"
       }
       headers {
-        name       = "Access-Control-Allow-Origin"
-        operation  = "set"
-        expression = "*"
+        name      = "Access-Control-Allow-Origin"
+        operation = "set"
+        value     = "*"
       }
     }
     expression = "(http.host eq \"${local.b2_domain}\")"
