@@ -6,5 +6,5 @@ version: 2.0.0
 
 dependencies:
   - name: mongodb
-    version: 14.2.8
+    version: 14.3.0
     repository: oci://registry-1.docker.io/bitnamicharts
