@@ -56,11 +56,19 @@ resource "cloudflare_ruleset" "b2_response_header_rewrites" {
         operation = "remove"
       }
       headers {
+        name      = "x-bz-info-large_file_sha1"
+        operation = "remove"
+      }
+      headers {
         name      = "x-bz-info-s3b-last-modified"
         operation = "remove"
       }
       headers {
         name      = "x-bz-info-sha256"
+        operation = "remove"
+      }
+      headers {
+        name      = "x-bz-info-src_last_modified_millis"
         operation = "remove"
       }
       headers {
