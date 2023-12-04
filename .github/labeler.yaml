@@ -1,14 +1,24 @@
 ---
 area/github:
-  - ".github/**/*"
-  - .gitignore
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**/*"
+          - .gitignore
 area/ansible:
-  - "ansible/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "ansible/**/*"
 area/kubernetes:
-  - "k8s/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "k8s/**/*"
 area/terraform:
-  - "terraform/**/*"
-  - .terraformignore
+  - changed-files:
+      - any-glob-to-any-file:
+          - "terraform/**/*"
+          - .terraformignore
 documentation:
-  - README.md
-  - LICENSE
+  - changed-files:
+      - any-glob-to-any-file:
+          - README.md
+          - LICENSE
