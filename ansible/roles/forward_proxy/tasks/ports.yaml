@@ -24,7 +24,7 @@
         image: "{{ socat_container_image }}"
         restart_policy: unless-stopped
         restart: yes
-        command: "{{ item.proto }}-listen:{{ item.port }},fork,reuseaddr {{ item.proto }}:{{ item.dest }}:{{ item.port }}"
+        command: "{{ item.proto }}-{{ 'listen' if item.proto =='tcp' else 'recvfrom' }}:{{ item.port }},fork,reuseaddr tcp:{{ item.dest }}:{{ item.port }}"
         ports:
           - "{{ item.port }}:{{ item.port }}/{{ item.proto }}"
         comparisons:
