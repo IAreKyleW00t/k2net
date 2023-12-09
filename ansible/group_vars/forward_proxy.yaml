@@ -51,7 +51,7 @@ caddy_hosts:
 
 # Port forwarding
 # renovate: datasource=docker
-socat_container_image: alpine/socat:1.7.4.4
+socat_container_image: alpine/socat:1.8.0.0
 socat_ports:
   # Unifi
   - port: 3478 # STUN
