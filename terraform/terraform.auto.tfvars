@@ -58,15 +58,5 @@ ingress_ports = [
     name     = "UniFi SpeedTest"
     port     = 6789
     protocol = "tcp"
-  },
-  {
-    name     = "UniFi Discovery"
-    port     = 10001
-    protocol = "udp"
-  },
-  {
-    name     = "UniFi L2 Discovery"
-    port     = 1900
-    protocol = "udp"
   }
 ]

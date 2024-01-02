@@ -72,9 +72,3 @@ socat_ports:
   - port: 6789 # Speedtest
     proto: tcp
     dest: 192.168.42.1
-  - port: 10001 # Discovery
-    proto: udp
-    dest: 192.168.42.1
-  - port: 1900 # L2 Discovery
-    proto: udp
-    dest: 192.168.42.1
