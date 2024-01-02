@@ -13,6 +13,7 @@
         image: "{{ caddy_container_image }}"
         restart_policy: unless-stopped
         restart: yes
+        memory: 32M
         etc_hosts: "{{ caddy_additional_hosts }}"
         env:
           CF_API_TOKEN: "{{ caddy_cloudflare_api_token }}"
