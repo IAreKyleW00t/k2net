@@ -25,7 +25,13 @@
         restart_policy: unless-stopped
         restart: yes
         memory: 8M
-        command: "{{ item.proto }}-{{ 'listen' if item.proto =='tcp' else 'recvfrom' }}:{{ item.port }},fork,reuseaddr {{ item.proto }}:{{ item.dest }}:{{ item.port }}"
+        log_options:
+        command: |-
+          {%- if item.proto =='tcp' -%}
+          TCP-LISTEN:{{ item.port }},reuseaddr,fork TCP:{{ item.dest }}:{{ item.port }}
+          {%- else -%}
+          UDP-RECVFROM:{{ item.port }},reuseaddr,fork UDP-SENDTO:{{ item.dest }}:{{ item.port }}
+          {%- endif -%}
         ports:
           - "{{ item.port }}:{{ item.port }}/{{ item.proto }}"
         comparisons:
