@@ -11,9 +11,6 @@
     "github>IAreKyleW00t/k2net//.github/renovate/semanticCommits.json",
     "github>IAreKyleW00t/k2net//.github/renovate/versions.json"
   ],
-  "platform": "github",
-  "onboarding": false,
-  "requireConfig": "required",
   "dependencyDashboardTitle": "Renovate Dashboard 🛡️",
   "timezone": "America/New_York",
   "schedule": ["at any time"],
