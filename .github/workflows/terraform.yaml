@@ -45,7 +45,7 @@ jobs:
         uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36 # v3.0.0
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: v1.7.2
+          terraform_version: v1.7.3
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform fmt
