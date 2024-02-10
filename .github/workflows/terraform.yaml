@@ -24,8 +24,6 @@ defaults:
     working-directory: terraform/
 
 env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
   B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
   B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
@@ -47,6 +45,13 @@ jobs:
           # renovate: datasource=github-releases depName=hashicorp/terraform
           terraform_version: v1.7.3
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+          with:
+            aws-region: us-east-2
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform fmt
         id: fmt
