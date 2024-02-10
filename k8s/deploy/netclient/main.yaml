@@ -1,0 +1,90 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: netclient
+  annotations:
+    linkerd.io/inject: enabled
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: netclient-data
+  namespace: netclient
+spec:
+  storageClassName: longhorn-backup
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netclient
+  namespace: netclient
+  annotations:
+    operator.1password.io/item-path: vaults/Homelab/items/netclient-token
+    operator.1password.io/item-name: netclient-token
+    operator.1password.io/auto-restart: "true"
+  labels:
+    app: netclient
+spec:
+  selector:
+    matchLabels:
+      app: netclient
+  replicas: 1
+  strategy:
+    type: Recreate # due to PVC
+  template:
+    metadata:
+      labels:
+        app: netclient
+    spec:
+      containers:
+        - name: netclient
+          image: gravitl/netclient:v0.22.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 51821 # WireGuard
+          envFrom:
+            - secretRef:
+                name: netclient-token
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: data
+              mountPath: /etc/netclient
+          livenessProbe:
+            tcpSocket:
+              port: 51821
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 51821
+            initialDelaySeconds: 2
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: netclient-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netclient
+  namespace: netclient
+spec:
+  selector:
+    app: netclient
+  ports:
+    - name: wireguard
+      port: 51821
+      targetPort: 51821
+  type: LoadBalancer
