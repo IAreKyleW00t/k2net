@@ -17,6 +17,7 @@
   "automerge": false,
   "automergeSchedule": [],
   "rebaseWhen": "conflicted",
+  "bumpVersion": "patch",
   "kubernetes": {
     "fileMatch": [
       "k8s/deploy/.+/main\\.ya?ml$",
