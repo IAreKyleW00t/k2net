@@ -62,3 +62,6 @@ additional_packages: []
 # IPs to allow SSH through firewall (IPv4 or IPv6)
 ssh_allowed_ips: []
 # - 1.2.3.4
+
+# Netclient settings
+netclient_version: master
