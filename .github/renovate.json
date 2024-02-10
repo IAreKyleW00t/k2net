@@ -24,8 +24,11 @@
       "k8s/deploy/.+/templates/.+\\.ya?ml$"
     ]
   },
-  "helm-values": {
+  "helmv3": {
     "fileMatch": ["k8s/deploy/.+/Chart\\.ya?ml$"]
+  },
+  "helm-values": {
+    "fileMatch": ["k8s/deploy/.+/values\\.ya?ml$"]
   },
   "argocd": {
     "fileMatch": ["k8s/apps/.+\\.ya?ml$"]
