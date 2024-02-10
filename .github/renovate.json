@@ -18,7 +18,10 @@
   "automergeSchedule": [],
   "rebaseWhen": "conflicted",
   "kubernetes": {
-    "fileMatch": ["k8s/deploy/.+/main\\.ya?ml$"]
+    "fileMatch": [
+      "k8s/deploy/.+/main\\.ya?ml$",
+      "k8s/deploy/.+/templates/.+\\.ya?ml$"
+    ]
   },
   "helm-values": {
     "fileMatch": ["k8s/deploy/.+/Chart\\.ya?ml$"]
