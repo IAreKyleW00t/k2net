@@ -1,4 +1,6 @@
 mongodb:
+  global:
+    imageRegistry: docker.io
   annotations:
     operator.1password.io/item-path: vaults/Homelab/items/unifi-database-credentials
     operator.1password.io/item-name: unifi-database-credentials
