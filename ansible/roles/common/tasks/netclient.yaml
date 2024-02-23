@@ -32,9 +32,6 @@
           - netclient
         state: latest
 
-    - name: Netclient | Set Netclient version
-      ansible.builtin.command: |
-        netclient use {{ netclient_version | quote }}
   become: yes
   tags:
     - netclient
