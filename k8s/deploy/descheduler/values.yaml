@@ -9,6 +9,6 @@ descheduler:
               memory: 10
               pods: 10
             targetThresholds:
-              cpu: 20
-              memory: 20
-              pods: 20
+              cpu: 25
+              memory: 25
+              pods: 25
