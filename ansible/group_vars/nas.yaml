@@ -1,7 +1,7 @@
 ---
 # Docker settings
 # renovate: datasource=docker
-minio_container_image: minio/minio:RELEASE.2024-02-17T01-15-57Z
+minio_container_image: minio/minio:RELEASE.2024-02-24T17-11-14Z
 minio_root_directory: /volume1/docker/minio
 
 # URL settings
