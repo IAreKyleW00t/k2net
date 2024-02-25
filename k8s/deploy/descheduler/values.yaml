@@ -1,0 +1,14 @@
+descheduler:
+  deschedulerPolicy:
+    strategies:
+      LowNodeUtilization:
+        params:
+          nodeResourceUtilizationThresholds:
+            thresholds:
+              cpu: 10
+              memory: 10
+              pods: 10
+            targetThresholds:
+              cpu: 20
+              memory: 20
+              pods: 20
