@@ -21,7 +21,7 @@ additional_users:
 # renovate: datasource=github-releases depName=pi-hole/pi-hole
 pihole_version: v5.17.3
 pihole_dnssec: false # https://support.quad9.net/hc/en-us/articles/4409274993677-DNS-Forwarders-Best-Practices
-pihole_dnsmasq_listening: all # to support Netmaker
+pihole_dnsmasq_listening: all # to support VPN
 pihole_webpassword: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   39646163396263306635326661623666333735623137353761343237623637393266613436333639
@@ -39,5 +39,5 @@ pihole_static_records:
     - 192.168.10.34
     - 192.168.10.60
 
-pihole_gravitysync_enabled: yes
+pihole_gravitysync_enabled: false
 pihole_gravitysync_local_ssh_key_path: ssh/gravitysync_rsa

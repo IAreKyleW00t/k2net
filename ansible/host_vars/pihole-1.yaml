@@ -5,8 +5,5 @@ additional_swap:
   - path: /var/swap
     size: 2
 
-additional_hosts:
-  100.100.100.1: pihole-2
-
 pihole_gravitysync_leader: true
 pihole_gravitysync_remote_host: 100.100.100.1

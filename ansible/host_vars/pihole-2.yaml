@@ -1,9 +1,0 @@
----
-additional_swap:
-  - path: /var/swap
-    size: 1
-
-additional_hosts:
-  192.168.10.16: pihole-1
-
-pihole_gravitysync_remote_host: 192.168.10.16

@@ -1,8 +1,0 @@
----
-dnsmasq_servers:
-  - 10.10.129.255
-  - 192.168.10.16
-
-additional_swap:
-  - path: /var/swap
-    size: 1
