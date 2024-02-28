@@ -129,6 +129,7 @@ kubectl apply -f k8s/apps/promtail.yaml
 kubectl apply -f k8s/apps/policy-controller.yaml
 kubectl apply -f k8s/apps/node-problem-detector.yaml
 kubectl apply -f k8s/apps/metrics-server.yaml
+kubectl apply -f k8s/apps/descheduler.yaml
 kubectl apply -f k8s/apps/argocd.yaml
 
 # User applications
