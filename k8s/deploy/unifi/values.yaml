@@ -9,10 +9,10 @@ mongodb:
     tag: "4.4.28" # latest "supported" version by UniFi
   resources:
     limits:
-      memory: 512Mi
+      memory: 1024Mi
     requests:
       cpu: 100m
-      memory: 256Mi
+      memory: 1024Mi
   updateStrategy:
     type: Recreate # due to PVC
   customLivenessProbe:

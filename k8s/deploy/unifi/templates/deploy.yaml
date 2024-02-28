@@ -73,7 +73,7 @@ spec:
               value: "{{ .Values.mongodb.service.ports.mongodb }}"
           resources:
             requests:
-              memory: 1024Mi
+              memory: 2048Mi
               cpu: 200m
             limits:
               memory: 2048Mi
