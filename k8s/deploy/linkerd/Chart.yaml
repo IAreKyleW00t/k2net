@@ -2,11 +2,14 @@ apiVersion: v2
 name: linkerd
 description: Meta-chart for Linkerd
 type: application
-version: 1.0.3
+version: 2.0.0
 
 dependencies:
   - name: linkerd-crds
     version: 1.8.0
+    repository: https://helm.linkerd.io/stable
+  - name: linkerd2-cni
+    version: 30.12.2
     repository: https://helm.linkerd.io/stable
   - name: linkerd-control-plane
     version: 1.16.11

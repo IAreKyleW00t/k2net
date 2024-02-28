@@ -1,4 +1,5 @@
 linkerd-control-plane:
+  cniEnabled: true
   podAnnotations:
     operator.1password.io/item-path: vaults/Homelab/items/linkerd-trust-anchor
     operator.1password.io/item-name: linkerd-trust-anchor
