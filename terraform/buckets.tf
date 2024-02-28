@@ -2,7 +2,7 @@
 # Backblaze B2 Buckets
 ##
 resource "b2_bucket" "backups" {
-  bucket_name = "${var.vpc_name}-backups"
+  bucket_name = local.b2_backup_bucket
   bucket_type = "allPrivate"
 
   default_server_side_encryption {

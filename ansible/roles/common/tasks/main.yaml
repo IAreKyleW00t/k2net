@@ -55,11 +55,6 @@
     - common
     - packages
 
-- import_tasks: netclient.yaml
-  tags:
-    - common
-    - netclient
-
 - import_tasks: docker.yaml
   tags:
     - common

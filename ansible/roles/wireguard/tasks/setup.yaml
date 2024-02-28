@@ -1,0 +1,59 @@
+# Called from mail.yaml, using include_tasks
+---
+- name: Setup
+  block:
+    - name: Setup | Enable IPv4 and IPv6 Forwarding
+      ansible.posix.sysctl:
+        name: "{{ item }}"
+        value: 1
+        state: present
+        sysctl_set: yes
+        reload: yes
+      loop:
+        - net.ipv4.ip_forward
+        - net.ipv6.conf.all.forwarding
+
+    - name: Setup | Pull '{{ wireguard_container_image }}' docker container
+      community.docker.docker_image:
+        name: "{{ wireguard_container_image }}"
+        source: pull
+
+    - name: "Setup | Pull and start latest '{{ wireguard_container_image }}' docker container"
+      community.docker.docker_container:
+        name: caddy
+        image: "{{ wireguard_container_image }}"
+        restart_policy: unless-stopped
+        restart: yes
+        memory: 128M
+        capabilities:
+          - NET_ADMIN
+          - SYS_MODULE
+        sysctls:
+          net.ipv4.conf.all.src_valid_mark: 1
+          net.ipv4.ip_forward: 1
+        env:
+          WG_DEVICE: "{{ wireguard_device }}"
+          WG_HOST: "{{ wireguard_host }}"
+          WG_PORT: "{{ wireguard_port }}"
+          WG_MTU: "{{ wireguard_mtu }}"
+          WG_PERSISTENT_KEEPALIVE: "{{ wireguard_keepalive }}"
+          WG_DEFAULT_ADDRESS: "{{ wireguard_cidr }}"
+          WG_DEFAULT_DNS: "{{ wireguard_dns }}"
+          WG_ALLOWED_IPS: "{{ wireguard_allowed_ips }}"
+          WG_PRE_UP: "{{ wireguard_preup }}"
+          WG_POST_UP: "{{ wireguard_postup }}"
+          WG_PRE_DOWN: "{{ wireguard_predown }}"
+          WG_POST_DOWN: "{{ wireguard_postdown }}"
+          PASSWORD: "{{ wireguard_ui_password}}"
+          LANG: "en"
+        volumes:
+          - "{{ wireguard_data_directory }}:/etc/wireguard"
+        ports:
+          - "{{ wireguard_port }}:51820/udp"
+          - "{{ wireguard_ui_port }}:51821"
+        comparisons:
+          "*": strict # recreate container on _any_ change
+  become: yes
+  tags:
+    - setup
+    - wireguard

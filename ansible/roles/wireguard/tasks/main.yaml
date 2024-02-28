@@ -1,0 +1,10 @@
+---
+- import_tasks: files.yaml
+  tags:
+    - wireguard
+    - files
+
+- import_tasks: setup.yaml
+  tags:
+    - wireguard
+    - setup
