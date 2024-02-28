@@ -303,9 +303,6 @@ spec:
     metadata:
       labels:
         app: sabnzbd
-      annotations:
-        # Overhead from Linkerd is detrimental to app performance
-        linkerd.io/inject: disabled
     spec:
       containers:
         - name: sabnzbd
@@ -370,9 +367,6 @@ spec:
     metadata:
       labels:
         app: qbittorrent
-      annotations:
-        # Overhead from Linkerd is detrimental to app performance
-        linkerd.io/inject: disabled
     spec:
       containers:
         - name: qbittorrent
