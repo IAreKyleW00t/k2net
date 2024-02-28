@@ -1,0 +1,18 @@
+# Called from mail.yaml, using include_tasks
+---
+- name: Files
+  block:
+    - name: Files | Ensure WireGuard data directory exists
+      ansible.builtin.file:
+        path: "{{ wireguard_data_directory }}/{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop:
+        - data
+        - config
+  become: yes
+  tags:
+    - files
+    - wireguard
