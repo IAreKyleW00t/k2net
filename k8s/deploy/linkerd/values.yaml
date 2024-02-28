@@ -1,6 +1,7 @@
 linkerd2-cni:
-  destCNINetDir: "/var/lib/rancher/k3s/agent/etc/cni/net.d"
-  destCNIBinDir: "/var/lib/rancher/k3s/data/current/bin"
+  # required for k3s
+  destCNINetDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
+  destCNIBinDir: /var/lib/rancher/k3s/data/current/bin
 
 linkerd-control-plane:
   cniEnabled: true
