@@ -50,7 +50,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: bitwarden
-          image: vaultwarden/server:1.30.4-alpine
+          image: vaultwarden/server:1.30.5-alpine
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
