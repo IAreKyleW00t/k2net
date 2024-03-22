@@ -2,9 +2,9 @@ apiVersion: v2
 name: loki
 description: Meta-chart for Loki
 type: application
-version: 1.1.13
+version: 1.1.14
 
 dependencies:
   - name: loki
-    version: 5.47.0
+    version: 5.47.1
     repository: https://grafana.github.io/helm-charts
