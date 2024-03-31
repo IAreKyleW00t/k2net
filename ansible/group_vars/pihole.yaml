@@ -19,7 +19,7 @@ additional_users:
       local_key_path: ssh/gravitysync_rsa
 
 # renovate: datasource=github-releases depName=pi-hole/pi-hole
-pihole_version: v5.18.1
+pihole_version: v5.18.2
 pihole_dnssec: false # https://support.quad9.net/hc/en-us/articles/4409274993677-DNS-Forwarders-Best-Practices
 pihole_dnsmasq_listening: all # to support VPN
 pihole_webpassword: !vault |
