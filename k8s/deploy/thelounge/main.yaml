@@ -46,7 +46,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: thelounge
-          image: ghcr.io/thelounge/thelounge:4.4.1
+          image: ghcr.io/thelounge/thelounge:4.4.3
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
