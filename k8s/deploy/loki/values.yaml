@@ -4,14 +4,24 @@ loki:
     auth_enabled: false
     commonConfig:
       replication_factor: 1
-    storage:
-      type: filesystem
+    schemaConfig:
+      configs:
+        - from: 2024-04-01
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    ingester:
+      chunk_encoding: snappy
   singleBinary:
     replicas: 1
     persistence:
       size: 100Gi
       storageClass: longhorn
 
+  # Zero out replica counts of other deployment modes
   backend:
     replicas: 0
   read:
