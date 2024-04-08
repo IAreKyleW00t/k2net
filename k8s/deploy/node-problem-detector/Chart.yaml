@@ -2,9 +2,9 @@ apiVersion: v2
 name: node-problem-detector
 description: Meta-chart for node-problem-detector
 type: application
-version: 1.0.1
+version: 1.0.2
 
 dependencies:
   - name: node-problem-detector
-    version: 2.3.12
+    version: 2.3.13
     repository: https://charts.deliveryhero.io/
