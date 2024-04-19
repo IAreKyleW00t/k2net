@@ -2,9 +2,9 @@ apiVersion: v2
 name: metallb
 description: Meta-chart for MetalLB
 type: application
-version: 1.0.2
+version: 1.0.3
 
 dependencies:
   - name: metallb
-    version: 0.14.4
+    version: 0.14.5
     repository: https://metallb.github.io/metallb
