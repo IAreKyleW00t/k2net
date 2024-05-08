@@ -70,10 +70,10 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             requests:
-              memory: 64Mi
+              memory: 128Mi
               cpu: 50m
             limits:
-              memory: 64Mi
+              memory: 128Mi
           env:
             - name: EXTERNAL_DNS_PIHOLE_PASSWORD
               valueFrom:
