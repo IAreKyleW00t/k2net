@@ -66,7 +66,7 @@ spec:
         fsGroup: 65534 # For ExternalDNS to be able to read Kubernetes token files
       containers:
         - name: external-dns
-          image: registry.k8s.io/external-dns/external-dns:v0.14.1
+          image: registry.k8s.io/external-dns/external-dns:v0.14.2
           imagePullPolicy: IfNotPresent
           resources:
             requests:
