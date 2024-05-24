@@ -41,7 +41,7 @@ spec:
       hostNetwork: true # for local discovery
       containers:
         - name: home-assistant
-          image: linuxserver/homeassistant:2024.5.4
+          image: linuxserver/homeassistant:2024.5.5
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8123 # HTTP
