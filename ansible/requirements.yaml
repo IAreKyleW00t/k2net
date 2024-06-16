@@ -5,4 +5,4 @@ collections:
   - name: community.general
     version: 9.0.1
   - name: community.docker
-    version: 3.10.3
+    version: 3.10.4
