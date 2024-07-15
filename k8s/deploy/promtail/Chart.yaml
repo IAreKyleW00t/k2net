@@ -2,9 +2,9 @@ apiVersion: v2
 name: promtail
 description: Meta-chart for Promtail
 type: application
-version: 1.1.4
+version: 1.1.5
 
 dependencies:
   - name: promtail
-    version: 6.16.3
+    version: 6.16.4
     repository: https://grafana.github.io/helm-charts
