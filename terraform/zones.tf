@@ -28,11 +28,6 @@ resource "cloudflare_zone_settings_override" "main" {
     # Speed > Optimization > Content Optimization
     brotli      = "on"
     early_hints = "on"
-    minify {
-      js   = "on"
-      css  = "on"
-      html = "on"
-    }
 
     # Speed > Optimization > Protocol Optimization
     http3    = "on"
