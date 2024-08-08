@@ -8,7 +8,7 @@ resource "cloudflare_record" "domains" {
 
   zone_id         = data.cloudflare_zone.dns.id
   name            = each.value.name
-  value           = each.value.value
+  content         = each.value.value
   type            = each.value.type
   proxied         = each.value.proxied
   allow_overwrite = true
@@ -17,7 +17,7 @@ resource "cloudflare_record" "domains" {
 resource "cloudflare_record" "b2" {
   zone_id         = data.cloudflare_zone.dns.id
   name            = "b2"
-  value           = trimprefix(data.b2_account_info.current.download_url, "https://")
+  content         = trimprefix(data.b2_account_info.current.download_url, "https://")
   type            = "CNAME"
   proxied         = true
   allow_overwrite = true
