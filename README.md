@@ -1,4 +1,4 @@
-# K2NET [![status](https://img.shields.io/badge/Status-2ea043)](https://status.kyle2.net/)
+# 🧪 K2NET [![status](https://img.shields.io/badge/Status-2ea043)](https://status.kyle2.net/)
 
 My homelab, managed with GitOps using [Terraform](https://www.terraform.io/), [Ansible](https://www.ansible.com/), and [ArgoCD](https://argoproj.github.io/cd/) on my [k3s](https://k3s.io/) cluster.
 
