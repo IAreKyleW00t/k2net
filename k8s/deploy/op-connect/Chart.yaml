@@ -2,9 +2,9 @@ apiVersion: v2
 name: argocd
 description: Meta-chart for 1Password Connect Operator
 type: application
-version: 1.0.2
+version: 1.0.3
 
 dependencies:
   - name: connect
-    version: 1.15.1
+    version: 1.16.0
     repository: https://1password.github.io/connect-helm-charts
