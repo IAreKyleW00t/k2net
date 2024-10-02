@@ -22,7 +22,7 @@ spec:
     spec:
       initContainers:
         - name: db-wait
-          image: busybox:1.36.1
+          image: busybox:1.37.0
           securityContext:
             runAsUser: 2102 # Allows skipping iptables rules
           command:
@@ -30,7 +30,7 @@ spec:
             - -c
             - while ! nc -v -z {{ .Release.Name }}-mongodb {{ .Values.mongodb.service.ports.mongodb }}; do sleep 1; done
         - name: site-configs
-          image: busybox:1.36.1
+          image: busybox:1.37.0
           command:
             - sh
             - -c
