@@ -6,7 +6,7 @@ mongodb:
     operator.1password.io/item-name: unifi-database-credentials
   image:
     repository: mongo
-    tag: "5.0.29" # latest "supported" version by UniFi
+    tag: "4.4.29" # latest "supported" version by cluster HW
   resources:
     limits:
       memory: 1024Mi
