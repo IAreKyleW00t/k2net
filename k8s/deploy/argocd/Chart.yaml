@@ -2,9 +2,9 @@ apiVersion: v2
 name: argocd
 description: Meta-chart for ArgoCD
 type: application
-version: 1.1.76
+version: 1.1.77
 
 dependencies:
   - name: argo-cd
-    version: 7.6.8
+    version: 7.6.9
     repository: https://argoproj.github.io/argo-helm
