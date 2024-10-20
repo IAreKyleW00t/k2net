@@ -21,7 +21,7 @@ terraform {
 
     b2 = {
       source  = "backblaze/b2"
-      version = "0.8.12"
+      version = "0.9.0"
     }
 
     http = {
