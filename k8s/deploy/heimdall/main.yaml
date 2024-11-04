@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
         - name: heimdall
-          image: linuxserver/heimdall:2.6.1
+          image: linuxserver/heimdall:2.6.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
