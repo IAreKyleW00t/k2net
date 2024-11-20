@@ -370,7 +370,7 @@ spec:
     spec:
       containers:
         - name: qbittorrent
-          image: linuxserver/qbittorrent:5.0.1
+          image: linuxserver/qbittorrent:5.0.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
