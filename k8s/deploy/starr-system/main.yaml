@@ -134,7 +134,7 @@ spec:
     spec:
       containers:
         - name: prowlarr
-          image: linuxserver/prowlarr:1.27.0
+          image: linuxserver/prowlarr:1.28.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9696
