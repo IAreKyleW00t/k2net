@@ -43,7 +43,7 @@ jobs:
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: v1.10.3
+          terraform_version: v1.10.4
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Configure AWS Credentials
