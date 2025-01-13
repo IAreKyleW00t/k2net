@@ -305,6 +305,8 @@ spec:
     metadata:
       labels:
         app: sabnzbd
+      annotations:
+        linkerd.io/inject: disabled
     spec:
       containers:
         - name: sabnzbd
@@ -371,6 +373,8 @@ spec:
     metadata:
       labels:
         app: qbittorrent
+      annotations:
+        linkerd.io/inject: disabled
     spec:
       containers:
         - name: qbittorrent
