@@ -292,6 +292,8 @@ metadata:
   namespace: starr-system
   labels:
     app: sabnzbd
+  annotations:
+    linkerd.io/inject: disabled
 spec:
   selector:
     matchLabels:
@@ -356,6 +358,8 @@ metadata:
   namespace: starr-system
   labels:
     app: qbittorrent
+  annotations:
+    linkerd.io/inject: disabled
 spec:
   selector:
     matchLabels:
