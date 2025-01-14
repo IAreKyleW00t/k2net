@@ -59,13 +59,13 @@ spec:
             httpGet:
               path: /auth/providers
               port: 8123
-            initialDelaySeconds: 30
+            initialDelaySeconds: 120
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /auth/providers
               port: 8123
-            initialDelaySeconds: 30
+            initialDelaySeconds: 120
             periodSeconds: 10
           volumeMounts:
             - name: data
