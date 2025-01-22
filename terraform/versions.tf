@@ -16,7 +16,7 @@ terraform {
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.50.0"
+      version = "4.51.0"
     }
 
     b2 = {
@@ -35,5 +35,5 @@ terraform {
     }
   }
 
-  required_version = "1.10.4"
+  required_version = "1.10.5"
 }
