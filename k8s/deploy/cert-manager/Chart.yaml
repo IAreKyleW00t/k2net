@@ -2,9 +2,9 @@ apiVersion: v2
 name: cert-manager
 description: Meta-chart for cert-manager
 type: application
-version: 1.0.13
+version: 1.0.14
 
 dependencies:
   - name: cert-manager
-    version: v1.16.3
+    version: v1.17.0
     repository: https://charts.jetstack.io
