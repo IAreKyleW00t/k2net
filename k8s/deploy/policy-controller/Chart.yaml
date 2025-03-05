@@ -2,9 +2,9 @@ apiVersion: v2
 name: policy-controller
 description: Meta-chart for policy-controller
 type: application
-version: 1.0.10
+version: 1.0.11
 
 dependencies:
   - name: policy-controller
-    version: 0.9.1
+    version: 0.10.0
     repository: https://sigstore.github.io/helm-charts
