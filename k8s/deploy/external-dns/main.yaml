@@ -86,4 +86,4 @@ spec:
             - --registry=noop
             - --policy=upsert-only
             - --provider=pihole
-            - --pihole-server=http://pihole-1.kyle2.net
+            - --pihole-server=http://192.168.10.16
