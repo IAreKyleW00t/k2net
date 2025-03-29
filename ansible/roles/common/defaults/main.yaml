@@ -38,10 +38,10 @@ additional_users: []
 #   comment: Example user
 #   groups: docker,users
 #   sudo:
-#     enable: yes
+#     enable: true
 #     content: "ALL=(ALL) NOPASSWD: ALL"
 #   ssh:
-#     enabled: yes
+#     enabled: true
 #     name: id_rsa
 #     local_key_path: ssh/mykey/id_rsa
 

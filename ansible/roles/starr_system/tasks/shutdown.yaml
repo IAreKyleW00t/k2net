@@ -11,7 +11,7 @@
       args:
         chdir: "{{ starr_root_directory }}"
       when: docker_compose_stat.stat.exists
-  become: yes
+  become: true
   tags:
     - shutdown
     - starr

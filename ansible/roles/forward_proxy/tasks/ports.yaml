@@ -7,8 +7,8 @@
         name: "{{ item }}"
         value: 1
         state: present
-        sysctl_set: yes
-        reload: yes
+        sysctl_set: true
+        reload: true
       loop:
         - net.ipv4.ip_forward
         - net.ipv6.conf.all.forwarding
@@ -23,7 +23,7 @@
         name: "socat-{{ item.proto }}-{{ item.port }}"
         image: "{{ socat_container_image }}"
         restart_policy: unless-stopped
-        restart: yes
+        restart: true
         memory: 8M
         log_options:
         command: |-
@@ -43,7 +43,7 @@
         name: "socat-{{ item.proto }}-{{ item.port }}"
         state: absent
       loop: "{{ disabled_ports }}"
-  become: yes
+  become: true
   tags:
     - ports
     - forward_proxy

@@ -26,7 +26,7 @@
 
     - name: DNS | Add idempotence flag from /etc/resolv.conf
       ansible.builtin.command: chattr +i /etc/resolv.conf
-  become: yes
+  become: true
   tags:
     - dns
     - pihole

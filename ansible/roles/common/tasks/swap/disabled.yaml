@@ -22,7 +22,7 @@
         dest: /etc/fstab
         regexp: "{{ item.path }}.+"
         state: absent
-  become: yes
+  become: true
   tags:
     - swap
     - common

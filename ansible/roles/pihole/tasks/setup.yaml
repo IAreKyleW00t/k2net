@@ -1,45 +1,42 @@
 ---
 - name: Setup
   block:
-    - name: Setup | Template out edns unbound config for dnsmasq
-      ansible.builtin.template:
-        src: edns.conf.j2
-        dest: /etc/dnsmasq.d/99-edns.conf
-        owner: root
-        group: root
-        mode: "0644"
-      when: pihole_unbound_enabled
+    - name: Setup | Pull '{{ pihole_container_image }}' docker container
+      community.docker.docker_image:
+        name: "{{ pihole_container_image }}"
+        source: pull
 
-    - name: Setup | Remove edns unbound config if unbound is disabled
-      ansible.builtin.file:
-        path: /etc/dnsmasq.d/99-edns.conf
-        state: absent
-      when: not pihole_unbound_enabled
-
-    - name: Setup | Template out Pi-Hole configuration
-      ansible.builtin.template:
-        src: pihole.conf.j2
-        dest: /etc/pihole/setupVars.conf
-        owner: root
-        group: root
-        mode: "0644"
-
-    - name: Setup | Download latest Pi-Hole install script
-      ansible.builtin.get_url:
-        url: https://install.pi-hole.net
-        dest: /tmp/pihole-install.sh
-        owner: root
-        group: root
-        mode: "0755"
-
-    - name: Setup | Run Pi-Hole install script
-      ansible.builtin.command: /tmp/pihole-install.sh --unattended
-
-    - name: Setup | Delete old Pi-Hole intsall script
-      ansible.builtin.file:
-        path: /tmp/pihole-install.sh
-        state: absent
-  become: yes
+    - name: "Setup | Pull and start latest '{{ pihole_container_image }}' docker container"
+      community.docker.docker_container:
+        name: pihole
+        image: "{{ pihole_container_image }}"
+        restart_policy: unless-stopped
+        restart: true
+        capabilities:
+          - CAP_NET_BIND_SERVICE
+          - SYS_NICE
+          - CAP_CHOWN
+        env:
+          TZ: "America/New_York"
+          FTLCONF_dns_listeningMode: "all"
+          FTLCONF_webserver_domain: "{{ pihole_domain }}"
+          FTLCONF_webserver_api_password: "{{ pihole_webserver_api_password }}"
+          FTLCONF_dns_upstreams: "{{ pihole_dns | join(';') }}"
+          FTLCONF_dns_hosts: "{{ pihole_hosts | join(';') }}"
+          FTLCONF_misc_etc_dnsmasq_d: "true"
+          FTLCONF_misc_dnsmasq_lines: "{{ pihole_dnsmasq_lines | join(';') }}"
+        volumes:
+          - "{{ pihole_data_directory }}:/etc/pihole"
+          - "{{ pihole_dnsmasq_directory }}:/etc/dnsmasq.d"
+        ports:
+          - "53:53/tcp"
+          - "53:53/udp"
+          - "80:80/tcp"
+          - "443:443/tcp"
+        comparisons:
+          "*": strict # recreate container on _any_ change
+      register: pihole_docker
+  become: true
   tags:
     - setup
     - pihole

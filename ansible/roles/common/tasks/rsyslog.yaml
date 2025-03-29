@@ -15,7 +15,7 @@
         name: rsyslog
         state: restarted
       when: rsyslog_config.changed
-  become: yes
+  become: true
   tags:
     - rsyslog
     - common

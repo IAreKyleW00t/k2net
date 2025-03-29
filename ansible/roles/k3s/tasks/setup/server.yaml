@@ -27,7 +27,7 @@
       ansible.builtin.file:
         path: /tmp/k3s-install.sh
         state: absent
-  become: yes
+  become: true
   tags:
     - server
     - setup

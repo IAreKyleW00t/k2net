@@ -30,7 +30,7 @@
         owner: "{{ starr_puid }}"
         group: "{{ starr_guid }}"
         mode: "0644"
-  become: yes
+  become: true
   tags:
     - files
     - starr

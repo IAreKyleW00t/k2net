@@ -7,9 +7,9 @@
         regexp: "^{{ item.key }}"
         line: "{{ item.key }}\t{{ item.value }}"
         insertbefore: "^##+"
-        firstmatch: yes
+        firstmatch: true
       loop: "{{ additional_hosts | dict2items }}"
-  become: yes
+  become: true
   tags:
     - hosts
     - common

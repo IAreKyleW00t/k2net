@@ -10,7 +10,7 @@
       ansible.builtin.reboot:
         reboot_timeout: "{{ reboot_timeout }}"
       when: check_reboot.stat.exists
-  become: yes
+  become: true
   tags:
     - restart
     - common

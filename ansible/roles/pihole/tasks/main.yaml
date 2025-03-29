@@ -1,32 +1,15 @@
 ---
-- import_tasks: files.yaml
-  tags:
-    - pihole
-    - files
-
-- include_tasks: unbound.yaml
-  when: pihole_unbound_enabled | bool
-  tags:
-    - pihole
-    - unbound
-
-- import_tasks: setup.yaml
-  tags:
-    - pihole
-    - setup
-
-- import_tasks: static.yaml
-  tags:
-    - pihole
-    - static
-
 - import_tasks: dns.yaml
   tags:
     - pihole
     - dns
 
-- include_tasks: gravitysync.yaml
-  when: pihole_gravitysync_enabled | bool
+- import_tasks: files.yaml
   tags:
     - pihole
-    - gravitysync
+    - files
+
+- import_tasks: setup.yaml
+  tags:
+    - pihole
+    - setup

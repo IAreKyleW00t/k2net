@@ -9,7 +9,7 @@ k3s_server_args:
 k3s_agent_args:
   - --kubelet-arg=resolv-conf=/etc/k3s-resolv.conf
 k3s_nameservers:
-  - 192.168.10.16
+  - 192.168.10.58
 
 # Handled via k3s
 rsyslog_server: ""

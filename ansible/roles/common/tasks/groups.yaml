@@ -4,7 +4,7 @@
     - name: System Groups | Ensure group '{{ group }}' exists
       ansible.builtin.group:
         name: "{{ group }}"
-  become: yes
+  become: true
   tags:
     - groups
     - common

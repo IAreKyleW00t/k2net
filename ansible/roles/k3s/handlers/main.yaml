@@ -3,7 +3,7 @@
   ansible.builtin.systemd:
     name: "{{ k3s_service_name }}"
     state: started
-  become: yes
+  become: true
 
 - name: Uncordon k3s node
   ansible.builtin.command: "kubectl uncordon {{ hostname | quote }}"

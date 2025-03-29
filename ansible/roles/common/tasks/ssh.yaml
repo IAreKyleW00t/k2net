@@ -23,7 +23,7 @@
         name: sshd
         state: reloaded
       when: sshd_proto_config.changed or sshd_auth_config.changed
-  become: yes
+  become: true
   tags:
     - ssh
     - common

@@ -40,7 +40,7 @@
 
     - name: Docker | Update Apt cache
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
       when: docker_repo.changed
 
     - name: Docker | Install docker engine
@@ -55,21 +55,21 @@
     - name: Docker | Enable and start the docker service
       ansible.builtin.systemd:
         name: docker
-        enabled: yes
+        enabled: true
         state: started
-  become: yes
+  become: true
   tags:
     - docker
     - common
 
 - name: Docker | Prune old docker containers, images, networks, volumes, and caches
   community.docker.docker_prune:
-    containers: yes
-    images: yes
-    networks: yes
-    volumes: yes
-    builder_cache: yes
-  become: yes
+    containers: true
+    images: true
+    networks: true
+    volumes: true
+    builder_cache: true
+  become: true
   tags:
     - docker
     - cleanup

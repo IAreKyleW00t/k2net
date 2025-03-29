@@ -3,7 +3,7 @@
   block:
     - name: DNS | Install DNSmasq
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         name:
           - dnsmasq
         state: latest
@@ -12,7 +12,7 @@
       ansible.builtin.lineinfile:
         dest: /etc/default/dnsmasq
         regexp: ^#?IGNORE_RESOLVCONF=.+$
-        line: IGNORE_RESOLVCONF=yes
+        line: IGNORE_RESOLVCONF=true
 
     - name: DNS | Template out /etc/dnsmasq.conf
       ansible.builtin.template:
@@ -26,13 +26,13 @@
       ansible.builtin.systemd:
         name: systemd-resolved
         state: stopped
-        enabled: no
+        enabled: false
 
     - name: DNS | Reload and enable DNSmasq service
       ansible.builtin.systemd:
         name: dnsmasq
         state: restarted
-        enabled: yes
+        enabled: true
 
     - name: DNS | Check if /etc/resolv.conf is symlink
       ansible.builtin.stat:
@@ -60,7 +60,7 @@
     - name: DNS | Add idempotence flag from /etc/resolv.conf
       ansible.builtin.command: chattr +i /etc/resolv.conf
 
-  become: yes
+  become: true
   tags:
     - dns
     - common

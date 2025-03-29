@@ -3,7 +3,7 @@
   block:
     - name: System Updates | Update Apt cache
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
 
     - name: System Updates | Update all packages
       ansible.builtin.apt:
@@ -21,16 +21,16 @@
 
     - name: System Updates | Remove obsolete packages from the cache
       ansible.builtin.apt:
-        autoclean: yes
+        autoclean: true
 
     - name: System Updates | Remove orphaned packages that are no longer required
       ansible.builtin.apt:
-        autoremove: yes
+        autoremove: true
 
     - name: System Updates | Clean old packages and install scripts
       ansible.builtin.apt:
-        clean: yes
-  become: yes
+        clean: true
+  become: true
   tags:
     - updates
     - common

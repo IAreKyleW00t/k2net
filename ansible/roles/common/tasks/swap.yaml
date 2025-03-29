@@ -15,7 +15,7 @@
 
 - name: Swap | Activate all enabled swap partitions
   ansible.builtin.command: swapon -a
-  become: yes
+  become: true
   tags:
     - swap
     - common

@@ -24,11 +24,9 @@ wyse-6
 wyse-7
 wyse-8
 
-[gateway]
-morganite
-
 [pihole]
 pihole-1
+morganite
 
 [nas]
 euclase

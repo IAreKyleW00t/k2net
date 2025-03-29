@@ -12,7 +12,7 @@
       loop:
         - data
         - config
-  become: yes
+  become: true
   tags:
     - files
     - wireguard

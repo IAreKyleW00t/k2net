@@ -4,6 +4,3 @@ ansible_user: kyle
 additional_swap:
   - path: /var/swap
     size: 2
-
-pihole_gravitysync_leader: true
-pihole_gravitysync_remote_host: 100.100.100.1

@@ -48,11 +48,11 @@
         owner: "{{ user.name }}"
         group: "{{ user.name }}"
         mode: "0644"
-        create: yes
+        create: true
       with_file:
         - "{{ user.ssh.local_key_path }}.pub"
       when: user.ssh.enabled | bool
-  become: yes
+  become: true
   tags:
     - users
     - common

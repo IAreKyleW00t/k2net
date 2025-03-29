@@ -5,13 +5,13 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        owner: root
-        group: root
+        owner: 1000
+        group: 1000
         mode: "0755"
       loop:
         - /etc/pihole
         - /etc/dnsmasq.d
-  become: yes
+  become: true
   tags:
     - files
     - pihole

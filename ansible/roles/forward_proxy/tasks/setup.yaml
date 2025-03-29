@@ -12,7 +12,7 @@
         name: caddy
         image: "{{ caddy_container_image }}"
         restart_policy: unless-stopped
-        restart: yes
+        restart: true
         memory: 32M
         etc_hosts: "{{ caddy_additional_hosts }}"
         env:
@@ -27,7 +27,7 @@
           - "{{ caddy_https_port }}:443"
         comparisons:
           "*": strict # recreate container on _any_ change
-  become: yes
+  become: true
   tags:
     - setup
     - forward_proxy

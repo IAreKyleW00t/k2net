@@ -1,4 +1,4 @@
 # {{ ansible_managed }} - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
-# Pi-Hole
-nameserver 127.0.0.1
-nameserver ::1
+{% for ns in pihole_dns %}
+nameserver {{ ns }}
+{% endfor %}

@@ -10,7 +10,7 @@
       ansible.builtin.shell: "{{ docker_compose_bin }} up -d --force-recreate"
       args:
         chdir: "{{ minio_root_directory }}"
-  become: yes
+  become: true
   tags:
     - setup
     - minio

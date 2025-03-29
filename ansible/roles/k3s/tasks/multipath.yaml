@@ -16,7 +16,7 @@
 
     - name: Multipath | Validate configuration
       ansible.builtin.command: multipath -t
-  become: yes
+  become: true
   tags:
     - k3s
     - multipath

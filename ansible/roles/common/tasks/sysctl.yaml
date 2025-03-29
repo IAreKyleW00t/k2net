@@ -6,8 +6,8 @@
         name: "{{ item.key }}"
         value: "{{ item.value }}"
         state: present
-        sysctl_set: yes
-        reload: yes
+        sysctl_set: true
+        reload: true
       loop: "{{ enabled_sysctl }}"
 
     - name: System sysctl | Unsetting sysctl values if null
@@ -15,10 +15,10 @@
         name: "{{ item.key }}"
         value: "{{ item.value }}"
         state: absent
-        sysctl_set: yes
-        reload: yes
+        sysctl_set: true
+        reload: true
       loop: "{{ disabled_sysctl }}"
-  become: yes
+  become: true
   tags:
     - sysctl
     - common

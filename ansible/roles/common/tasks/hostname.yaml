@@ -12,13 +12,13 @@
         regexp: "^127\\.0\\.1\\.1.+"
         line: "127.0.1.1\t{{ hostname }}"
         insertbefore: "^##+"
-        firstmatch: yes
+        firstmatch: true
 
     - name: Hostname | Reboot system to fully set hostname
       ansible.builtin.reboot:
         reboot_timeout: "{{ reboot_timeout }}"
       when: hostname_check.changed
-  become: yes
+  become: true
   tags:
     - hostname
     - common

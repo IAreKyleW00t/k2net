@@ -6,7 +6,7 @@
       community.general.filesystem:
         dev: "{{ item.src }}"
         fstype: "{{ item.fstype }}"
-        force: no
+        force: false
 
     - name: "Mounts | Mount device to '{{ item.path }}' and ensure it persistents across reboots"
       ansible.posix.mount:
@@ -15,7 +15,7 @@
         fstype: "{{ item.fstype }}"
         opts: "{{ item.opts }}"
         state: mounted
-  become: yes
+  become: true
   tags:
     - mounts
     - common

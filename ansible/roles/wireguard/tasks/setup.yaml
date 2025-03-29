@@ -7,8 +7,8 @@
         name: "{{ item }}"
         value: 1
         state: present
-        sysctl_set: yes
-        reload: yes
+        sysctl_set: true
+        reload: true
       loop:
         - net.ipv4.ip_forward
         - net.ipv6.conf.all.forwarding
@@ -23,7 +23,7 @@
         name: caddy
         image: "{{ wireguard_container_image }}"
         restart_policy: unless-stopped
-        restart: yes
+        restart: true
         memory: 128M
         capabilities:
           - NET_ADMIN
@@ -53,7 +53,7 @@
           - "{{ wireguard_ui_port }}:51821"
         comparisons:
           "*": strict # recreate container on _any_ change
-  become: yes
+  become: true
   tags:
     - setup
     - wireguard
