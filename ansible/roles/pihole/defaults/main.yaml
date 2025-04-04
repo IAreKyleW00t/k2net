@@ -14,10 +14,6 @@ pihole_dns:
   - 149.112.112.112
   # - 127.0.0.1#5353 # Unbound
 
-# Static A-record hosts
-pihole_hosts: []
-#  - 192.168.1.1 router
-
 # Records defined in dnsmasq directly
 pihole_dnsmasq_lines: []
 #  - host-record=myhost,1.2.3.4

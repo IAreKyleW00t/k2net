@@ -21,24 +21,6 @@ pihole_webserver_api_password: !vault |
   6630373863366138313161613830396532363231363230346330
 
 # Static/Custom hosts
-pihole_hosts:
-  - 192.168.10.1 router
-  - 192.168.10.2 switch-1
-  - 192.168.10.6 ap-1
-  - 192.168.10.5 ap-2
-  - 192.168.10.11 archer
-  - 192.168.10.10 euclase
-  - 192.168.10.142 wyse-1
-  - 192.168.10.136 wyse-2
-  - 192.168.10.34 wyse-3
-  - 192.168.10.97 wyse-4
-  - 192.168.10.60 wyse-5
-  - 192.168.10.138 wyse-6
-  - 192.168.10.26 wyse-7
-  - 192.168.10.130 wyse-8
-  - 192.168.10.58 morganite
-  - 192.168.10.16 pihole-1.kyle2.net
-  - 192.168.10.58 pihole-2.kyle2.net
 pihole_dnsmasq_lines:
   - host-record=k3s.kyle2.net,192.168.10.142,60
   - host-record=k3s.kyle2.net,192.168.10.34,60

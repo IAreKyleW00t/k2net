@@ -22,7 +22,6 @@
           FTLCONF_webserver_domain: "{{ pihole_domain }}"
           FTLCONF_webserver_api_password: "{{ pihole_webserver_api_password }}"
           FTLCONF_dns_upstreams: "{{ pihole_dns | join(';') }}"
-          FTLCONF_dns_hosts: "{{ pihole_hosts | join(';') }}"
           FTLCONF_misc_etc_dnsmasq_d: "true"
           FTLCONF_misc_dnsmasq_lines: "{{ pihole_dnsmasq_lines | join(';') }}"
         volumes:
