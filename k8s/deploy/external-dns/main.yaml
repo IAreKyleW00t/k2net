@@ -87,3 +87,4 @@ spec:
             - --policy=upsert-only
             - --provider=pihole
             - --pihole-server=http://192.168.10.58
+            - --pihole-api-version=6
