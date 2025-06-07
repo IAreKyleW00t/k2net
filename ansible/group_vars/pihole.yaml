@@ -6,7 +6,7 @@ pihole_dns:
 
 # Container settings
 # renovate: datasource=docker
-pihole_container_image: pihole/pihole:2025.04.0
+pihole_container_image: pihole/pihole:2025.06.1
 pihole_data_directory: /etc/pihole
 pihole_dnsmasq_directory: /etc/dnsmasq.d
 
