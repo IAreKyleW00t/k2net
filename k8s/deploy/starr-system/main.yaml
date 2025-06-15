@@ -186,7 +186,7 @@ spec:
     spec:
       containers:
         - name: radarr
-          image: linuxserver/radarr:5.25.0
+          image: linuxserver/radarr:5.26.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7878
