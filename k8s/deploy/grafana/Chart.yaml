@@ -2,9 +2,9 @@ apiVersion: v2
 name: grafana
 description: Meta-chart for Grafana
 type: application
-version: 1.1.80
+version: 1.1.81
 
 dependencies:
   - name: grafana
-    version: 9.3.1
+    version: 9.3.2
     repository: https://grafana.github.io/helm-charts
