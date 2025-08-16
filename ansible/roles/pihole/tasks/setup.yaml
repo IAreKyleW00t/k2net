@@ -24,6 +24,8 @@
           FTLCONF_dns_upstreams: "{{ pihole_dns | join(';') }}"
           FTLCONF_misc_etc_dnsmasq_d: "true"
           FTLCONF_misc_dnsmasq_lines: "{{ pihole_dnsmasq_lines | join(';') }}"
+          FTLCONF_dns_ratelimit_count: "{{ pihole_dns_ratelimit_count | string }}"
+          FTLCONF_dns_ratelimit_interval: "{{ pihole_dns_ratelimit_interval | string }}"
         volumes:
           - "{{ pihole_data_directory }}:/etc/pihole"
           - "{{ pihole_dnsmasq_directory }}:/etc/dnsmasq.d"
