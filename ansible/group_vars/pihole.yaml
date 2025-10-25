@@ -6,7 +6,7 @@ pihole_dns:
 
 # Container settings
 # renovate: datasource=docker
-pihole_container_image: pihole/pihole:2025.08.0
+pihole_container_image: pihole/pihole:2025.10.0
 pihole_data_directory: /etc/pihole
 pihole_dnsmasq_directory: /etc/dnsmasq.d
 pihole_dns_ratelimit_count: 2048
