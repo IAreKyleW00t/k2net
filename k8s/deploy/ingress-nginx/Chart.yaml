@@ -2,9 +2,9 @@ apiVersion: v2
 name: ingress-nginx
 description: Meta-chart for ingress-nginx
 type: application
-version: 1.0.15
+version: 1.0.16
 
 dependencies:
   - name: ingress-nginx
-    version: 4.13.3
+    version: 4.14.0
     repository: https://kubernetes.github.io/ingress-nginx
