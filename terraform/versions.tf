@@ -18,16 +18,6 @@ terraform {
       source  = "backblaze/b2"
       version = "0.10.0"
     }
-
-    http = {
-      source  = "hashicorp/http"
-      version = "3.5.0"
-    }
-
-    template = {
-      source  = "hashicorp/template"
-      version = "2.2.0"
-    }
   }
 
   required_version = "1.13.5"
