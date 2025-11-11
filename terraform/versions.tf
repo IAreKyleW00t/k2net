@@ -9,11 +9,6 @@ terraform {
   }
 
   required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "6.20.0"
-    }
-
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = "4.52.5"
