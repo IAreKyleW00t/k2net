@@ -13,41 +13,57 @@
   ],
   "dependencyDashboardTitle": "Renovate Dashboard 🛡️",
   "timezone": "America/New_York",
-  "schedule": ["at any time"],
+  "schedule": [
+    "at any time"
+  ],
   "automerge": false,
   "automergeSchedule": [],
   "rebaseWhen": "conflicted",
   "bumpVersion": "patch",
   "kubernetes": {
-    "fileMatch": [
-      "k8s/deploy/.+/main\\.ya?ml$",
-      "k8s/deploy/.+/templates/.+\\.ya?ml$"
+    "managerFilePatterns": [
+      "/k8s/deploy/.+/main\\.ya?ml$/",
+      "/k8s/deploy/.+/templates/.+\\.ya?ml$/"
     ]
   },
   "helmv3": {
-    "fileMatch": ["k8s/deploy/.+/Chart\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/k8s/deploy/.+/Chart\\.ya?ml$/"
+    ]
   },
   "helm-values": {
-    "fileMatch": ["k8s/deploy/.+/values\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/k8s/deploy/.+/values\\.ya?ml$/"
+    ]
   },
   "argocd": {
-    "fileMatch": ["k8s/apps/.+\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/k8s/apps/.+\\.ya?ml$/"
+    ]
   },
   "terraform": {
-    "fileMatch": ["terraform/.+\\.tf$"]
+    "managerFilePatterns": [
+      "/terraform/.+\\.tf$/"
+    ]
   },
   "ansible": {
-    "fileMatch": ["ansible/roles/.+/tasks/.+\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/ansible/roles/.+/tasks/.+\\.ya?ml$/"
+    ]
   },
   "ansible-galaxy": {
-    "fileMatch": ["ansible/requirements\\.ya?ml$", "ansible/galaxy\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/ansible/requirements\\.ya?ml$/",
+      "/ansible/galaxy\\.ya?ml$/"
+    ]
   },
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": [
-        ".github/.+/.+\\.ya?ml$",
-        "ansible/group_vars/.+\\.ya?ml$",
-        "ansible/host_vars/.+\\.ya?ml$"
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.github/.+/.+\\.ya?ml$/",
+        "/ansible/group_vars/.+\\.ya?ml$/",
+        "/ansible/host_vars/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "#\\s?renovate: datasource=(?<datasource>.*?)\\s?.+[_-]container[_-]image: (?<depName>.+):(?<currentValue>[\\w+\\.\\-]*)",
