@@ -37,4 +37,4 @@ spec:
               service:
                 name: morganite
                 port:
-                  number: 8888
+                  number: 51821
