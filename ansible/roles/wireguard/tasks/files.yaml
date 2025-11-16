@@ -19,7 +19,7 @@
         dest: "{{ wireguard_data_directory }}/config/config.yaml"
         owner: root
         group: root
-        mode: "0644"
+        mode: "0640"
   become: true
   tags:
     - files
