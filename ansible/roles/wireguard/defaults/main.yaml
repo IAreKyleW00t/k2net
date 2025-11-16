@@ -1,16 +1,89 @@
 ---
 # Docker container image tag and data directory
-wireguard_container_image: ghcr.io/wg-easy/wg-easy:15
-wireguard_data_directory: /srv/docker/wireguard
+wireguard_container_image: wgportal/wg-portal:2
+wireguard_data_directory: /srv/docker/wg-portal
 
-# WireGuard settings
-wireguard_host: 127.0.0.1
-wireguard_port: 51820
-wireguard_ui_port: 51821
-wireguard_ui_host: 0.0.0.0
-wireguard_ui_username: admin
-wireguard_ui_password: wireguard
-wireguard_ipv4_cidr: 10.8.0.0/24
-wireguard_ipv6_cidr: 2001:0DB8::/32
-wireguard_dns: 1.1.1.1, 1.0.0.1
-wireguard_disable_ipv6: true
+# core
+wireguard_admin_user: admin@wgportal.local
+wireguard_admin_password: wgportal-default
+wireguard_admin_api_token: ""
+wireguard_disable_admin_user: false
+wireguard_editable_keys: true
+wireguard_create_default_peer: false
+wireguard_create_default_peer_on_creation: false
+wireguard_re_enable_peer_after_user_enable: true
+wireguard_delete_peer_after_user_deleted: false
+wireguard_self_provisioning_allowed: false
+wireguard_import_existing: true
+wireguard_restore_state: true
+
+# advanced
+wireguard_log_level: info
+wireguard_log_pretty: false
+wireguard_log_json: false
+wireguard_start_listen_port: 51820
+wireguard_start_cidr_v4: 10.11.12.0/24
+wireguard_start_cidr_v6: fdfd:d3ad:c0de:1234::0/64
+wireguard_use_ip_v6: true
+wireguard_config_storage_path: ""
+wireguard_expiry_check_interval: 15m
+wireguard_rule_prio_offset: 20000
+wireguard_route_table_offset: 20000
+wireguard_api_admin_only: true
+wireguard_limit_additional_user_peers: 0
+
+# backend
+wireguard_backend_default: local
+wireguard_backend_local_resolvconf_prefix: tun.
+
+# database
+wireguard_db_debug: false
+wireguard_db_slow_query_threshold: 0
+wireguard_db_type: sqlite
+wireguard_db_dsn: data/sqlite.db
+wireguard_db_encryption_passphrase: ""
+
+# stats
+wireguard_use_ping_checks: true
+wireguard_ping_check_workers: 10
+wireguard_ping_unprivileged: false
+wireguard_ping_check_interval: 1m
+wireguard_data_collection_interval: 1m
+wireguard_collect_interface_data: true
+wireguard_collect_peer_data: true
+wireguard_collect_audit_data: true
+wireguard_listening_address: :8787
+
+# mail
+wireguard_mail_host: 127.0.0.1
+wireguard_mail_port: 25
+wireguard_mail_encryption: none
+wireguard_mail_cert_validation: true
+wireguard_mail_username: ""
+wireguard_mail_password: ""
+wireguard_mail_auth_type: plain
+wireguard_mail_from: Wireguard Portal <noreply@wireguard.local>
+wireguard_mail_link_only: false
+wireguard_mail_allow_peer_email: false
+
+# auth
+wireguard_auth_min_password_length: 16
+wireguard_auth_hide_login_form: false
+
+# web
+wireguard_web_listening_address: :8888
+wireguard_web_external_url: http://localhost:8888
+wireguard_web_site_company_name: WireGuard Portal
+wireguard_web_site_title: WireGuard Portal
+wireguard_web_session_identifier: wgPortalSession
+wireguard_web_session_secret: very_secret
+wireguard_web_csrf_secret: extremely_secret
+wireguard_web_request_logging: false
+wireguard_web_expose_host_info: false
+wireguard_web_cert_file: ""
+wireguard_web_key_File: ""
+
+# webhook
+wireguard_webhook_url: ""
+wireguard_webhook_authentication: ""
+wireguard_webhook_timeout: 10s

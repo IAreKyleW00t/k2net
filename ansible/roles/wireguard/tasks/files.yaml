@@ -4,11 +4,22 @@
   block:
     - name: Files | Ensure WireGuard data directory exists
       ansible.builtin.file:
-        path: "{{ wireguard_data_directory }}"
+        path: "{{ wireguard_data_directory }}/{{ item }}"
         state: directory
         owner: root
         group: root
         mode: "0755"
+      loop:
+        - data
+        - config
+
+    - name: Files | Template out wg-portal config.yaml
+      ansible.builtin.template:
+        src: config.yaml.j2
+        dest: "{{ wireguard_data_directory }}/config/config.yaml"
+        owner: root
+        group: root
+        mode: "0644"
   become: true
   tags:
     - files

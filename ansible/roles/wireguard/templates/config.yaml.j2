@@ -1,0 +1,89 @@
+core:
+  admin_user: {{ wireguard_admin_user }}
+  admin_password: {{ wireguard_admin_password }}
+  admin_api_token: {{ wireguard_admin_api_token }}
+  disable_admin_user: {{ wireguard_disable_admin_user | lower }}
+  editable_keys: {{ wireguard_editable_keys | lower }}
+  create_default_peer: {{ wireguard_create_default_peer | lower }}
+  create_default_peer_on_creation: {{ wireguard_create_default_peer_on_creation | lower }}
+  re_enable_peer_after_user_enable: {{ wireguard_re_enable_peer_after_user_enable | lower }}
+  delete_peer_after_user_deleted: {{ wireguard_delete_peer_after_user_deleted | lower }}
+  self_provisioning_allowed: {{ wireguard_self_provisioning_allowed | lower }}
+  import_existing: {{ wireguard_import_existing | lower }}
+  restore_state: {{ wireguard_restore_state | lower }}
+
+backend:
+  default: {{ wireguard_backend_default }}
+  local_resolvconf_prefix: {{ wireguard_backend_local_resolvconf_prefix }}
+
+advanced:
+  log_level: {{ wireguard_log_level }}
+  log_pretty: {{ wireguard_log_pretty | lower }}
+  log_json: {{ wireguard_log_json | lower }}
+  start_listen_port: {{ wireguard_start_listen_port }}
+  start_cidr_v4: {{ wireguard_start_cidr_v4 }}
+  start_cidr_v6: {{ wireguard_start_cidr_v6 }}
+  use_ip_v6: {{ wireguard_use_ip_v6 | lower }}
+  config_storage_path: {{ wireguard_config_storage_path }}
+  expiry_check_interval: {{ wireguard_expiry_check_interval }}
+  rule_prio_offset: {{ wireguard_rule_prio_offset }}
+  route_table_offset: {{ wireguard_route_table_offset }}
+  api_admin_only: {{ wireguard_api_admin_only | lower }}
+  limit_additional_user_peers: {{ wireguard_limit_additional_user_peers }}
+
+database:
+  debug: {{ wireguard_db_debug | lower }}
+  slow_query_threshold: "{{ wireguard_db_slow_query_threshold }}"
+  type: {{ wireguard_db_type }}
+  dsn: {{ wireguard_db_dsn }}
+  encryption_passphrase: {{ wireguard_db_encryption_passphrase }}
+
+statistics:
+  use_ping_checks: {{ wireguard_use_ping_checks | lower }}
+  ping_check_workers: {{ wireguard_ping_check_workers }}
+  ping_unprivileged: {{ wireguard_ping_unprivileged | lower }}
+  ping_check_interval: {{ wireguard_ping_check_interval }}
+  data_collection_interval: {{ wireguard_data_collection_interval }}
+  collect_interface_data: {{ wireguard_collect_interface_data | lower }}
+  collect_peer_data: {{ wireguard_collect_peer_data | lower }}
+  collect_audit_data: {{ wireguard_collect_audit_data | lower }}
+  listening_address: {{ wireguard_listening_address }}
+
+mail:
+  host: {{ wireguard_mail_host }}
+  port: {{ wireguard_mail_port }}
+  encryption: {{ wireguard_mail_encryption }}
+  cert_validation: {{ wireguard_mail_cert_validation | lower }}
+  username: {{ wireguard_mail_username }}
+  password: {{ wireguard_mail_password }}
+  auth_type: {{ wireguard_mail_auth_type }}
+  from: {{ wireguard_mail_from }}
+  link_only: {{ wireguard_mail_link_only | lower }}
+  allow_peer_email: {{ wireguard_mail_allow_peer_email | lower }}
+
+auth:
+  oidc: []
+  oauth: []
+  ldap: []
+  webauthn:
+    enabled: true
+  min_password_length: {{ wireguard_auth_min_password_length }}
+  hide_login_form: {{ wireguard_auth_hide_login_form | lower }}
+
+web:
+  listening_address: {{ wireguard_web_listening_address }}
+  external_url: {{ wireguard_web_external_url }}
+  site_company_name: {{ wireguard_web_site_company_name }}
+  site_title: {{ wireguard_web_site_title }}
+  session_identifier: {{ wireguard_web_session_identifier }}
+  session_secret: {{ wireguard_web_session_secret }}
+  csrf_secret: {{ wireguard_web_csrf_secret }}
+  request_logging: {{ wireguard_web_request_logging | lower }}
+  expose_host_info: {{ wireguard_web_expose_host_info | lower }}
+  cert_file: {{ wireguard_web_cert_file }}
+  key_File: {{ wireguard_web_key_File }}
+
+webhook:
+  url: {{ wireguard_webhook_url }}
+  authentication: {{ wireguard_webhook_authentication }}
+  timeout: {{ wireguard_webhook_timeout }}

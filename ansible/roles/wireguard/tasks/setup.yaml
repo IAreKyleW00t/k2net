@@ -2,6 +2,28 @@
 ---
 - name: Setup
   block:
+    - name: Setup | Enable IPv4 and IPv6 Forwarding
+      ansible.posix.sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        sysctl_set: true
+        reload: true
+      loop:
+        - { name: net.ipv4.ip_forward, value: 1 }
+        - { name: net.ipv4.conf.all.src_valid_mark, value: 1 }
+        - { name: net.ipv6.conf.all.disable_ipv6, value: 0 }
+        - { name: net.ipv6.conf.all.forwarding, value: 1 }
+        - { name: net.ipv6.conf.default.forwarding, value: 1 }
+
+    - name: Setup | Install wireguard packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - wireguard
+        - wireguard-tools
+
     - name: Setup | Pull '{{ wireguard_container_image }}' docker container
       community.docker.docker_image:
         name: "{{ wireguard_container_image }}"
@@ -13,34 +35,14 @@
         image: "{{ wireguard_container_image }}"
         restart_policy: unless-stopped
         restart: true
-        memory: 128M
+        memory: 256M
         capabilities:
           - NET_ADMIN
-          - SYS_MODULE
-        sysctls:
-          net.ipv4.ip_forward: 1
-          net.ipv4.conf.all.src_valid_mark: 1
-          net.ipv6.conf.all.disable_ipv6: 0
-          net.ipv6.conf.all.forwarding: 1
-          net.ipv6.conf.default.forwarding: 1
-        env:
-          INIT_ENABLED: "true"
-          INIT_USERNAME: "{{ wireguard_ui_username }}"
-          INIT_PASSWORD: "{{ wireguard_ui_password }}"
-          INIT_HOST: "{{ wireguard_host }}"
-          INIT_PORT: "{{ wireguard_port | string }}"
-          INIT_DNS: "{{ wireguard_dns }}"
-          INIT_IPV4_CIDR: "{{ wireguard_ipv4_cidr }}"
-          INIT_IPV6_CIDR: "{{ wireguard_ipv6_cidr }}"
-          PORT: "{{ wireguard_ui_port | string }}"
-          HOST: "{{ wireguard_ui_host }}"
-          DISABLE_IPV6: "{{ wireguard_disable_ipv6 | string }}"
         volumes:
-          - "{{ wireguard_data_directory }}:/etc/wireguard"
-          - /lib/modules:/lib/modules:ro
-        ports:
-          - "{{ wireguard_port }}:51820/udp"
-          - "{{ wireguard_ui_port }}:51821"
+          - "/etc/wireguard:/etc/wireguard"
+          - "{{ wireguard_data_directory }}/data:/app/data"
+          - "{{ wireguard_data_directory }}/config:/app/config"
+        network_mode: host
         comparisons:
           "*": strict # recreate container on _any_ change
   become: true
