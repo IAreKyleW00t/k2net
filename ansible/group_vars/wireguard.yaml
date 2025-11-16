@@ -1,8 +1,13 @@
 ---
+# Container settings
+# renovate: datasource=docker
+wireguard_container_image: ghcr.io/wg-easy/wg-easy:15.1.0
+
+# WireGuard settings
+wireguard_host: vpn.kyle2.net
+wireguard_dns: 192.168.10.58
 wireguard_ipv4_cidr: 192.168.100.0/24
 wireguard_disable_ipv6: true
-wireguard_dns: 192.168.10.58
-wireguard_host: vpn.kyle2.net
 wireguard_ui_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   66313061306562356331306534306265656566323434653231333033616432306236626164653939
