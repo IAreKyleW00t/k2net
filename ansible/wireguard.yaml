@@ -1,5 +1,4 @@
 ---
 - hosts: wireguard
   roles:
-    - common
     - wireguard
