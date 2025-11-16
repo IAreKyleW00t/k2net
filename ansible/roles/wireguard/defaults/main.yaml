@@ -1,24 +1,16 @@
 ---
 # Docker container image tag and data directory
-wireguard_container_image: ghcr.io/wg-easy/wg-easy:latest
+wireguard_container_image: ghcr.io/wg-easy/wg-easy:15
 wireguard_data_directory: /srv/docker/wireguard
 
 # WireGuard settings
-wireguard_device: eth0
 wireguard_host: 127.0.0.1
 wireguard_port: 51820
 wireguard_ui_port: 51821
+wireguard_ui_host: 0.0.0.0
+wireguard_ui_username: admin
 wireguard_ui_password: wireguard
-wireguard_keepalive: 25
-wireguard_mtu: null
-wireguard_cidr: 10.6.0.x
+wireguard_ipv4_cidr: 10.8.0.0/24
+wireguard_ipv6_cidr: 2001:0DB8::/32
 wireguard_dns: 1.1.1.1, 1.0.0.1
-wireguard_allowed_ips: 0.0.0.0/0, ::/0
-wireguard_preup: ""
-wireguard_postup: |
-  iptables -t nat -A POSTROUTING -s 10.6.0.0/24 -o eth0 -j MASQUERADE;
-  iptables -A INPUT -p udp -m udp --dport 51820 -j ACCEPT;
-  iptables -A FORWARD -i wg0 -j ACCEPT;
-  iptables -A FORWARD -o wg0 -j ACCEPT
-wireguard_predown: ""
-wireguard_postdown: ""
+wireguard_disable_ipv6: true
