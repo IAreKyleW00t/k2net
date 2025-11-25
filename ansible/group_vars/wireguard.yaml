@@ -1,7 +1,7 @@
 ---
 # Container settings
 # renovate: datasource=docker
-wireguard_container_image: wgportal/wg-portal:2.1.0
+wireguard_container_image: wgportal/wg-portal:v2.1.1
 
 # core
 wireguard_admin_user: admin@kyle2.net
