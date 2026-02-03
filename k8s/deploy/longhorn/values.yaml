@@ -25,3 +25,8 @@ longhorn:
       external-dns.alpha.kubernetes.io/hostname: longhorn.kyle2.net
       nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+
+image:
+  longhorn:
+    instanceManager:
+      tag: v1.11.0-hotfix-1
