@@ -16,6 +16,7 @@
           - CAP_NET_BIND_SERVICE
           - SYS_NICE
           - CAP_CHOWN
+        shm_size: "{{ pihole_container_shm_size }}"
         env:
           TZ: "America/New_York"
           FTLCONF_dns_listeningMode: "all"

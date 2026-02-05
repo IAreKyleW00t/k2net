@@ -5,6 +5,7 @@ pihole_data_directory: /src/docker/pihole/pihole
 pihole_dnsmasq_directory: /src/docker/pihole/dnsmasq.d
 pihole_dns_ratelimit_count: 1000
 pihole_dns_ratelimit_interval: 60
+pihole_container_shm_size: 128m
 
 # Primary Pi-Hole settings
 pihole_domain: pi.hole
