@@ -1,4 +1,4 @@
-# {{ ansible_managed }} - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+# {{ ansible_managed }} - {{ ansible_facts['date_time'].date }} {{ ansible_facts['date_time'].time }}
 # ignore build-in resolv.conf files
 resolv-file=
 {% for ns in dnsmasq_servers %}

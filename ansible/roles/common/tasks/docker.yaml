@@ -27,13 +27,13 @@
 
     - name: Docker | Add docker GPG signing key
       ansible.builtin.apt_key:
-        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+        url: "https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }}/gpg"
         keyring: /etc/apt/trusted.gpg.d/docker.gpg
         state: present
 
     - name: Docker | Add docker Apt repository
       ansible.builtin.apt_repository:
-        repo: "deb [arch={{ dpkg.stdout }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        repo: "deb [arch={{ dpkg.stdout }}] https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }} {{ ansible_facts['distribution_release'] }} stable"
         filename: docker
         state: present
       register: docker_repo

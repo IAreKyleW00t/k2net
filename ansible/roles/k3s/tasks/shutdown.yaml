@@ -8,6 +8,11 @@
           --ignore-daemonsets
       delegate_to: localhost
 
+    # Just a safety precaution
+    - name: Shutdown | Wait 60s for node to drain
+      ansible.builtin.pause:
+        seconds: 60
+
     - name: Shutdown | Run k3s-killall.sh
       ansible.builtin.command: k3s-killall.sh
   notify:

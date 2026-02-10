@@ -1,7 +1,7 @@
 ---
 - include_vars: "{{ item }}"
   with_first_found:
-    - "{{ ansible_distribution | lower }}.yaml"
+    - "{{ ansible_facts['distribution'] | lower }}.yaml"
     - default.yaml
   tags:
     - minio
