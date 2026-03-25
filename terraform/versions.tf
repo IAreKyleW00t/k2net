@@ -11,7 +11,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.52.5"
+      version = "4.52.7"
     }
 
     b2 = {
@@ -20,5 +20,5 @@ terraform {
     }
   }
 
-  required_version = "1.14.7"
+  required_version = "1.14.8"
 }
