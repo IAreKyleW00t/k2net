@@ -2,9 +2,9 @@ apiVersion: v2
 name: unifi
 description: Meta-chart for UniFi
 type: application
-version: 2.0.139
+version: 2.0.140
 
 dependencies:
   - name: mongodb
-    version: 19.1.26
+    version: 19.1.30
     repository: oci://registry-1.docker.io/bitnamicharts
