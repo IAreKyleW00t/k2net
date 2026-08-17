@@ -43,6 +43,7 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8123 # HTTP
+            - containerPort: 9584 # MCP
           env:
             # Linuxserver.io images require root, but drop down to user-level
             - name: PUID
@@ -87,6 +88,9 @@ spec:
     - name: http
       port: 8123
       targetPort: 8123
+    - name: mcp
+      port: 9584
+      targetPort: 9584
   type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
