@@ -89,5 +89,4 @@ spec:
             - --registry=noop
             - --policy=upsert-only
             - --provider=pihole
-            - --pihole-api-version=6
             - --pihole-server=http://192.168.10.58
