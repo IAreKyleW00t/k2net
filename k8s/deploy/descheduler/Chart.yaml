@@ -2,9 +2,9 @@ apiVersion: v2
 name: descheduler
 description: Meta-chart for descheduler
 type: application
-version: 1.0.11
+version: 1.0.12
 
 dependencies:
   - name: descheduler
-    version: 0.36.0
+    version: 0.37.0
     repository: https://kubernetes-sigs.github.io/descheduler
