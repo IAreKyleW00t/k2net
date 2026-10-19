@@ -42,7 +42,7 @@ spec:
               mountPath: /configs
       containers:
         - name: unifi
-          image: linuxserver/unifi-network-application:10.6.101
+          image: linuxserver/unifi-network-application:10.6.106
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3478 # STUN
