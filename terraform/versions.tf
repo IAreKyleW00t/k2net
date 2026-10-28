@@ -11,14 +11,14 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.52.9"
+      version = "4.52.10"
     }
 
     b2 = {
       source  = "backblaze/b2"
-      version = "0.14.0"
+      version = "0.14.1"
     }
   }
 
-  required_version = "1.16.6"
+  required_version = "1.17.1"
 }
