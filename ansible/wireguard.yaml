@@ -1,4 +1,18 @@
 ---
-- hosts: wireguard
+- name: Configure WireGuard
+  hosts: wireguard
+  become: true
+  gather_facts: true
   roles:
-    - wireguard
+    - role: common
+      tags: [common]
+    - role: docker
+      tags: [docker]
+    - role: wireguard
+      tags: [wireguard]
+  post_tasks:
+    - name: Apply pending reboot
+      ansible.builtin.import_role:
+        name: common
+        tasks_from: reboot
+      tags: [common_reboot]

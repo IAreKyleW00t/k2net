@@ -1,0 +1,60 @@
+---
+- name: Assert WireGuard configuration and secrets are supplied
+  ansible.builtin.assert:
+    that:
+      - wireguard_admin_user | default('') | length > 0
+      - wireguard_admin_password | default('') | length > 0
+      - wireguard_database_encryption_passphrase | default('') | length > 0
+      - wireguard_session_secret | default('') | length > 0
+      - wireguard_csrf_secret | default('') | length > 0
+    fail_msg: >-
+      Supply the WireGuard site configuration and secrets in inventory
+      before you run this role.
+  tags: [wireguard_configure, wireguard_container]
+
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags: [wireguard_firewall]
+
+- name: Gather service facts
+  ansible.builtin.service_facts:
+  tags: [wireguard_configure]
+
+- name: Assert WireGuard routing prerequisites
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.default_ipv4.interface is defined
+      - wireguard_vpn_cidr | default('') | length > 0
+    fail_msg: >-
+      WireGuard requires a default IPv4 interface and VPN CIDR
+      for routed client traffic.
+  tags: [wireguard_configure, wireguard_firewall, wireguard_container]
+
+- name: Read the UFW before rules
+  ansible.builtin.slurp:
+    src: /etc/ufw/before.rules
+  register: wireguard_ufw_before_rules
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages
+  tags: [wireguard_firewall]
+
+- name: Validate UFW NAT ownership
+  ansible.builtin.assert:
+    that:
+      - nat_rules.count('*nat') <= 1
+      - >-
+        nat_rules.count('# BEGIN K2NET WIREGUARD NAT') ==
+        nat_rules.count('# END K2NET WIREGUARD NAT')
+      - nat_rules.count('# BEGIN K2NET WIREGUARD NAT') <= 1
+      - >-
+        '# BEGIN K2NET WIREGUARD NAT' not in nat_rules or
+        (nat_rules is search('(?ms)^# BEGIN K2NET WIREGUARD NAT\r?\n.*?^# END K2NET WIREGUARD NAT\r?$'))
+      - "'*nat' not in (nat_rules | regex_replace('(?ms)^# BEGIN K2NET WIREGUARD NAT\\r?\\n.*?^# END K2NET WIREGUARD NAT\\r?$', ''))"
+      - "'K2NET WGPORTAL NAT' not in nat_rules"
+    fail_msg: >-
+      Existing UFW NAT configuration is unmanaged or conflicts with the
+      WireGuard role's dedicated NAT table.
+  vars:
+    nat_rules: "{{ wireguard_ufw_before_rules.content | b64decode }}"
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages
+  tags: [wireguard_firewall]

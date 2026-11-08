@@ -1,0 +1,19 @@
+---
+- name: Create Pi-hole persistent directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ pihole_persistent_root }}"
+      owner: root
+      group: root
+      mode: "0755"
+    - path: "{{ pihole_persistent_root }}/etc-pihole"
+      owner: "{{ pihole_uid }}"
+      group: "{{ pihole_gid }}"
+      mode: "0750"
+  loop_control:
+    label: "{{ item.path }}"

@@ -1,0 +1,16 @@
+---
+- name: Allow Caddy ingress through UFW
+  community.general.ufw:
+    rule: allow
+    direction: in
+    to_port: "{{ item.port }}"
+    proto: tcp
+    comment: "{{ item.comment }}"
+  loop:
+    - port: "80"
+      comment: Caddy HTTP
+    - port: "443"
+      comment: Caddy HTTPS
+  loop_control:
+    label: "{{ item.port }}/tcp"
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages

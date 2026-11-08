@@ -1,0 +1,33 @@
+---
+- name: Inspect the Pi-hole container
+  community.docker.docker_container_info:
+    name: "{{ pihole_container_name }}"
+  register: pihole_container_info
+  no_log: true
+  until:
+    - pihole_container_info.exists
+    - pihole_container_info.container.State.Running | bool
+    - >-
+      pihole_container_info.container.State.Health.Status
+      | default('starting') == 'healthy'
+  retries: 30
+  delay: 2
+  when: not ansible_check_mode
+
+- name: Wait for Pi-hole TCP listeners
+  ansible.builtin.wait_for:
+    host: 127.0.0.1
+    port: "{{ item.port }}"
+    state: started
+    connect_timeout: 5
+    timeout: 60
+  loop:
+    - port: "{{ pihole_dns_port }}"
+      name: DNS TCP
+    - port: "{{ pihole_http_port }}"
+      name: web HTTP
+    - port: "{{ pihole_https_port }}"
+      name: web HTTPS
+  loop_control:
+    label: "{{ item.name }}"
+  when: not ansible_check_mode

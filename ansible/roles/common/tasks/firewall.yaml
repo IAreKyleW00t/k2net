@@ -1,0 +1,33 @@
+---
+- name: Configure UFW when its package is available
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages
+  block:
+    - name: Allow the configured Ansible SSH port through UFW
+      community.general.ufw:
+        rule: allow
+        direction: in
+        to_port: "{{ ansible_port | default(22) }}"
+        proto: tcp
+        comment: Ansible SSH
+
+    - name: Set the UFW default incoming policy
+      community.general.ufw:
+        default: deny
+        direction: incoming
+
+    - name: Set the UFW default outgoing policy
+      community.general.ufw:
+        default: allow
+        direction: outgoing
+
+    - name: Enable UFW after permitting Ansible SSH access
+      community.general.ufw:
+        state: enabled
+
+- name: Report deferred UFW configuration in check mode
+  ansible.builtin.debug:
+    msg: >-
+      Ansible skips UFW configuration in check mode when UFW is not installed.
+  when:
+    - ansible_check_mode
+    - "'ufw' not in ansible_facts.packages"

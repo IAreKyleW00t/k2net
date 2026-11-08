@@ -1,36 +1,14 @@
 ---
-- name: System Updates
-  block:
-    - name: System Updates | Update Apt cache
-      ansible.builtin.apt:
-        update_cache: true
+- name: Configure automatic security updates without automatic reboots
+  ansible.builtin.copy:
+    content: |
+      // Enable periodic metadata refresh and Ubuntu's unattended security updates.
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
 
-    - name: System Updates | Update all packages
-      ansible.builtin.apt:
-        name: "*"
-        state: latest
-
-    - name: System Updates | Perform dist-upgrade
-      ansible.builtin.apt:
-        upgrade: dist
-
-    - name: System Updates | Enable unattended-upgrades
-      ansible.builtin.apt:
-        name: unattended-upgrades
-        state: latest
-
-    - name: System Updates | Remove obsolete packages from the cache
-      ansible.builtin.apt:
-        autoclean: true
-
-    - name: System Updates | Remove orphaned packages that are no longer required
-      ansible.builtin.apt:
-        autoremove: true
-
-    - name: System Updates | Clean old packages and install scripts
-      ansible.builtin.apt:
-        clean: true
-  become: true
-  tags:
-    - updates
-    - common
+      // Reboots are an explicit maintenance operation.
+      Unattended-Upgrade::Automatic-Reboot "false";
+    dest: /etc/apt/apt.conf.d/99-automatic-updates
+    owner: root
+    group: root
+    mode: "0644"

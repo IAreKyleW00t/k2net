@@ -1,3 +1,0 @@
----
-enabled_ports: "{{ socat_ports | selectattr('dest', '!=', 0)}}"
-disabled_ports: "{{ socat_ports | selectattr('dest', '==', 0)}}"

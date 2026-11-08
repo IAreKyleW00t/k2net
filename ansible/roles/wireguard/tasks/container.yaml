@@ -1,0 +1,42 @@
+---
+- name: Check whether the Docker socket exists
+  ansible.builtin.stat:
+    path: /var/run/docker.sock
+  register: wireguard_docker_socket
+
+- name: Report deferred WireGuard container reconciliation in check mode
+  ansible.builtin.debug:
+    msg: >-
+      Ansible skips WGPortal container changes in check mode
+      when Docker is absent.
+  when:
+    - ansible_check_mode
+    - not wireguard_docker_socket.stat.exists
+
+- name: Run the WireGuard portal container
+  community.docker.docker_container:
+    name: "{{ wireguard_container_name }}"
+    image: "{{ wireguard_container_image }}"
+    state: started
+    pull: missing
+    restart_policy: unless-stopped
+    network_mode: host
+    capabilities:
+      - NET_ADMIN
+    volumes:
+      - "{{ wireguard_host_config_directory }}:/etc/wireguard"
+      - "{{ wireguard_persistent_root }}/data:/app/data"
+      - "{{ wireguard_persistent_root }}/config:/app/config"
+    env:
+      WG_PORTAL_CONFIG: /app/config/config.yaml
+      WG_PORTAL_CORE_ADMIN_PASSWORD: "{{ wireguard_admin_password }}"
+      WG_PORTAL_DATABASE_ENCRYPTION_PASSPHRASE: >-
+        {{ wireguard_database_encryption_passphrase }}
+      WG_PORTAL_WEB_SESSION_SECRET: "{{ wireguard_session_secret }}"
+      WG_PORTAL_WEB_CSRF_SECRET: "{{ wireguard_csrf_secret }}"
+  no_log: true
+  when: not ansible_check_mode or wireguard_docker_socket.stat.exists
+
+- name: Apply WireGuard configuration changes before health checks
+  ansible.builtin.meta: flush_handlers
+  when: not ansible_check_mode

@@ -1,6 +1,0 @@
----
-ansible_user: kyle
-
-additional_swap:
-  - path: /var/swap
-    size: 2

@@ -1,0 +1,34 @@
+---
+- name: Validate Caddy configuration before reload
+  community.docker.docker_container_exec:
+    container: "{{ caddy_container_name }}"
+    argv:
+      - caddy
+      - validate
+      - --config
+      - /etc/caddy/Caddyfile
+      - --adapter
+      - caddyfile
+  register: caddy_validation
+  changed_when: false
+  failed_when: caddy_validation.rc | default(1) != 0
+  no_log: true
+  listen: Reload Caddy
+
+- name: Reload the Caddy configuration
+  community.docker.docker_container_exec:
+    container: "{{ caddy_container_name }}"
+    argv:
+      - caddy
+      - reload
+      - --config
+      - /etc/caddy/Caddyfile
+      - --adapter
+      - caddyfile
+      - --address
+      - 127.0.0.1:2019
+  register: caddy_reload
+  changed_when: caddy_reload.rc | default(1) == 0
+  failed_when: caddy_reload.rc | default(1) != 0
+  no_log: true
+  listen: Reload Caddy

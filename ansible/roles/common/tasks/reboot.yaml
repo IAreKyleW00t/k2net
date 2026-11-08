@@ -1,0 +1,10 @@
+---
+- name: Check whether a reboot is required
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: common_reboot_required
+
+- name: Reboot when required
+  ansible.builtin.reboot:
+  when: common_reboot_required.stat.exists
+  throttle: 1

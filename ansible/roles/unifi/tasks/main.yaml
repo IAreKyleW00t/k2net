@@ -1,0 +1,20 @@
+---
+- name: Check UniFi OS Server prerequisites
+  ansible.builtin.import_tasks: preflight.yaml
+  tags: [unifi_preflight]
+
+- name: Configure UniFi firewall rules
+  ansible.builtin.import_tasks: firewall.yaml
+  tags: [unifi_firewall]
+
+- name: Install UniFi OS Server
+  ansible.builtin.import_tasks: install.yaml
+  tags: [unifi_install]
+
+- name: Verify UniFi OS Server
+  ansible.builtin.import_tasks: verify.yaml
+  tags: [unifi_verify]
+
+- name: Deploy UniFi Network site files
+  ansible.builtin.import_tasks: sites.yaml
+  tags: [unifi_sites]

@@ -1,0 +1,18 @@
+---
+- name: Assert Caddy configuration and secrets are supplied
+  ansible.builtin.assert:
+    that:
+      - caddy_bind_address | default('') | length > 0
+      - caddy_domain | default('') | length > 0
+      - caddy_acme_email | default('') | length > 0
+      - caddy_cloudflare_api_token | default('') | length > 0
+    fail_msg: >-
+      Supply the Caddy site configuration and Cloudflare token in inventory
+      before you run this role.
+  no_log: true
+  tags: [caddy_configure, caddy_container, caddy_firewall]
+
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags: [caddy_firewall]

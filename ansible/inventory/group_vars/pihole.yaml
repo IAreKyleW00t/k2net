@@ -1,0 +1,9 @@
+---
+ansible_user: pi
+
+pihole_timezone: America/New_York
+pihole_web_password: >-
+  {{ lookup('community.general.onepassword', 'Pi-Hole', vault='Homelab', field='password') }}
+
+pihole_custom_dnsmasq_lines:
+  - address=/*.home.kyle2.net/192.168.40.6

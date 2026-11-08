@@ -1,0 +1,44 @@
+---
+- name: Allow WireGuard VPN ingress through UFW
+  community.general.ufw:
+    rule: allow
+    direction: in
+    to_port: "{{ wireguard_listen_port }}"
+    proto: udp
+    comment: WireGuard VPN
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages
+
+- name: Allow routed WireGuard client traffic through UFW
+  community.general.ufw:
+    rule: allow
+    route: true
+    interface_out: "{{ ansible_facts.default_ipv4.interface }}"
+    from_ip: "{{ wireguard_vpn_cidr }}"
+    comment: WireGuard client routing
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages
+
+- name: Allow explicitly configured WireGuard web clients through UFW
+  community.general.ufw:
+    rule: allow
+    direction: in
+    from_ip: "{{ item }}"
+    to_port: "{{ wireguard_web_port }}"
+    proto: tcp
+    comment: WireGuard portal web UI
+  loop: "{{ wireguard_web_allowed_sources }}"
+  when:
+    - wireguard_web_allowed_sources | length > 0
+    - not ansible_check_mode or "ufw" in ansible_facts.packages
+
+- name: Configure WireGuard source NAT in UFW
+  ansible.builtin.blockinfile:
+    path: /etc/ufw/before.rules
+    marker: "# {mark} K2NET WIREGUARD NAT"
+    insertbefore: "^\\*filter$"
+    block: |
+      *nat
+      :POSTROUTING ACCEPT [0:0]
+      -A POSTROUTING -s {{ wireguard_vpn_cidr }} -o {{ ansible_facts.default_ipv4.interface }} -j MASQUERADE
+      COMMIT
+  notify: Reload UFW
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages

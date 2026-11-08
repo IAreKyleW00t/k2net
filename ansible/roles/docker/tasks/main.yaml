@@ -1,0 +1,16 @@
+---
+- name: Check Docker platform support
+  ansible.builtin.import_tasks: preflight.yaml
+  tags: [docker_preflight]
+
+- name: Configure the Docker repository
+  ansible.builtin.import_tasks: repository.yaml
+  tags: [docker_repository]
+
+- name: Install Docker
+  ansible.builtin.import_tasks: install.yaml
+  tags: [docker_install]
+
+- name: Verify Docker
+  ansible.builtin.import_tasks: verify.yaml
+  tags: [docker_verify]

@@ -1,0 +1,62 @@
+---
+- name: Check for the Docker APT repository
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/docker.sources
+  register: docker_apt_repository
+  tags: [docker_install]
+
+- name: Check for the Docker APT signing key
+  ansible.builtin.stat:
+    path: /etc/apt/keyrings/docker.asc
+  register: docker_apt_signing_key
+  tags: [docker_install]
+
+- name: Install Docker repository prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - python3-debian
+      - python3-requests
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure the Docker APT keyring directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: not ansible_check_mode or docker_apt_signing_key.stat.exists
+
+- name: Download the Docker APT signing key
+  ansible.builtin.get_url:
+    url: >-
+      https://download.docker.com/linux/{{
+      docker_apt_platforms[ansible_facts.distribution].repository }}/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    owner: root
+    group: root
+    mode: "0644"
+  when: not ansible_check_mode or docker_apt_signing_key.stat.exists
+
+- name: Configure the Docker official APT repository
+  ansible.builtin.deb822_repository:
+    name: docker
+    types:
+      - deb
+    uris: >-
+      https://download.docker.com/linux/{{
+      docker_apt_platforms[ansible_facts.distribution].repository }}
+    suites: "{{ ansible_facts.distribution_release }}"
+    components:
+      - stable
+    architectures:
+      - "{{ docker_apt_architecture.stdout }}"
+    signed_by: /etc/apt/keyrings/docker.asc
+    state: present
+  when: >-
+    not ansible_check_mode or (
+    "python3-debian" in ansible_facts.packages and
+    docker_apt_repository.stat.exists and docker_apt_signing_key.stat.exists)

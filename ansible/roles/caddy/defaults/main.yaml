@@ -1,0 +1,14 @@
+---
+# The image must include the Cloudflare DNS module.
+caddy_container_image: iarekylew00t/caddy-cloudflare:2.11.7
+caddy_container_name: caddy
+caddy_persistent_root: /srv/docker/caddy
+
+caddy_bind_address: 127.0.0.1
+caddy_domain: ""
+caddy_sites: {}
+caddy_acme_email: ""
+caddy_cloudflare_api_token: ""
+caddy_dns_resolvers:
+  - 1.1.1.1
+  - 1.0.0.1

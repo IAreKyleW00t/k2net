@@ -1,0 +1,32 @@
+---
+- name: Detect the native APT architecture
+  ansible.builtin.command:
+    cmd: dpkg --print-architecture
+  register: docker_apt_architecture
+  changed_when: false
+  check_mode: false
+  tags: [docker_repository, docker_install]
+
+- name: Assert Docker platform support
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution in docker_apt_platforms
+      - >-
+        ansible_facts.distribution_release in
+        docker_apt_platforms[ansible_facts.distribution].releases
+      - >-
+        docker_apt_architecture.stdout in
+        docker_apt_platforms[ansible_facts.distribution].architectures
+      - >-
+        docker_apt_architecture.stdout != 'armhf' or
+        ansible_facts.architecture in ['armv7l', 'armv8l', 'aarch64']
+    fail_msg: >-
+      Docker requires a supported OS release and native APT architecture.
+      Supported systems are Ubuntu, Debian, and Raspberry Pi OS.
+      ARM 32-bit packages require an ARMv7 or newer CPU.
+  tags: [docker_repository, docker_install]
+
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags: [docker_repository, docker_install]

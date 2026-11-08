@@ -1,0 +1,22 @@
+---
+- name: Check Caddy prerequisites
+  ansible.builtin.import_tasks: preflight.yaml
+  tags: [caddy_preflight]
+
+- name: Configure Caddy firewall rules
+  ansible.builtin.import_tasks: firewall.yaml
+  tags: [caddy_firewall]
+
+- name: Configure and run Caddy
+  when: not ansible_check_mode
+  tags: [caddy_configure, caddy_container]
+  block:
+    - name: Deploy Caddy configuration
+      ansible.builtin.import_tasks: configure.yaml
+
+    - name: Run Caddy
+      ansible.builtin.import_tasks: container.yaml
+
+    - name: Verify Caddy
+      ansible.builtin.import_tasks: verify.yaml
+      tags: [caddy_verify]

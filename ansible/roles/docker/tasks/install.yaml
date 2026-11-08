@@ -1,0 +1,28 @@
+---
+- name: Reconcile Docker packages when repository prerequisites are available
+  when: >-
+    not ansible_check_mode or (
+    "python3-debian" in ansible_facts.packages and
+    docker_apt_repository.stat.exists and docker_apt_signing_key.stat.exists)
+  block:
+    - name: Remove packages conflicting with Docker's official packages
+      ansible.builtin.apt:
+        name: "{{ docker_conflicting_packages }}"
+        state: absent
+
+    - name: Install Docker Engine and plugins
+      ansible.builtin.apt:
+        name: "{{ docker_apt_packages }}"
+        state: present
+        update_cache: true
+
+- name: Gather Docker service facts
+  ansible.builtin.service_facts:
+
+- name: Enable and start Docker
+  ansible.builtin.systemd_service:
+    name: docker
+    enabled: true
+    state: started
+  when: >-
+    not ansible_check_mode or 'docker.service' in ansible_facts.services

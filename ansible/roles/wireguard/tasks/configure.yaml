@@ -1,0 +1,73 @@
+---
+- name: Create WireGuard persistent directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ wireguard_persistent_root }}"
+      mode: "0750"
+    - path: "{{ wireguard_persistent_root }}/data"
+      mode: "0700"
+    - path: "{{ wireguard_persistent_root }}/config"
+      mode: "0700"
+    - path: "{{ wireguard_host_config_directory }}"
+      mode: "0700"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Configure WireGuard host routing sysctls
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_set: true
+    reload: true
+  loop:
+    - name: net.ipv4.ip_forward
+      value: "1"
+    - name: net.ipv4.conf.all.src_valid_mark
+      value: "1"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Configure route preservation for systemd-networkd
+  when:
+    - "'systemd-networkd.service' in ansible_facts.services"
+    - ansible_facts.services['systemd-networkd.service'].state == 'running'
+  block:
+    - name: Ensure the systemd-networkd drop-in directory exists
+      ansible.builtin.file:
+        path: /etc/systemd/networkd.conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Preserve WireGuard routes through networkd restarts
+      ansible.builtin.template:
+        src: wireguard-networkd.conf.j2
+        dest: /etc/systemd/networkd.conf.d/90-wireguard.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart systemd-networkd
+
+- name: Check for an existing WireGuard container
+  community.docker.docker_container_info:
+    name: "{{ wireguard_container_name }}"
+  register: wireguard_container_before
+  no_log: true
+  when: not ansible_check_mode
+
+- name: Create WireGuard portal configuration
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ wireguard_persistent_root }}/config/config.yaml"
+    owner: root
+    group: root
+    mode: "0600"
+  diff: false
+  notify: Restart WireGuard portal after configuration changes

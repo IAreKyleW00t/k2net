@@ -1,0 +1,11 @@
+---
+- name: Validate the Docker client and daemon
+  ansible.builtin.command:
+    cmd: docker version
+  changed_when: false
+  when: not ansible_check_mode
+
+- name: Report deferred Docker runtime validation in check mode
+  ansible.builtin.debug:
+    msg: Ansible skips the Docker client and daemon check in check mode.
+  when: ansible_check_mode

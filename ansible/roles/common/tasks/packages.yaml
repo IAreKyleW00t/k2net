@@ -1,15 +1,17 @@
 ---
-- name: System Packages
-  block:
-    - name: System Packages | Update Apt cache
-      ansible.builtin.apt:
-        update_cache: true
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags: [common_firewall]
 
-    - name: System Packages | Install additional packages
-      ansible.builtin.apt:
-        name: "{{ additional_packages }}"
-        state: latest
-  become: true
-  tags:
-    - updates
-    - common
+- name: Install baseline packages
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - fwupd
+      - unattended-upgrades
+      - ufw
+    state: present
+    update_cache: true
+    cache_valid_time: 3600

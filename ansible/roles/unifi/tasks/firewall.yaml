@@ -1,0 +1,72 @@
+---
+- name: Allow required UniFi Network ingress through UFW
+  community.general.ufw:
+    rule: allow
+    direction: in
+    to_port: "{{ item.port }}"
+    proto: "{{ item.protocol }}"
+    comment: "{{ item.comment }}"
+  loop:
+    - port: "53"
+      protocol: tcp
+      comment: UniFi DNS
+    - port: "53"
+      protocol: udp
+      comment: UniFi DNS
+    - port: "443"
+      protocol: tcp
+      comment: UniFi web interface
+    - port: "5349"
+      protocol: tcp
+      comment: UniFi remote access support
+    - port: "5671"
+      protocol: tcp
+      comment: UniFi UXG traffic flow
+    - port: "8080"
+      protocol: tcp
+      comment: UniFi device inform
+    - port: "8443"
+      protocol: tcp
+      comment: UniFi console interface
+    - port: "8444"
+      protocol: tcp
+      comment: UniFi secure hotspot portal
+    - port: "8843"
+      protocol: tcp
+      comment: UniFi hotspot portal HTTPS
+    - port: "8880:8882"
+      protocol: tcp
+      comment: UniFi hotspot portal HTTP
+    - port: "6789"
+      protocol: tcp
+      comment: UniFi mobile speed test
+    - port: "27117"
+      protocol: tcp
+      comment: UniFi local database
+    - port: "28082"
+      protocol: tcp
+      comment: UniFi support downloads
+    - port: "11443"
+      protocol: tcp
+      comment: UniFi OS Server UI
+    - port: "3478"
+      protocol: udp
+      comment: UniFi STUN
+    - port: "10001"
+      protocol: udp
+      comment: UniFi device discovery
+    - port: "10101"
+      protocol: udp
+      comment: UniFi client fingerprinting
+    - port: "1900"
+      protocol: udp
+      comment: UniFi L2 discovery
+    - port: "5514"
+      protocol: udp
+      comment: UniFi remote syslog
+    - port: "20100:22100"
+      protocol: udp
+      comment: UniFi Site Magic SD-WAN
+  loop_control:
+    label: "{{ item.protocol }}/{{ item.port }}"
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages

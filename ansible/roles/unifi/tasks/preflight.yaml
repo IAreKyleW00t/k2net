@@ -1,0 +1,17 @@
+---
+- name: Assert the UniFi OS Server platform requirements
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.architecture in ["x86_64", "amd64"]
+      - ansible_facts.service_mgr == "systemd"
+    fail_msg: "UniFi OS Server requires x86_64 with systemd."
+  tags: [unifi_install]
+
+- name: Gather service facts
+  ansible.builtin.service_facts:
+  tags: [unifi_install, unifi_sites]
+
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags: [unifi_firewall]

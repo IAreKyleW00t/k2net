@@ -1,0 +1,16 @@
+---
+- name: Bootstrap UniFi OS
+  hosts: unifi_os
+  become: true
+  gather_facts: true
+  roles:
+    - role: common
+      tags: [common]
+    - role: unifi
+      tags: [unifi]
+  post_tasks:
+    - name: Apply pending reboot
+      ansible.builtin.import_role:
+        name: common
+        tasks_from: reboot
+      tags: [common_reboot]

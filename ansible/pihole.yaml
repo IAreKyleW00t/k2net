@@ -1,5 +1,18 @@
 ---
-- hosts: pihole
+- name: Configure Pi-hole
+  hosts: pihole
+  become: true
+  gather_facts: true
   roles:
-    - common
-    - pihole
+    - role: common
+      tags: [common]
+    - role: docker
+      tags: [docker]
+    - role: pihole
+      tags: [pihole]
+  post_tasks:
+    - name: Apply pending reboot
+      ansible.builtin.import_role:
+        name: common
+        tasks_from: reboot
+      tags: [common_reboot]

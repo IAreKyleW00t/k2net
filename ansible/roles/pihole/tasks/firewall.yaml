@@ -1,0 +1,24 @@
+---
+- name: Allow Pi-hole ingress through UFW
+  community.general.ufw:
+    rule: allow
+    direction: in
+    to_port: "{{ item.port }}"
+    proto: "{{ item.protocol }}"
+    comment: "{{ item.comment }}"
+  loop:
+    - port: "{{ pihole_dns_port }}"
+      protocol: tcp
+      comment: Pi-hole DNS TCP
+    - port: "{{ pihole_dns_port }}"
+      protocol: udp
+      comment: Pi-hole DNS UDP
+    - port: "{{ pihole_http_port }}"
+      protocol: tcp
+      comment: Pi-hole web HTTP
+    - port: "{{ pihole_https_port }}"
+      protocol: tcp
+      comment: Pi-hole web HTTPS
+  loop_control:
+    label: "{{ item.protocol }}/{{ item.port }}"
+  when: not ansible_check_mode or "ufw" in ansible_facts.packages

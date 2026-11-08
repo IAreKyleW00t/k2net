@@ -1,0 +1,31 @@
+---
+docker_apt_platforms:
+  Ubuntu:
+    repository: ubuntu
+    releases: [jammy, noble, resolute, stonking]
+    architectures: [amd64, arm64, armhf, ppc64el, s390x]
+  Debian:
+    repository: debian
+    releases: [bookworm, trixie]
+    architectures: [amd64, arm64, armhf, ppc64el]
+  Raspbian:
+    repository: debian
+    releases: [bookworm, trixie]
+    architectures: [arm64, armhf]
+
+docker_apt_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+docker_conflicting_packages:
+  - containerd
+  - docker-buildx
+  - docker-compose
+  - docker-compose-v2
+  - docker-doc
+  - docker.io
+  - podman-docker
+  - runc

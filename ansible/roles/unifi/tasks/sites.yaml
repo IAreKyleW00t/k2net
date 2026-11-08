@@ -1,0 +1,52 @@
+---
+- name: Deploy site files when present
+  when:
+    - (playbook_dir ~ '/files/unifi/sites') is directory
+    - >-
+      query('community.general.filetree', playbook_dir ~ '/files/unifi/sites')
+      | selectattr('state', 'equalto', 'file') | list | length > 0
+    - not ansible_check_mode or 'uosserver.service' in ansible_facts.services
+  vars:
+    unifi_volume_mountpoint: >-
+      {{ (unifi_volume.stdout | from_json | first).Mountpoint }}
+  block:
+    - name: Inspect the UniFi OS Server Podman volume
+      ansible.builtin.command:
+        chdir: /
+        argv:
+          - runuser
+          - -u
+          - uosserver
+          - --
+          - podman
+          - volume
+          - inspect
+          - uosserver_var_lib_unifi
+      become_user: root
+      become: true
+      register: unifi_volume
+      changed_when: false
+      check_mode: false
+
+    - name: Inspect the UniFi data directory ownership
+      ansible.builtin.stat:
+        path: "{{ unifi_volume_mountpoint }}"
+      register: unifi_data_directory
+
+    - name: Inspect the UniFi sites directory ownership
+      ansible.builtin.stat:
+        path: "{{ unifi_volume_mountpoint }}/sites"
+      register: unifi_sites_directory
+
+    - name: Copy UniFi site files
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/files/unifi/sites/"
+        dest: "{{ unifi_volume_mountpoint }}/sites/"
+        owner: >-
+          {{ unifi_sites_directory.stat.uid
+             | default(unifi_data_directory.stat.uid) }}
+        group: >-
+          {{ unifi_sites_directory.stat.gid
+             | default(unifi_data_directory.stat.gid) }}
+        mode: "0644"
+        directory_mode: "0755"

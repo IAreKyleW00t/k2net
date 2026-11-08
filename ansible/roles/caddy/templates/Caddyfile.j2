@@ -1,0 +1,32 @@
+# Managed by the K2NET Ansible Caddy role.
+{
+    admin 127.0.0.1:2019
+    email {{ caddy_acme_email }}
+}
+
+*.{{ caddy_domain }} {
+    tls {
+        issuer acme {
+            dir https://acme-v02.api.letsencrypt.org/directory
+            dns cloudflare {env.CF_API_TOKEN}
+            resolvers {{ caddy_dns_resolvers | join(' ') }}
+        }
+    }
+    respond "Not found" 404
+}
+
+{% for hostname, upstream in caddy_sites.items() %}
+{{ hostname }} {
+{% if upstream.startswith('https://') %}
+    reverse_proxy {{ upstream }} {
+        header_up Host {hostport}
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+{% else %}
+    reverse_proxy {{ upstream }}
+{% endif %}
+}
+
+{% endfor %}

@@ -1,0 +1,18 @@
+---
+- name: Create Caddy persistent directories
+  ansible.builtin.file:
+    path: "{{ caddy_persistent_root }}/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  loop: ["", data, config]
+
+- name: Deploy the main Caddyfile
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: "{{ caddy_persistent_root }}/Caddyfile"
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Reload Caddy

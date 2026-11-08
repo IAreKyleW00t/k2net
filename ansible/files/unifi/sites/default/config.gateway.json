@@ -1,0 +1,26 @@
+{
+  "service": {
+    "nat": {
+      "rule": {
+        "10": {
+          "description": "Force IoT DNS to Pi-hole",
+          "type": "destination",
+          "inbound-interface": "eth1.30",
+          "protocol": "tcp_udp",
+          "source": {
+            "address": "192.168.30.0/24"
+          },
+          "destination": {
+            "address": "!192.168.40.7",
+            "port": "53"
+          },
+          "inside-address": {
+            "address": "192.168.40.7",
+            "port": "53"
+          },
+          "log": "disable"
+        }
+      }
+    }
+  }
+}

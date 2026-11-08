@@ -1,0 +1,21 @@
+---
+- name: Inspect the WireGuard portal container
+  community.docker.docker_container_info:
+    name: "{{ wireguard_container_name }}"
+  register: wireguard_container_info
+  no_log: true
+  until:
+    - wireguard_container_info.exists
+    - wireguard_container_info.container.State.Running | bool
+  retries: 30
+  delay: 2
+  when: not ansible_check_mode
+
+- name: Wait for the WireGuard portal web listener
+  ansible.builtin.wait_for:
+    host: "{{ wireguard_web_listen_address }}"
+    port: "{{ wireguard_web_port }}"
+    state: started
+    connect_timeout: 5
+    timeout: 60
+  when: not ansible_check_mode

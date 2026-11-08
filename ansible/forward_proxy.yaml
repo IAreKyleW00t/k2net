@@ -1,5 +1,0 @@
----
-- hosts: forward_proxy
-  roles:
-    - common
-    - forward_proxy

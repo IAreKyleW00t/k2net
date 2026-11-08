@@ -1,22 +1,19 @@
 ---
-# Docker container image tag and data directory
-pihole_container_image: pihole/pihole:latest
-pihole_data_directory: /src/docker/pihole/pihole
-pihole_dnsmasq_directory: /src/docker/pihole/dnsmasq.d
-pihole_dns_ratelimit_count: 1000
-pihole_dns_ratelimit_interval: 60
-pihole_container_shm_size: 128m
+# renovate: datasource=docker depName=pihole/pihole
+pihole_container_image: pihole/pihole:2026.10.1
+pihole_container_name: pihole
+pihole_persistent_root: /srv/docker/pihole
+pihole_uid: 1000
+pihole_gid: 1000
 
-# Primary Pi-Hole settings
-pihole_domain: pi.hole
-pihole_webserver_api_password: admin
+pihole_timezone: UTC
+pihole_dns_servers:
+  - 1.1.1.1
+  - 1.0.0.1
+pihole_custom_dns_records: []
+pihole_custom_cname_records: []
+pihole_custom_dnsmasq_lines: []
 
-# Upstream DNS, default Quad9
-pihole_dns:
-  - 9.9.9.9
-  - 149.112.112.112
-  # - 127.0.0.1#5353 # Unbound
-
-# Records defined in dnsmasq directly
-pihole_dnsmasq_lines: []
-#  - host-record=myhost,1.2.3.4
+pihole_dns_port: 53
+pihole_http_port: 80
+pihole_https_port: 443

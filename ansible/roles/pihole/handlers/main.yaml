@@ -1,0 +1,10 @@
+---
+- name: Reapply Pi-hole NetworkManager DNS
+  ansible.builtin.command:
+    argv:
+      - nmcli
+      - device
+      - reapply
+      - "{{ ansible_facts.default_ipv4.interface }}"
+  changed_when: true
+  when: not ansible_check_mode

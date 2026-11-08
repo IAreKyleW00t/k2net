@@ -1,0 +1,26 @@
+---
+- name: Run the Caddy container
+  community.docker.docker_container:
+    name: "{{ caddy_container_name }}"
+    image: "{{ caddy_container_image }}"
+    state: started
+    pull: missing
+    restart_policy: unless-stopped
+    network_mode: bridge
+    command:
+      - caddy
+      - run
+      - --config
+      - /etc/caddy/Caddyfile
+      - --adapter
+      - caddyfile
+    published_ports:
+      - "{{ caddy_bind_address }}:80:80/tcp"
+      - "{{ caddy_bind_address }}:443:443/tcp"
+    volumes:
+      - "{{ caddy_persistent_root }}:/etc/caddy:ro"
+      - "{{ caddy_persistent_root }}/data:/data"
+      - "{{ caddy_persistent_root }}/config:/config"
+    env:
+      CF_API_TOKEN: "{{ caddy_cloudflare_api_token }}"
+  no_log: true

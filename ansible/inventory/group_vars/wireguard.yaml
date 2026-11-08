@@ -1,0 +1,24 @@
+---
+ansible_user: pi
+
+wireguard_vpn_cidr: 192.168.100.0/24
+wireguard_web_port: 51821
+wireguard_web_listen_address: 0.0.0.0
+wireguard_web_allowed_sources:
+  - 192.168.0.0/16
+  - 172.17.0.0/16
+
+wireguard_external_url: https://wg.home.kyle2.net
+wireguard_site_company_name: K2NET
+wireguard_site_title: K2NET WireGuard
+
+wireguard_admin_user: admin@kyle2.net
+wireguard_admin_password: >-
+  {{ lookup('community.general.onepassword', 'WireGuard', vault='Homelab', field='password') }}
+
+wireguard_database_encryption_passphrase: >-
+  {{ lookup('community.general.onepassword', 'WireGuard', vault='Homelab', field='database encryption passphrase') }}
+wireguard_session_secret: >-
+  {{ lookup('community.general.onepassword', 'WireGuard', vault='Homelab', field='session secret') }}
+wireguard_csrf_secret: >-
+  {{ lookup('community.general.onepassword', 'WireGuard', vault='Homelab', field='csrf secret') }}

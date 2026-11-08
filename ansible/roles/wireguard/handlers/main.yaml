@@ -1,0 +1,21 @@
+---
+- name: Restart systemd-networkd
+  ansible.builtin.systemd_service:
+    name: systemd-networkd
+    state: restarted
+  when: not ansible_check_mode
+
+- name: Restart WireGuard portal after configuration changes
+  community.docker.docker_container:
+    name: "{{ wireguard_container_name }}"
+    state: started
+    restart: true
+  no_log: true
+  when:
+    - not ansible_check_mode
+    - wireguard_container_before.exists | default(false)
+
+- name: Reload UFW
+  community.general.ufw:
+    state: reloaded
+  when: not ansible_check_mode

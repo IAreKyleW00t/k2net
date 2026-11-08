@@ -1,0 +1,20 @@
+---
+- name: Assert the Pi-hole web password is supplied
+  ansible.builtin.assert:
+    that:
+      - pihole_web_password | default('') | length > 0
+    fail_msg: >-
+      Set pihole_web_password in inventory before you run this role.
+  tags: [pihole_container]
+
+- name: Assert Pi-hole CNAME record format
+  ansible.builtin.assert:
+    that:
+      - item is string
+      - >-
+        item is match('^[^,;\s]+,[^,;\s]+(,[0-9]+)?$')
+    fail_msg: >-
+      Use alias,target[,TTL] for each Pi-hole CNAME record.
+      If supplied, TTL must be a non-negative integer.
+  loop: "{{ pihole_custom_cname_records }}"
+  tags: [pihole_container]

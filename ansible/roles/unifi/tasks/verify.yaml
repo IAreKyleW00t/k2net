@@ -1,0 +1,12 @@
+---
+- name: Wait for the UniFi OS Server TCP ports
+  ansible.builtin.wait_for:
+    host: 127.0.0.1
+    port: "{{ item }}"
+    state: started
+    connect_timeout: 5
+    timeout: 180
+  loop:
+    - 11443
+    - 8080
+  when: not ansible_check_mode

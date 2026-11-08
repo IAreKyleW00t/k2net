@@ -1,0 +1,4 @@
+---
+# Used only to bootstrap an absent UniFi OS Server installation.
+unifi_bootstrap_url: >-
+  https://fw-download.ubnt.com/data/unifi-os-server/0e7e-linux-x64-5.1.40-149c6209-9218-4925-86d2-227b6b92f94d.40-x64

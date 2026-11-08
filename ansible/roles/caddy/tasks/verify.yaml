@@ -1,0 +1,12 @@
+---
+- name: Wait for Caddy TCP listeners
+  ansible.builtin.wait_for:
+    host: "{{ caddy_bind_address }}"
+    port: "{{ item }}"
+    state: started
+    connect_timeout: 5
+    timeout: 60
+  loop: [80, 443]
+
+- name: Apply Caddy configuration changes
+  ansible.builtin.meta: flush_handlers

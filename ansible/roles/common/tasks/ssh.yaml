@@ -1,29 +1,28 @@
 ---
-- name: SSH
-  block:
-    - name: SSH | Enable SSH Protocol 2
-      ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config
-        regexp: ^Protocol .+$
-        line: Protocol 2
-      register: sshd_proto_config
+- name: Ensure the SSH drop-in directory exists
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
 
-    - name: SSH | Disable password-based authentication methods
-      ansible.builtin.lineinfile:
-        dest: /etc/ssh/sshd_config
-        regexp: "^{{ item }} .+$"
-        line: "{{ item }} no"
-      loop:
-        - PasswordAuthentication
-        - PermitEmptyPasswords
-      register: sshd_auth_config
+- name: Configure key-only SSH authentication
+  ansible.builtin.copy:
+    content: |
+      # This is ordered before Ubuntu's optional SSH drop-ins because sshd uses
+      # the first value it reads for these settings.
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      PermitEmptyPasswords no
+      PubkeyAuthentication yes
+    dest: /etc/ssh/sshd_config.d/00-ssh-policy.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload SSH daemon
 
-    - name: SSH | Reload sshd service
-      ansible.builtin.systemd:
-        name: sshd
-        state: reloaded
-      when: sshd_proto_config.changed or sshd_auth_config.changed
-  become: true
-  tags:
-    - ssh
-    - common
+- name: Validate the complete SSH daemon configuration
+  ansible.builtin.command:
+    cmd: /usr/sbin/sshd -t
+  changed_when: false

@@ -1,10 +1,20 @@
 ---
-- import_tasks: files.yaml
-  tags:
-    - wireguard
-    - files
+- name: Check WireGuard prerequisites
+  ansible.builtin.import_tasks: preflight.yaml
+  tags: [wireguard_preflight]
 
-- import_tasks: setup.yaml
-  tags:
-    - wireguard
-    - setup
+- name: Configure WireGuard
+  ansible.builtin.import_tasks: configure.yaml
+  tags: [wireguard_configure]
+
+- name: Configure WireGuard firewall rules
+  ansible.builtin.import_tasks: firewall.yaml
+  tags: [wireguard_firewall]
+
+- name: Run the WireGuard portal
+  ansible.builtin.import_tasks: container.yaml
+  tags: [wireguard_container]
+
+- name: Verify the WireGuard portal
+  ansible.builtin.import_tasks: verify.yaml
+  tags: [wireguard_verify]

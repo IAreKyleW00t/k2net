@@ -62,11 +62,13 @@
       "customType": "regex",
       "managerFilePatterns": [
         "/.github/.+/.+\\.ya?ml$/",
-        "/ansible/group_vars/.+\\.ya?ml$/",
-        "/ansible/host_vars/.+\\.ya?ml$/"
+        "/ansible/inventory/group_vars/.+\\.ya?ml$/",
+        "/ansible/inventory/host_vars/.+\\.ya?ml$/",
+        "/ansible/roles/.+/defaults/.+\\.ya?ml$/"
       ],
       "matchStrings": [
         "#\\s?renovate: datasource=(?<datasource>.*?)\\s?.+[_-]container[_-]image: (?<depName>.+):(?<currentValue>[\\w+\\.\\-]*)",
+        "#\\s?renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s*\\r?\\n\\s*\\w+_container_image: \\S+:(?<currentValue>[\\w+.\\-]+)",
         "#\\s?renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s?.+[_-]version: (?<currentValue>[\\w+\\.\\-]*)"
       ]
     }

@@ -1,0 +1,41 @@
+---
+- name: Bootstrap UniFi OS Server when it is absent
+  when: "'uosserver.service' not in ansible_facts.services"
+  block:
+    - name: Install UniFi OS Server prerequisites
+      ansible.builtin.package:
+        name:
+          - podman
+          - slirp4netns
+          - passt
+        state: present
+
+    - name: Download the UniFi OS Server bootstrap installer
+      ansible.builtin.get_url:
+        url: "{{ unifi_bootstrap_url }}"
+        dest: /var/tmp/unifi-os-server-installer
+        mode: "0755"
+        force: true
+
+    - name: Execute the UniFi OS Server bootstrap installer
+      ansible.builtin.command:
+        argv:
+          - /var/tmp/unifi-os-server-installer
+          - --non-interactive
+      changed_when: true
+      register: unifi_bootstrap
+      when: not ansible_check_mode
+
+- name: Enable and start UniFi OS Server
+  ansible.builtin.systemd_service:
+    name: uosserver
+    enabled: true
+    state: started
+  when: not ansible_check_mode or "uosserver.service" in ansible_facts.services
+
+# Remove the installer after service startup, before later checks can fail.
+- name: Remove the successful UniFi bootstrap installer  # noqa: no-handler
+  ansible.builtin.file:
+    path: /var/tmp/unifi-os-server-installer
+    state: absent
+  when: unifi_bootstrap is changed

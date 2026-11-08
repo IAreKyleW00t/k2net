@@ -1,0 +1,29 @@
+#cloud-config
+autoinstall:
+  version: 1
+
+  source:
+    id: ubuntu-server-minimal
+
+  storage:
+    layout:
+      name: direct
+
+  ssh:
+    install-server: true
+    allow-pw: false
+
+  user-data:
+    hostname: ubuntu
+    manage_etc_hosts: true
+
+    users:
+      - name: ubuntu
+        groups:
+          - adm
+          - sudo
+        shell: /bin/bash
+        lock_passwd: true
+        sudo: "ALL=(ALL) NOPASSWD:ALL"
+        ssh_authorized_keys:
+          - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN0WJ0nsg/8xLA41jISzl3d4VKHv3V13y8AY1iUntymD"

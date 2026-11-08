@@ -1,0 +1,13 @@
+---
+caddy_domain: home.kyle2.net
+caddy_acme_email: admin@kyle2.net
+caddy_bind_address: 0.0.0.0
+
+caddy_cloudflare_api_token:  >-
+  {{ lookup('community.general.onepassword', 'Cloudflare', vault='Tools & Services', field='caddy token') }}
+
+caddy_sites:
+  unifi.home.kyle2.net: https://192.168.40.4:11443
+  ha.home.kyle2.net: http://192.168.40.40:80
+  wg.home.kyle2.net: http://192.168.40.6:51821
+  pihole.home.kyle2.net: https://192.168.40.7:443

@@ -1,15 +1,24 @@
 ---
-- import_tasks: dns.yaml
-  tags:
-    - pihole
-    - dns
+- name: Check Pi-hole configuration
+  ansible.builtin.import_tasks: preflight.yaml
+  tags: [pihole_preflight]
 
-- import_tasks: files.yaml
-  tags:
-    - pihole
-    - files
+- name: Create Pi-hole directories
+  ansible.builtin.import_tasks: directories.yaml
+  tags: [pihole_directories]
 
-- import_tasks: setup.yaml
-  tags:
-    - pihole
-    - setup
+- name: Configure host DNS
+  ansible.builtin.import_tasks: dns.yaml
+  tags: [pihole_dns]
+
+- name: Configure Pi-hole firewall rules
+  ansible.builtin.import_tasks: firewall.yaml
+  tags: [pihole_firewall]
+
+- name: Run Pi-hole
+  ansible.builtin.import_tasks: container.yaml
+  tags: [pihole_container]
+
+- name: Verify Pi-hole
+  ansible.builtin.import_tasks: verify.yaml
+  tags: [pihole_verify]
