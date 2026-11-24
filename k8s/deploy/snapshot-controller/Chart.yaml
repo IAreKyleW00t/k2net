@@ -2,9 +2,9 @@ apiVersion: v2
 name: snapshot-controller
 description: Meta-chart for snapshot-controller
 type: application
-version: 1.0.21
+version: 1.0.22
 
 dependencies:
   - name: snapshot-controller
-    version: 5.4.0
+    version: 5.4.1
     repository: https://piraeus.io/helm-charts/
